@@ -1,17 +1,24 @@
+#!/bin/bash
+
 #install qemu
-if command -v apt >/dev/null 2>&1; then
-    sudo apt update
-    sudo apt install -y qemu-kvm qemu-system virt-manager bridge-utils
-elif command -v dnf >/dev/null 2>&1; then
-    qemu_sys=qemu-system-x86
-    if ! dnf list --quiet "$qemu_sys" >/dev/null 2>&1; then
-        qemu_sys=qemu-system-aarch64
+if ! output=$(qemu-img "--help" > /dev/null 2>&1); then
+    echo "Installing QEMU"
+    #Debian & Ubuntu Based
+    if command -v apt >/dev/null 2>&1; then
+        sudo apt update
+        sudo apt install -y qemu-kvm qemu-system virt-manager bridge-utils
+    elif command -v dnf >/dev/null 2>&1; then
+        #Fedora Support
+        qemu_sys=qemu-system-x86
+        if ! dnf list --quiet "$qemu_sys" >/dev/null 2>&1; then
+            qemu_sys=qemu-system-aarch64
+        fi
+        sudo dnf install -y qemu-system
+        sudo dnf install -y $qemu_sys
+        sudo dnf install -y qemu-kvm virt-manager
+    else
+        echo Unsupported Linux Distro Please Manually install QEMU then run this script again
     fi
-    sudo dnf install -y qemu-system
-    sudo dnf install -y $qemu_sys
-    sudo dnf install -y qemu-kvm virt-manager
-else
-    echo Unsupported Linux Distro Please Manually install QEMU then delete the install qemu block and run this script again
 fi
 #setup share dir
 sharedir="$HOME/vms/share"
