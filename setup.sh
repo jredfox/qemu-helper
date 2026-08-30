@@ -21,13 +21,14 @@ if ! output=$(qemu-img "--version" > /dev/null 2>&1); then
     fi
 fi
 #setup share dir
-sharedir="$HOME/vms/share"
-mkdir -p "$sharedir"
-#install cows
-cd "$HOME/vms"
+install_dir="$HOME/vms"
+cd "$install_dir"
+#create dirs
 mkdir -p "disks"
 mkdir -p "boot"
 mkdir -p "iso"
+mkdir -p "share"
+#install cows
 for file in "iso"/*.iso; do
     name=$(basename "$file")
     name="${name%.*}"
