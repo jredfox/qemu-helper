@@ -1,7 +1,7 @@
 cow="${1}.qcow2"
 arch="$2"
 if [ -z "$3" ];
-  qemu_ram=4096
+  qemu_ram="4096"
 else
   qemu_ram="$3"
 fi
