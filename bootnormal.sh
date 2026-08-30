@@ -5,7 +5,7 @@ sharedir="$HOME/vms/share"
 cd "$workingdir"
 
 qemu-system-$arch \
-  -m 2048 \
+  -m 4096 \
   -cpu host \
   -smp 2 \
   -hda "$cow" \
