@@ -1,8 +1,7 @@
 cow="${1}.qcow2"
 arch="$2"
-workingdir="$HOME/vms/disks"
-sharedir="$HOME/vms/share"
-cd "$workingdir"
+sharedir="share"
+cd "disks"
 
 qemu-system-$arch \
   -m 4096 \
