@@ -1,10 +1,10 @@
 cow="${1}.qcow2"
 arch="$2"
 qemu_ram="$3"
-if [ -z "$3" ];
+if [ -z "$3" ]; then
   qemu_ram="4096"
 fi
-sharedir="share"
+sharedir="../share"
 cd "disks"
 
 qemu-system-$arch \
