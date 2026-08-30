@@ -1,7 +1,5 @@
-#!/bin/bash
-
 #install dir of qemu-helper
-if [[ -z "$install_dir" ]]; then
+if [ -z "$install_dir" ]; then
     install_dir="$HOME/vms"
 fi
 
@@ -43,10 +41,10 @@ for file in "iso"/*.iso; do
         bootsh="boot/${name}.sh"
         bootisosh="boot/${name}_iso.sh"
         arch="${name##*-}"
-        echo "cd $HOME/vms/boot" >"$bootsh"
-        echo "bash ../bootnormal.sh ${name} ${arch}" >>"$bootsh"
-        echo "cd $HOME/vms/boot" >"$bootisosh"
-        echo "bash ../bootiso.sh ${name} ${arch}" >>"$bootisosh"
+        echo "cd $install_dir" >"$bootsh"
+        echo "sh bootnormal.sh ${name} ${arch}" >>"$bootsh"
+        echo "cd $install_dir" >"$bootisosh"
+        echo "sh bootiso.sh ${name} ${arch}" >>"$bootisosh"
         chmod +x "$bootsh"
         chmod +x "$bootisosh"
     fi
