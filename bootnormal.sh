@@ -9,7 +9,7 @@ sharedir="share"
 cd "disks"
 
 qemu-system-$arch \
-  -m 4096 \
+  -m "$qemu_ram" \
   -cpu host \
   -smp 2 \
   -hda "$cow" \
