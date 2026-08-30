@@ -1,5 +1,10 @@
 #!/bin/bash
 
+#install dir of qemu-helper
+if [[ -z "$install_dir" ]]; then
+    install_dir="$HOME/vms"
+fi
+
 #install qemu
 if ! output=$(qemu-img "--version" > /dev/null 2>&1); then
     echo "Installing QEMU"
@@ -20,8 +25,7 @@ if ! output=$(qemu-img "--version" > /dev/null 2>&1); then
         echo Unsupported Linux Distro Please Manually install QEMU then run this script again
     fi
 fi
-#setup share dir
-install_dir="$HOME/vms"
+#cd into the install dir
 cd "$install_dir"
 #create dirs
 mkdir -p "disks"
