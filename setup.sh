@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #install qemu
-if ! output=$(qemu-img "--help" > /dev/null 2>&1); then
+if ! output=$(qemu-img "--version" > /dev/null 2>&1); then
     echo "Installing QEMU"
     #Debian & Ubuntu Based
     if command -v apt >/dev/null 2>&1; then
