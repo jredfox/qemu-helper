@@ -1,3 +1,5 @@
+#!/bin/sh
+
 #install dir of qemu-helper
 if [ -z "$install_dir" ]; then
     install_dir="$HOME/vms"
