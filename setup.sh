@@ -9,6 +9,10 @@ install_dir_q="\"$install_dir\""
 if [ -z "$qemu_ram" ]; then
     qemu_ram="4096"
 fi
+#default cores to give qemu
+if [ -z "$qcore" ]; then
+    qcore="4"
+fi
 
 #install qemu
 if ! output=$(qemu-img "--version" > /dev/null 2>&1); then
@@ -49,9 +53,9 @@ for file in "iso"/*.iso; do
         bootisosh="boot/${name}_iso.sh"
         arch="${name##*-}"
         echo "cd ${install_dir_q}" >"$bootsh"
-        echo "sh bootnormal.sh ${name} ${arch} ${qemu_ram}" >>"$bootsh"
+        echo "sh bootnormal.sh ${name} ${arch} ${qemu_ram} ${qcore}" >>"$bootsh"
         echo "cd ${install_dir_q}" >"$bootisosh"
-        echo "sh bootiso.sh ${name} ${arch} ${qemu_ram}" >>"$bootisosh"
+        echo "sh bootiso.sh ${name} ${arch} ${qemu_ram} ${qcore}" >>"$bootisosh"
         chmod +x "$bootsh"
         chmod +x "$bootisosh"
     fi

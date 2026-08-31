@@ -1,13 +1,17 @@
 iso="iso/${1}.iso"
 cow="disks/${1}.qcow2"
 arch=$2
-qemu_ram="$3"
-if [ -z "$3" ]; then
-  qemu_ram="4096"
+qram="$3"
+qcore="$4"
+if [ -z "$qram" ]; then
+  qram="4096"
+fi
+if [ -z "$qcore" ]; then
+  qcore="4"
 fi
 
 qemu-system-$arch \
-  -m "$qemu_ram" \
+  -m "$qram" \
   -cpu host \
   -smp 4 \
   -hda "$cow" \
