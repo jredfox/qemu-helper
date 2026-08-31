@@ -52,10 +52,16 @@ for file in "iso"/*.iso; do
         bootsh="boot/${name}.sh"
         bootisosh="boot/${name}_iso.sh"
         arch="${name##*-}"
+        LWDE="false"
+        case $(printf '%s' "$name" | tr '[:upper:]' '[:lower:]') in
+            *xfce*|*mate*|*lxqt*|*lxde*|*budgie*)
+                LWDE="true"
+                ;;
+        esac
         echo "cd ${install_dir_q}" >"$bootsh"
-        echo "sh bootnormal.sh ${name} ${arch} ${qemu_ram} ${qcore}" >>"$bootsh"
+        echo "sh bootnormal.sh ${name} ${arch} ${qemu_ram} ${qcore} ${LWDE}" >>"$bootsh"
         echo "cd ${install_dir_q}" >"$bootisosh"
-        echo "sh bootiso.sh ${name} ${arch} ${qemu_ram} ${qcore}" >>"$bootisosh"
+        echo "sh bootiso.sh ${name} ${arch} ${qemu_ram} ${qcore} ${LWDE}" >>"$bootisosh"
         chmod +x "$bootsh"
         chmod +x "$bootisosh"
     fi
