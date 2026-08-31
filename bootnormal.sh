@@ -10,7 +10,7 @@ cd "disks"
 qemu-system-$arch \
   -m "$qemu_ram" \
   -cpu host \
-  -smp 2 \
+  -smp 4 \
   -hda "$cow" \
   -enable-kvm \
   -device AC97 \

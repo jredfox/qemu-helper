@@ -9,7 +9,7 @@ fi
 qemu-system-$arch \
   -m "$qemu_ram" \
   -cpu host \
-  -smp 2 \
+  -smp 4 \
   -hda "$cow" \
   -cdrom "$iso" \
   -boot d \
