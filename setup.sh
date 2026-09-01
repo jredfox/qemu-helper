@@ -56,7 +56,7 @@ for file in "iso"/*.iso; do
         lname="$(printf '%s' "$name" | tr '[:upper:]' '[:lower:]')"
         #Enable LightWeight Deskop Enviorment Flag
         case "$lname" in
-            *xfce*|*mate*|*lxqt*|*lxde*|*budgie*)
+            *xfce*|*mate*|*lxqt*|*lxde*|*budgie*|*lubuntu*|*xubuntu*)
                 LWDE="true"
                 ;;
         esac
