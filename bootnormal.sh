@@ -19,7 +19,9 @@ cd "disks"
 if [ "$arch" = "riscv64" ]; then
   qemu-system-riscv64 \
     -cpu rv64 \
-    -machine virt,acpi=off -m 4G -smp cpus=2 \
+    -machine virt,acpi=off \
+    -m "$qram" \
+    -smp "$qcore" \
     -nographic \
     -kernel /usr/lib/u-boot/qemu-riscv64_smode/uboot.elf \
     -netdev user,id=net0 \
