@@ -53,16 +53,16 @@ for file in "iso"/*.iso; do
         bootisosh="boot/${name}_iso.sh"
         
         LWDE="false"
-        iname=$(printf '%s' "$name" | tr '[:upper:]' '[:lower:]')
+        lname=$(printf '%s' "$name" | tr '[:upper:]' '[:lower:]')
         #Enable LightWeight Deskop Enviorment Flag
-        case "$iname" in
+        case "$lname" in
             *xfce*|*mate*|*lxqt*|*lxde*|*budgie*)
                 LWDE="true"
                 ;;
         esac
 
         #Extract the arch from from the ISO and translate the arch aliases to be standard
-        case "$iname" in
+        case "$lname" in
             # ARM 64-bit
             *aarch64*|*arm64*|*armv8*|*armv9*)
                 arch="aarch64"
