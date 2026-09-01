@@ -30,7 +30,8 @@ if ! output=$(qemu-img "--version" > /dev/null 2>&1); then
         sudo dnf install -y $qemu_sys
         sudo dnf install -y qemu-kvm virt-manager
     else
-        echo "Unsupported Linux Distro Please Manually install QEMU then run this script again"
+        echo "Unsupported Linux Distro Please Manually install QEMU then run this script again!"
+        exit 1
     fi
 fi
 #cd into the install dir
