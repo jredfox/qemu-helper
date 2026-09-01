@@ -53,7 +53,7 @@ for file in "iso"/*.iso; do
         bootisosh="boot/${name}_iso.sh"
         
         LWDE="false"
-        lname=$(printf '%s' "$name" | tr '[:upper:]' '[:lower:]')
+        lname="$(printf '%s' "$name" | tr '[:upper:]' '[:lower:]')"
         #Enable LightWeight Deskop Enviorment Flag
         case "$lname" in
             *xfce*|*mate*|*lxqt*|*lxde*|*budgie*)
