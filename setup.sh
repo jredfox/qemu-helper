@@ -69,17 +69,37 @@ for file in "iso"/*.iso; do
                 ;;
 
             # ARM 32-bit
-            *aarch32*|*arm32*|*armv[0-7]*|*armhf*|*armel*)
+            *aarch32*|*arm32*|*armv[0-7]*|*armhf*|*armel*|*[!a-z]arm[!a-z]*|arm[!a-z]*|*[!a-z]arm)
                 arch="arm"
                 ;;
 
             # RISC-V
-            *risc-v*|*riscv*|*risc64*|*risc?64*)
+            *risc-v*|*riscv*|*risc64*|*risc?64*|*rv64*)
                 arch="riscv64"
                 ;;
 
+            # loongarch64
+            *loong64*|*loongarch64*|*loongarch*)
+                arch="loongarch64"
+                ;;
+
+            # powerpc64 little edian
+            *ppc64el*|*ppc64le*|*powerpc64le*|*powerpc64el*)
+                arch="ppc64le"
+                ;;
+
+            # powerpc32
+            *ppc32*|*ppc?32*|*powerpc32*|*powerpc?32*)
+                arch="ppc32"
+                ;;
+
+            # powerpc64
+            *ppc64*|*powerpc64*|*powerpc*)
+                arch="powerpc64"
+                ;;
+
             # IBM Z
-            *ibm-z*|*s390x*)
+            *ibm-z*|*s390x*|*[!a-z0-9]s390[!a-z0-9]*|s390[!a-z0-9]*|*[!a-z0-9]s390)
                 arch="s390x"
                 ;;
 
