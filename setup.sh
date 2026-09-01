@@ -46,7 +46,7 @@ for file in "iso"/*.iso; do
     name=$(basename "$file")
     name="${name%.*}"
     if [ -f "disks/${name}.qcow2" ]; then
-        echo Skipping ISO $name
+        echo "Skipping ISO $name"
     else
         qemu-img create -f qcow2 "disks/${name}.qcow2" 50G
         bootsh="boot/${name}.sh"
