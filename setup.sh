@@ -117,7 +117,7 @@ for file in "iso"/*.iso; do
                 ;;
         esac
         echo "cd \"${install_dir}\"" >"$bootsh"
-        echo "sh bootnormal.sh \"${name}\"" ${arch} ${qemu_ram} ${qcore} ${LWDE}" >>"$bootsh"
+        echo "sh bootnormal.sh \"${name}\" ${arch} ${qemu_ram} ${qcore} ${LWDE}" >>"$bootsh"
         echo "cd \"${install_dir}\"" >"$bootisosh"
         echo "sh bootiso.sh \"${name}\" ${arch} ${qemu_ram} ${qcore} ${LWDE}" >>"$bootisosh"
         chmod +x "$bootsh"
