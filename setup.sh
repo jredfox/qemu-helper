@@ -4,7 +4,6 @@
 if [ -z "$install_dir" ]; then
     install_dir="$HOME/vms"
 fi
-install_dir_q="\"$install_dir\""
 #default ram to give qemu
 if [ -z "$qemu_ram" ]; then
     qemu_ram="4096"
@@ -117,10 +116,10 @@ for file in "iso"/*.iso; do
                 arch="x86_64"
                 ;;
         esac
-        echo "cd ${install_dir_q}" >"$bootsh"
-        echo "sh bootnormal.sh ${name} ${arch} ${qemu_ram} ${qcore} ${LWDE}" >>"$bootsh"
-        echo "cd ${install_dir_q}" >"$bootisosh"
-        echo "sh bootiso.sh ${name} ${arch} ${qemu_ram} ${qcore} ${LWDE}" >>"$bootisosh"
+        echo "cd \"${install_dir}\"" >"$bootsh"
+        echo "sh bootnormal.sh \"${name}\"" ${arch} ${qemu_ram} ${qcore} ${LWDE}" >>"$bootsh"
+        echo "cd \"${install_dir}\"" >"$bootisosh"
+        echo "sh bootiso.sh \"${name}\" ${arch} ${qemu_ram} ${qcore} ${LWDE}" >>"$bootisosh"
         chmod +x "$bootsh"
         chmod +x "$bootisosh"
     fi
