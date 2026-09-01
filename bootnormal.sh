@@ -1,13 +1,13 @@
 cow="${1}.qcow2"
 arch="$2"
 qram="$3"
-qcores="$4"
+qcore="$4"
 LWDE="$5"
 if [ -z "$qram" ]; then
   qram="4096"
 fi
-if [ -z "$qcores" ]; then
-  qcores="4"
+if [ -z "$qcore" ]; then
+  qcore="4"
 fi
 if [ -z "$LWDE" ]; then
   LWDE="false"
@@ -20,7 +20,7 @@ if [ "$LWDE" = "true" ]; then
   qemu-system-$arch \
     -m "$qram" \
     -cpu host \
-    -smp "$qcores" \
+    -smp "$qcore" \
     -hda "$cow" \
     -enable-kvm \
     -device AC97 \
@@ -33,7 +33,7 @@ fi
 qemu-system-$arch \
   -m "$qram" \
   -cpu host \
-  -smp "$qcores" \
+  -smp "$qcore" \
   -hda "$cow" \
   -enable-kvm \
   -device AC97 \

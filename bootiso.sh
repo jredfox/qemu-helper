@@ -20,20 +20,19 @@ if [ "$LWDE" = "true" ]; then
   qemu-system-$arch \
     -m "$qram" \
     -cpu host \
-    -smp "$qcores" \
+    -smp "$qcore" \
     -hda "$cow" \
+    -cdrom "$iso" \
+    -boot d \
     -enable-kvm \
-    -device AC97 \
-    -usb -device usb-mouse \
     -device qxl-vga,vram_size=134217728 \
-    -virtfs "local,path=$sharedir,mount_tag=hostshare,security_model=none"
   exit "$?"
 fi
 
 qemu-system-$arch \
   -m "$qram" \
   -cpu host \
-  -smp 4 \
+  -smp "$qcore" \
   -hda "$cow" \
   -cdrom "$iso" \
   -boot d \
