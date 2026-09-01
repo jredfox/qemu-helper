@@ -78,11 +78,6 @@ for file in "iso"/*.iso; do
                 arch="riscv64"
                 ;;
 
-            # loongarch64
-            *loong64*|*loongarch64*|*loongarch*)
-                arch="loongarch64"
-                ;;
-
             # powerpc64 little edian
             *ppc64el*|*ppc64le*|*powerpc64le*|*powerpc64el*)
                 arch="ppc64le"
