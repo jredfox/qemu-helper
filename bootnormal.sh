@@ -71,9 +71,6 @@ if [ "$arch" = "arm" ]; then
     -netdev "user,id=net0" \
     -device "virtio-net-device,netdev=net0" \
     -device "virtio-rng-pci" \
-    -drive "if=none,file=${iso},id=cdrom,media=cdrom" \
-    -device "virtio-scsi-device" \
-    -device "scsi-cd,drive=cdrom" \
     -drive "if=none,file=${cow},id=hd0,format=qcow2" \
     -device "virtio-blk-device,drive=hd0" \
     -nographic
