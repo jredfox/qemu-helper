@@ -67,7 +67,7 @@ if [ "$LWDE" = "true" ]; then
     -usb -device "usb-mouse" \
     -device "qxl-vga,vram_size=134217728" \
     -virtfs "local,path=$sharedir,mount_tag=hostshare,security_model=none"
-  exit "$?"
+  exit $?
 fi
 
 qemu-system-$arch \
@@ -76,7 +76,7 @@ qemu-system-$arch \
   -smp "$qcore" \
   -hda "$cow" \
   -enable-kvm \
-  -device AC97 \
-  -usb -device usb-mouse \
+  -device "AC97" \
+  -usb -device "usb-mouse" \
   -virtfs "local,path=$sharedir,mount_tag=hostshare,security_model=none"
 
