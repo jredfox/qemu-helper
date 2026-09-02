@@ -1,6 +1,6 @@
 iso="iso/${1}.iso"
 cow="disks/${1}.qcow2"
-fwrdir="firmware/${1}"
+fwrdir="firmware/${1}_iso"
 arch="$2"
 qram="$3"
 qcore="$4"
