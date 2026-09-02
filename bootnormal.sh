@@ -1,4 +1,4 @@
-cow="${1}.qcow2"
+cow="disks/${1}.qcow2"
 arch="$2"
 qram="$3"
 qcore="$4"
@@ -12,8 +12,7 @@ fi
 if [ -z "$LWDE" ]; then
   LWDE="false"
 fi
-sharedir="../share"
-cd "disks"
+sharedir="share"
 
 if [ "$arch" = "aarch64" ]; then
   mkdir -p "firmware"
@@ -29,8 +28,8 @@ if [ "$arch" = "aarch64" ]; then
     -device "usb-tablet" \
     -device "virtio-keyboard-pci" \
     -device "virtio-mouse-pci" \
-    -drive "if=pflash,format=raw,unit=0,file=AAVMF_CODE.fd,readonly=on" \
-    -drive "if=pflash,format=raw,unit=1,file=AAVMF_VARS.fd" \
+    -drive "if=pflash,format=raw,unit=0,file=firmware/AAVMF_CODE.fd,readonly=on" \
+    -drive "if=pflash,format=raw,unit=1,file=firmware/AAVMF_VARS.fd" \
     -netdev "user,id=net0" \
     -device "virtio-net-device,netdev=net0" \
     -device "virtio-rng-pci" \
