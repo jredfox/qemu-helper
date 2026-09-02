@@ -1,6 +1,6 @@
 iso="iso/${1}.iso"
 cow="disks/${1}.qcow2"
-arch=$2
+arch="$2"
 qram="$3"
 qcore="$4"
 LWDE="$5"
@@ -70,7 +70,7 @@ if [ "$LWDE" = "true" ]; then
     -boot d \
     -enable-kvm \
     -device "qxl-vga,vram_size=134217728" \
-  exit "$?"
+  exit $?
 fi
 
 qemu-system-$arch \
