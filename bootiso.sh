@@ -52,8 +52,8 @@ if [ "$arch" = "riscv64" ]; then
     -netdev "user,id=net0" \
     -device "virtio-net-device,netdev=net0" \
     -device "virtio-rng-pci" \
-    -drive "file=${iso},format=raw,readonly=on,if=virtio" \
     -drive "file=${cow},format=qcow2,if=virtio" \
+    -drive "file=${iso},format=raw,readonly=on,if=virtio" \
     -nographic
     exit $?
 fi
