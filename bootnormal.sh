@@ -45,7 +45,7 @@ if [ "$arch" = "aarch64" ]; then
   exit $?
 fi
 
-#BOOT ARM32 ISO
+#BOOT ARM32
 if [ "$arch" = "arm" ]; then
   mkdir -p "$fwrdir"
   fwrcode="$fwrdir/AAVMF_CODE_32${1}.fd"
@@ -72,7 +72,8 @@ if [ "$arch" = "arm" ]; then
     -device "virtio-net-device,netdev=net0" \
     -device "virtio-rng-pci" \
     -drive "if=none,file=${iso},id=cdrom,media=cdrom" \
-    -device "virtio-scsi-device -device scsi-cd,drive=cdrom" \
+    -device "virtio-scsi-device" \
+    -device "scsi-cd,drive=cdrom" \
     -drive "if=none,file=${cow},id=hd0,format=qcow2" \
     -device "virtio-blk-device,drive=hd0" \
     -nographic
