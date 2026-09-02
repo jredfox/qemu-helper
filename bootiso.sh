@@ -65,6 +65,24 @@ if [ "$arch" = "riscv64" ]; then
     exit $?
 fi
 
+#BOOT IBM-Z (s390x)
+if [ "$arch" = "riscv64" ]; then
+  qemu-system-s390x \
+    -cpu max \
+    -m "$qram" \
+    -smp "$qcore" \
+    -machine "s390-ccw-virtio" \
+    -netdev "user,id=net0" \
+    -device "virtio-net-ccw,netdev=net0" \
+    -drive "file=${cow},format=qcow2,if=none,id=disk0" \
+    -device "virtio-blk-ccw,drive=disk0,id=vdisk0,bootindex=1" \
+    -drive "file=${iso},format=raw,readonly=on,if=none,id=cdrom0,media=cdrom" \
+    -device "virtio-scsi-ccw,id=scsi0" \
+    -device "scsi-cd,drive=cdrom0,bus=scsi0.0,bootindex=2" \
+    -nographic
+    exit $?
+fi
+
 #Handle LightWeight Desktop Enviorment with -device qxl-vga,vram_size=134217728
 if [ "$LWDE" = "true" ]; then
   echo "Launching qemu with LWDE with $qcore"
