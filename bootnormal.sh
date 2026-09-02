@@ -45,6 +45,40 @@ if [ "$arch" = "aarch64" ]; then
   exit $?
 fi
 
+#BOOT ARM32 ISO
+if [ "$arch" = "arm" ]; then
+  mkdir -p "$fwrdir"
+  fwrcode="$fwrdir/AAVMF_CODE_32${1}.fd"
+  fwrvars="$fwrdir/AAVMF_VARS_32${1}.fd"
+  if [ ! -f "$fwrcode" ]; then
+    cp "/usr/share/AAVMF/AAVMF32_CODE.fd" "$fwrcode"
+  fi
+  if [ ! -f "$fwrvars" ]; then
+    cp "/usr/share/AAVMF/AAVMF32_VARS.fd" "$fwrvars"
+  fi
+  qemu-system-arm \
+    -cpu cortex-a15 \
+    -machine virt,gic-version=2 \
+    -m "$qram" \
+    -smp "$qcore" \
+    -device "qemu-xhci" \
+    -device "usb-kbd" \
+    -device "usb-tablet" \
+    -device "virtio-keyboard-pci" \
+    -device "virtio-mouse-pci" \
+    -drive "if=pflash,format=raw,unit=0,file=AAVMF32_CODE.fd,readonly=on" \
+    -drive "if=pflash,format=raw,unit=1,file=AAVMF32_VARS.fd" \
+    -netdev "user,id=net0" \
+    -device "virtio-net-device,netdev=net0" \
+    -device "virtio-rng-pci" \
+    -drive "if=none,file=${iso},id=cdrom,media=cdrom" \
+    -device "virtio-scsi-device -device scsi-cd,drive=cdrom" \
+    -drive "if=none,file=${cow},id=hd0,format=qcow2" \
+    -device "virtio-blk-device,drive=hd0" \
+    -nographic
+  exit $?
+fi
+
 #BOOT RISC-V
 if [ "$arch" = "riscv64" ]; then
   qemu-system-riscv64 \
