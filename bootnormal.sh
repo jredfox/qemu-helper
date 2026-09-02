@@ -42,7 +42,7 @@ fi
 #BOOT RISC-V
 if [ "$arch" = "riscv64" ]; then
   qemu-system-riscv64 \
-    -cpu rv64 \
+    -cpu "rv64" \
     -machine "virt,acpi=off" \
     -m "$qram" \
     -smp "$qcore" \
@@ -51,7 +51,7 @@ if [ "$arch" = "riscv64" ]; then
     -netdev "user,id=net0" \
     -device "virtio-net-device,netdev=net0" \
     -device "virtio-rng-pci" \
-    -drive "file=$cow,format=qcow2,if=virtio"
+    -drive "file=${cow},format=qcow2,if=virtio"
   exit $?
 fi
 
@@ -59,7 +59,7 @@ fi
 if [ "$LWDE" = "true" ]; then
   qemu-system-$arch \
     -m "$qram" \
-    -cpu host \
+    -cpu "host" \
     -smp "$qcore" \
     -hda "$cow" \
     -enable-kvm \
@@ -72,7 +72,7 @@ fi
 
 qemu-system-$arch \
   -m "$qram" \
-  -cpu host \
+  -cpu "host" \
   -smp "$qcore" \
   -hda "$cow" \
   -enable-kvm \
