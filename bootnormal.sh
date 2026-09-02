@@ -80,7 +80,7 @@ fi
 if [ "$LWDE" = "true" ]; then
   qemu-system-$arch \
     -m "$qram" \
-    -cpu "host" \
+    -cpu host \
     -smp "$qcore" \
     -hda "$cow" \
     -enable-kvm \
@@ -93,7 +93,7 @@ fi
 
 qemu-system-$arch \
   -m "$qram" \
-  -cpu "host" \
+  -cpu host \
   -smp "$qcore" \
   -hda "$cow" \
   -enable-kvm \
