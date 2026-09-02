@@ -15,6 +15,27 @@ fi
 sharedir="../share"
 cd "disks"
 
+if [ "$arch" = "aarch64" ]; then
+  qemu-system-aarch64 \
+    -cpu cortex-a72 \
+    -machine virt,gic-version=2 \
+    -m "$qram" \
+    -smp "$qcore" \
+    -device qemu-xhci \
+    -device usb-kbd \
+    -device usb-tablet \
+    -device virtio-keyboard-pci \
+    -device virtio-mouse-pci \
+    -drive if=pflash,format=raw,unit=0,file=AAVMF_CODE.fd,readonly=on \
+    -drive if=pflash,format=raw,unit=1,file=AAVMF_VARS.fd \
+    -netdev user,id=net0 \
+    -device virtio-net-device,netdev=net0 \
+    -device virtio-rng-pci \
+    -drive file=${cow},format=qcow2,if=virtio \
+    -nographic
+  exit $?
+fi
+
 #BOOT RISC-V
 if [ "$arch" = "riscv64" ]; then
   qemu-system-riscv64 \

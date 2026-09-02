@@ -14,6 +14,30 @@ if [ -z "$LWDE" ]; then
   LWDE="false"
 fi
 
+if [ "$arch" = "aarch64" ]; then
+  qemu-system-aarch64 \
+    -cpu cortex-a72 \
+    -machine virt,gic-version=2 \
+    -m "$qram" \
+    -smp "$qcore" \
+    -device qemu-xhci \
+    -device usb-kbd \
+    -device usb-tablet \
+    -device virtio-keyboard-pci \
+    -device virtio-mouse-pci \
+    -drive if=pflash,format=raw,unit=0,file=AAVMF_CODE.fd,readonly=on \
+    -drive if=pflash,format=raw,unit=1,file=AAVMF_VARS.fd \
+    -netdev user,id=net0 \
+    -device virtio-net-device,netdev=net0 \
+    -device virtio-rng-pci \
+    -drive file=${cow},format=qcow2,if=virtio,id=VIRTIO1 \
+    -device virtio-scsi-pci,id=scsi0 \
+    -drive file=${iso},format=raw,readonly=on,if=none,id=cdrom0,media=cdrom \
+    -device scsi-cd,drive=cdrom0,bus=scsi0.0 \
+    -nographic
+  exit $?
+fi
+
 #BOOT RISC-V ISO
 if [ "$arch" = "riscv64" ]; then
   qemu-system-riscv64 \
