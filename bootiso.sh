@@ -60,8 +60,8 @@ if [ "$arch" = "arm" ]; then
     cp "/usr/share/AAVMF/AAVMF32_VARS.fd" "$fwrvars"
   fi
   qemu-system-arm \
-    -cpu cortex-a15 \
-    -machine virt,gic-version=2 \
+    -cpu "cortex-a15" \
+    -machine "virt,gic-version=2" \
     -m "$qram" \
     -smp "$qcore" \
     -device "qemu-xhci" \
@@ -69,8 +69,8 @@ if [ "$arch" = "arm" ]; then
     -device "usb-tablet" \
     -device "virtio-keyboard-pci" \
     -device "virtio-mouse-pci" \
-    -drive "if=pflash,format=raw,unit=0,file=AAVMF32_CODE.fd,readonly=on" \
-    -drive "if=pflash,format=raw,unit=1,file=AAVMF32_VARS.fd" \
+    -drive "if=pflash,format=raw,unit=0,file=${fwrcode},readonly=on" \
+    -drive "if=pflash,format=raw,unit=1,file=${fwrvars}" \
     -netdev "user,id=net0" \
     -device "virtio-net-device,netdev=net0" \
     -device "virtio-rng-pci" \
