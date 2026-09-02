@@ -62,7 +62,7 @@ if [ "$arch" = "riscv64" ]; then
 fi
 
 #BOOT IBM-Z (s390x)
-if [ "$arch" = "riscv64" ]; then
+if [ "$arch" = "s390x" ]; then
   qemu-system-s390x \
     -cpu max \
     -m "$qram" \
