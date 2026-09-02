@@ -80,7 +80,7 @@ if [ "$arch" = "riscv64" ]; then
     -device "virtio-scsi-ccw,id=scsi0" \
     -device "scsi-cd,drive=cdrom0,bus=scsi0.0,bootindex=2" \
     -nographic
-    exit $?
+  exit $?
 fi
 
 #Handle LightWeight Desktop Enviorment with -device qxl-vga,vram_size=134217728
@@ -94,7 +94,7 @@ if [ "$LWDE" = "true" ]; then
     -cdrom "$iso" \
     -boot d \
     -enable-kvm \
-    -device "qxl-vga,vram_size=134217728" \
+    -device "qxl-vga,vram_size=134217728"
   exit $?
 fi
 
