@@ -1,5 +1,5 @@
 cow="disks/${1}.qcow2"
-fwrdir="firmware/${1}"
+fwrdir="disks/firmware"
 arch="$2"
 qram="$3"
 qcore="$4"
@@ -17,8 +17,14 @@ sharedir="share"
 
 if [ "$arch" = "aarch64" ]; then
   mkdir -p "$fwrdir"
-  cp "/usr/share/AAVMF/AAVMF_CODE.fd" "$fwrdir/AAVMF_CODE.fd"
-  cp "/usr/share/AAVMF/AAVMF_VARS.fd" "$fwrdir/AAVMF_VARS.fd"
+  fwrcode="$fwrdir/AAVMF_CODE_${1}.fd"
+  fwrvars="$fwrdir/AAVMF_VARS_${1}.fd"
+  if [ ! -f "$fwrcode" ]; then
+    cp "/usr/share/AAVMF/AAVMF_CODE.fd" "$fwrcode"
+  fi
+  if [ ! -f "$fwrvars" ]; then
+    cp "/usr/share/AAVMF/AAVMF_VARS.fd" "$fwrvars"
+  fi
   qemu-system-aarch64 \
     -cpu "cortex-a72" \
     -machine "virt,gic-version=2" \
@@ -29,8 +35,8 @@ if [ "$arch" = "aarch64" ]; then
     -device "usb-tablet" \
     -device "virtio-keyboard-pci" \
     -device "virtio-mouse-pci" \
-    -drive "if=pflash,format=raw,unit=0,file=${fwrdir}/AAVMF_CODE.fd,readonly=on" \
-    -drive "if=pflash,format=raw,unit=1,file=${fwrdir}/AAVMF_VARS.fd" \
+    -drive "if=pflash,format=raw,unit=0,file=${fwrcode},readonly=on" \
+    -drive "if=pflash,format=raw,unit=1,file=${fwrvars}" \
     -netdev "user,id=net0" \
     -device "virtio-net-device,netdev=net0" \
     -device "virtio-rng-pci" \
