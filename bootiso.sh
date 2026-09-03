@@ -19,12 +19,8 @@ if [ "$arch" = "aarch64" ]; then
   mkdir -p "$fwrdir"
   fwrcode="$fwrdir/AAVMF_CODE_${1}_iso.fd"
   fwrvars="$fwrdir/AAVMF_VARS_${1}_iso.fd"
-  if [ ! -f "$fwrcode" ]; then
-    cp "/usr/share/AAVMF/AAVMF_CODE.fd" "$fwrcode"
-  fi
-  if [ ! -f "$fwrvars" ]; then
-    cp "/usr/share/AAVMF/AAVMF_VARS.fd" "$fwrvars"
-  fi
+  cp "/usr/share/AAVMF/AAVMF_CODE.fd" "$fwrcode"
+  cp "/usr/share/AAVMF/AAVMF_VARS.fd" "$fwrvars"
   qemu-system-aarch64 \
     -cpu "cortex-a72" \
     -machine "virt,gic-version=2" \
@@ -53,12 +49,8 @@ if [ "$arch" = "arm" ]; then
   mkdir -p "$fwrdir"
   fwrcode="$fwrdir/AAVMF_CODE_32${1}_iso.fd"
   fwrvars="$fwrdir/AAVMF_VARS_32${1}_iso.fd"
-  if [ ! -f "$fwrcode" ]; then
-    cp "/usr/share/AAVMF/AAVMF32_CODE.fd" "$fwrcode"
-  fi
-  if [ ! -f "$fwrvars" ]; then
-    cp "/usr/share/AAVMF/AAVMF32_VARS.fd" "$fwrvars"
-  fi
+  cp "/usr/share/AAVMF/AAVMF32_CODE.fd" "$fwrcode"
+  cp "/usr/share/AAVMF/AAVMF32_VARS.fd" "$fwrvars"
   qemu-system-arm \
     -cpu "cortex-a15" \
     -machine "virt,gic-version=2" \
