@@ -40,10 +40,10 @@ if [ "$arch" = "aarch64" ]; then
     -netdev "user,id=net0" \
     -device "virtio-net-device,netdev=net0" \
     -device "virtio-rng-pci" \
-    -drive "file=${cow},format=qcow2,if=virtio,id=VIRTIO1" \
     -device "virtio-scsi-pci,id=scsi0" \
     -drive "file=${iso},format=raw,readonly=on,if=none,id=cdrom0,media=cdrom" \
     -device "scsi-cd,drive=cdrom0,bus=scsi0.0" \
+    -drive "file=${cow},format=qcow2,if=virtio" \
     -nographic
   exit $?
 fi
