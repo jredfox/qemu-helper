@@ -17,8 +17,8 @@ fi
 
 if [ "$arch" = "aarch64" ]; then
   mkdir -p "$fwrdir"
-  fwrcode="$fwrdir/AAVMF_CODE_${1}_iso.fd"
-  fwrvars="$fwrdir/AAVMF_VARS_${1}_iso.fd"
+  fwrcode="$fwrdir/${1}_AAVMF_CODE_iso.fd"
+  fwrvars="$fwrdir/${1}_AAVMF_VARS_iso.fd"
   cp "/usr/share/AAVMF/AAVMF_CODE.fd" "$fwrcode"
   cp "/usr/share/AAVMF/AAVMF_VARS.fd" "$fwrvars"
   qemu-system-aarch64 \
@@ -47,8 +47,8 @@ fi
 #BOOT ARM32 ISO
 if [ "$arch" = "arm" ]; then
   mkdir -p "$fwrdir"
-  fwrcode="$fwrdir/AAVMF_CODE_32${1}_iso.fd"
-  fwrvars="$fwrdir/AAVMF_VARS_32${1}_iso.fd"
+  fwrcode="$fwrdir/${1}_AAVMF_CODE_32_iso.fd"
+  fwrvars="$fwrdir/${1}_AAVMF_VARS_32_iso.fd"
   cp "/usr/share/AAVMF/AAVMF32_CODE.fd" "$fwrcode"
   cp "/usr/share/AAVMF/AAVMF32_VARS.fd" "$fwrvars"
   qemu-system-arm \

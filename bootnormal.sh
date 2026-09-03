@@ -17,8 +17,8 @@ sharedir="share"
 
 if [ "$arch" = "aarch64" ]; then
   mkdir -p "$fwrdir"
-  fwrcode="$fwrdir/AAVMF_CODE_${1}.fd"
-  fwrvars="$fwrdir/AAVMF_VARS_${1}.fd"
+  fwrcode="$fwrdir/${1}_AAVMF_CODE.fd"
+  fwrvars="$fwrdir/${1}_AAVMF_VARS.fd"
   if [ ! -f "$fwrcode" ]; then
     cp "/usr/share/AAVMF/AAVMF_CODE.fd" "$fwrcode"
   fi
@@ -48,8 +48,8 @@ fi
 #BOOT ARM32
 if [ "$arch" = "arm" ]; then
   mkdir -p "$fwrdir"
-  fwrcode="$fwrdir/AAVMF_CODE_32${1}.fd"
-  fwrvars="$fwrdir/AAVMF_VARS_32${1}.fd"
+  fwrcode="$fwrdir/${1}_AAVMF_CODE_32.fd"
+  fwrvars="$fwrdir/${1}_AAVMF_VARS_32.fd"
   if [ ! -f "$fwrcode" ]; then
     cp "/usr/share/AAVMF/AAVMF32_CODE.fd" "$fwrcode"
   fi
