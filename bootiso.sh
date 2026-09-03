@@ -94,8 +94,8 @@ if [ "$arch" = "riscv64" ]; then
     -netdev "user,id=net0" \
     -device "virtio-net-device,netdev=net0" \
     -device "virtio-rng-pci" \
-    -drive "file=${cow},format=qcow2,if=virtio" \
     -drive "file=${iso},format=raw,readonly=on,if=virtio" \
+    -drive "file=${cow},format=qcow2,if=virtio" \
     -nographic
   exit $?
 fi
@@ -125,8 +125,8 @@ if [ "$LWDE" = "true" ]; then
     -m "$qram" \
     -cpu host \
     -smp "$qcore" \
-    -hda "$cow" \
     -cdrom "$iso" \
+    -hda "$cow" \
     -boot d \
     -enable-kvm \
     -device "qxl-vga,vram_size=134217728"
@@ -137,8 +137,8 @@ qemu-system-$arch \
   -m "$qram" \
   -cpu host \
   -smp "$qcore" \
-  -hda "$cow" \
   -cdrom "$iso" \
+  -hda "$cow" \
   -boot d \
   -enable-kvm
 
