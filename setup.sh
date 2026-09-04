@@ -19,9 +19,10 @@ if ! output=$(qemu-img "--version" > /dev/null 2>&1); then
     #Debian & Ubuntu Based
     if command -v apt >/dev/null 2>&1; then
         sudo apt update
-        sudo apt install -y qemu-kvm qemu-system virt-manager bridge-utils qemu-efi-aarch64 qemu-efi-arm genisoimage
+        sudo apt install -y qemu-kvm qemu-system virt-manager bridge-utils qemu-efi-aarch64 qemu-efi-arm
         #RISC-V DEPS
         sudo apt install -y opensbi qemu-system-riscv64 qemu-efi-riscv64 u-boot-qemu
+        #TODO: install 7z or py7zip depending upon what is avaliable
     elif command -v dnf >/dev/null 2>&1; then
         #Fedora Support
         qemu_sys=qemu-system-x86

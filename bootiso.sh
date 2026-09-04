@@ -16,6 +16,36 @@ if [ -z "$LWDE" ]; then
 fi
 
 if [ "$arch" = "aarch64" ]; then
+  kb="true"
+  if [ "$kb" = "true" ]; then
+    kbdir="disks/kb"
+    mkdir -p "$kbdir"
+    #Extract kernal and initrd from the linux ISO
+    pushd "$kbdir" >/dev/null
+    7z l -ba "${iso}" | awk 'substr($3,1,1) != "D" { sub(/^([^ ]+ +){5}/, "") ; print }' | sed 's|^[^/]|/&|' | grep -Ei '^(/[^/]+){0,4}/(hwe-)?(vmlinuz|zImage|uImage|Image|linux|vmlinux|initrd|uInitrd|initramfs|initramfs-linux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | sed 's|^/||' | xargs -r -d '\n' 7z e "$iso" >/dev/null
+    popd >/dev/null
+    qemu-system-aarch64 \
+      -cpu "cortex-a72" \
+      -machine "virt,gic-version=2" \
+      -m "$qram" \
+      -smp "$qcore" \
+      -device "qemu-xhci" \
+      -device "usb-kbd" \
+      -device "usb-tablet" \
+      -device "virtio-keyboard-pci" \
+      -device "virtio-mouse-pci" \
+      -kernel "$kbkernal" \
+      -initrd "$kbinitrd" \
+      -append "console=ttyAMA0" \
+      -netdev "user,id=net0" \
+      -device "virtio-net-device,netdev=net0" \
+      -device "virtio-rng-pci" \
+      -device "virtio-scsi-pci,id=scsi0" \
+      -drive "file=${iso},format=raw,readonly=on,if=none,id=cdrom0,media=cdrom" \
+      -device "scsi-cd,drive=cdrom0,bus=scsi0.0" \
+      -drive "file=${cow},format=qcow2,if=virtio" \
+      -nographic
+  fi
   mkdir -p "$fwrdir"
   fwrcode="$fwrdir/${1}_AAVMF_CODE_iso.fd"
   fwrvars="$fwrdir/${1}_AAVMF_VARS_iso.fd"
