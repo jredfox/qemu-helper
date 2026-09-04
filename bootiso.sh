@@ -19,7 +19,7 @@ fi
 if [ "$arch" = "aarch64" ]; then
   kb="true"
   if [ "$kb" = "true" ]; then
-    kbdir="disks/kb"
+    kbdir="disks/kb/${1}"
     mkdir -p "$kbdir"
     vmlinuz="$(find "$kbdir" -maxdepth 1 -type f | grep -Ei '/(hwe-)?(vmlinuz|zImage|uImage|Image|linux|vmlinux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' -m 1)"
     initrd="$(find "$kbdir" -maxdepth 1 -type f | grep -Ei '/(hwe-)?(initrd|uInitrd|initramfs|initramfs-linux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' -m 1)"
