@@ -1,0 +1,2 @@
+grep -Ei '^(/[^/]+){0,3}/(hwe-)?(vmlinuz|zImage|uImage|Image|linux|vmlinux)(-lts)?$'
+grep -Ei '^(/[^/]+){0,3}/(hwe-)?(initrd|uInitrd|initramfs|initramfs-linux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$'
