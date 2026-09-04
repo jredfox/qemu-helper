@@ -19,7 +19,8 @@ if ! output=$(qemu-img "--version" > /dev/null 2>&1); then
     #Debian & Ubuntu Based
     if command -v apt >/dev/null 2>&1; then
         sudo apt update
-        sudo apt install -y qemu-kvm qemu-system virt-manager bridge-utils
+        sudo apt install -y qemu-kvm qemu-system virt-manager bridge-utils qemu-efi-aarch64 qemu-efi-arm genisoimage
+        #RISC-V DEPS
         sudo apt install -y opensbi qemu-system-riscv64 qemu-efi-riscv64 u-boot-qemu
     elif command -v dnf >/dev/null 2>&1; then
         #Fedora Support
