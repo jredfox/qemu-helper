@@ -160,7 +160,7 @@ fi
 
 #Handle LightWeight Desktop Enviorment with -device qxl-vga,vram_size=134217728
 if [ "$LWDE" = "true" ]; then
-  echo "Launching qemu with LWDE with $qcore"
+  echo "Launching qemu with LWDE"
   qemu-system-$arch \
     -m "$qram" \
     -cpu host \
