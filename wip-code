@@ -1,9 +1,0 @@
-#grep -Ei '^(/[^/]+){0,3}/(hwe-)?(vmlinuz|zImage|uImage|Image|linux|vmlinux)(-lts)?$'
-#grep -Ei '^(/[^/]+){0,3}/(hwe-)?(initrd|uInitrd|initramfs|initramfs-linux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$'
-
-
-iso=/home/jredfox/vms/ubuntu-16.10-server-arm64.iso
-pushd "$HOME/Desktop/test"
-pwd -P
-#isoinfo -R -f -i "${iso}" | grep -Ei '^(/[^/]+){0,3}/(hwe-)?(vmlinuz|zImage|uImage|Image|linux|vmlinux)(-lts)?$' "$log" | xargs -r -d '\n' 7z x "${iso}"
-popd
