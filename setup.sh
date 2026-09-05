@@ -127,7 +127,7 @@ for file in "iso"/*.iso; do
                 ;;
         esac
         
-        if [ -z "$bits32" = "true" ];
+        if [ "$bits32" = "true" ]; then
             qram="$qram32"
             qcore="$qcore32"
         fi
