@@ -73,6 +73,7 @@ for file in "iso"/*.iso; do
         esac
 
         #Extract the arch from from the ISO and translate the arch aliases to be standard
+        bits32="false"
         case "$lname" in
             # ARM 64-bit
             *aarch64*|*arm64*|*armv8*|*armv9*)
@@ -128,13 +129,16 @@ for file in "iso"/*.iso; do
         esac
         
         if [ "$bits32" = "true" ]; then
-            qram="$qram32"
-            qcore="$qcore32"
+            qram_gen="$qram32"
+            qcore_gen="$qcore32"
+        else
+            qram_gen="$qram"
+            qcore_gen="$qcore"
         fi
         echo "cd \"${install_dir}\"" >"$bootsh"
-        echo "sh bootnormal.sh \"${name}\" ${arch} ${qram} ${qcore} ${LWDE}" >>"$bootsh"
+        echo "sh bootnormal.sh \"${name}\" ${arch} ${qram_gen} ${qcore_gen} ${LWDE}" >>"$bootsh"
         echo "cd \"${install_dir}\"" >"$bootisosh"
-        echo "sh bootiso.sh \"${name}\" ${arch} ${qram} ${qcore} ${LWDE}" >>"$bootisosh"
+        echo "sh bootiso.sh \"${name}\" ${arch} ${qram_gen} ${qcore_gen} ${LWDE}" >>"$bootisosh"
         chmod +x "$bootsh"
         chmod +x "$bootisosh"
     fi
