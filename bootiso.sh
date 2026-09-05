@@ -32,6 +32,8 @@ if [ "$arch" = "aarch64" ]; then
       results_sorted="$(printf '%s' "$results" | awk '{print length, $0}' | sort -n | cut -d' ' -f2-)"
       vmlinuz_path="$(printf '%s' "$results_sorted" | grep -Ei '(hwe-)?(vmlinuz|zImage|uImage|Image|linux|vmlinux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | head -n 1)"
       initrd_path="$(printf '%s' "$results_sorted" | grep -Ei '(hwe-)?(initrd|uInitrd|initramfs|initramfs-linux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | head -n 1)"
+    else
+      echo "skipping dynamic kernal fetch"
     fi
     7z e "${iso}" "$vmlinuz_path" "$initrd_path" -aou -y >/dev/null
     echo "kernal: $vmlinuz_path initrd: $initrd_path"
