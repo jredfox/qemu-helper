@@ -5,12 +5,20 @@ if [ -z "$install_dir" ]; then
     install_dir="$HOME/vms"
 fi
 #default ram to give qemu
-if [ -z "$qemu_ram" ]; then
-    qemu_ram="4096"
+if [ -z "$qram" ]; then
+    qram="4096"
 fi
 #default cores to give qemu
 if [ -z "$qcore" ]; then
     qcore="4"
+fi
+#default ram to give qemu for 32 bits
+if [ -z "$qram32" ]; then
+    qram32="2048"
+fi
+#default cores to give qemu for 32 bits
+if [ -z "$qcore32" ]; then
+    qcore32="2"
 fi
 
 #install qemu
@@ -74,6 +82,7 @@ for file in "iso"/*.iso; do
             # ARM 32-bit
             *aarch32*|*arm32*|*armv[0-7]*|*armhf*|*armel*|*[!a-z]arm[!a-z]*|arm[!a-z]*|*[!a-z]arm)
                 arch="arm"
+                bits32="true"
                 ;;
 
             # RISC-V
@@ -89,6 +98,7 @@ for file in "iso"/*.iso; do
             # powerpc32
             *ppc32*|*ppc?32*|*powerpc32*|*powerpc?32*)
                 arch="ppc32"
+                bits32="true"
                 ;;
 
             # powerpc64
@@ -109,16 +119,22 @@ for file in "iso"/*.iso; do
             # x86 32-bit
             *i[0-9]86*|*i[0-9][0-9]86*|*i[0-9][0-9][0-9]86*|*x86?32*|*x86*|*32bit*|*32?bit*|*x32*|*ia-32*)
                 arch="i386"
+                bits32="true"
                 ;;
 
             *)
                 arch="x86_64"
                 ;;
         esac
+        
+        if [ -z "$bits32" = "true" ];
+            qram="$qram32"
+            qcore="$qcore32"
+        fi
         echo "cd \"${install_dir}\"" >"$bootsh"
-        echo "sh bootnormal.sh \"${name}\" ${arch} ${qemu_ram} ${qcore} ${LWDE}" >>"$bootsh"
+        echo "sh bootnormal.sh \"${name}\" ${arch} ${qram} ${qcore} ${LWDE}" >>"$bootsh"
         echo "cd \"${install_dir}\"" >"$bootisosh"
-        echo "sh bootiso.sh \"${name}\" ${arch} ${qemu_ram} ${qcore} ${LWDE}" >>"$bootisosh"
+        echo "sh bootiso.sh \"${name}\" ${arch} ${qram} ${qcore} ${LWDE}" >>"$bootisosh"
         chmod +x "$bootsh"
         chmod +x "$bootisosh"
     fi

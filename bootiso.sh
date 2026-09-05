@@ -37,7 +37,6 @@ if [ "$arch" = "aarch64" ]; then
     fi
     7z e "${iso}" "$vmlinuz_path" "$initrd_path" -aou -y >/dev/null
     echo "kernal: $vmlinuz_path initrd: $initrd_path"
-    echo "if you experience issues with kernal booting read the FAQ"
     cd "$opwd"
     kbkernal="$(find "$kbdir" -maxdepth 1 -type f | grep -Ei '/(hwe-)?(vmlinuz|zImage|uImage|bzImage|Image|linux|vmlinux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | head -n 1)"
     kbinitrd="$(find "$kbdir" -maxdepth 1 -type f | grep -Ei '/(hwe-)?(initrd|uInitrd|initramfs|initramfs-linux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | head -n 1)"
