@@ -55,10 +55,11 @@ if [ "$arch" = "aarch64" ]; then
       -netdev "user,id=net0" \
       -device "virtio-net-device,netdev=net0" \
       -device "virtio-rng-pci" \
-      -device "virtio-scsi-pci,id=scsi0" \
+      -device "virtio-scsi-device,id=scsi0" \
       -drive "file=${iso},format=raw,readonly=on,if=none,id=cdrom0,media=cdrom" \
       -device "scsi-cd,drive=cdrom0,bus=scsi0.0" \
-      -drive "file=${cow},format=qcow2,if=virtio" \
+      -drive "file=${cow},format=qcow2,if=none,id=disk0" \
+      -device "virtio-blk-device,drive=disk0" \
       -nographic
   fi
   mkdir -p "$fwrdir"
