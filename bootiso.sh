@@ -28,9 +28,9 @@ if [ "$arch" = "aarch64" ]; then
     vmlinuz_path="$kb_path"
     initrd_path="$kb_initrd"
     if [ -z "$vmlinuz_path" ] || [ -z "$initrd_path" ]; then
-      results="$(7z l -ba "${iso}" | awk 'substr($3,1,1) != "D" { sub(/^([^ ]+ +){5}/, "") ; print }' | sed 's|^[^/]|/&|' | grep -Ei '^(/[^/]+){0,4}/(hwe-)?(vmlinuz|zImage|uImage|Image|linux|vmlinux|initrd|uInitrd|initramfs|initramfs-linux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | sed 's|^/||')"
+      results="$(7z l -ba "${iso}" | awk 'substr($3,1,1) != "D" { sub(/^([^ ]+ +){5}/, "") ; print }' | sed 's|^[^/]|/&|' | grep -Ei '^(/[^/]+){0,4}/(hwe-)?(vmlinuz|zImage|uImage|bzImage|Image|linux|vmlinux|initrd|uInitrd|initramfs|initramfs-linux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | sed 's|^/||')"
       results_sorted="$(printf '%s' "$results" | awk '{print length, $0}' | sort -n | cut -d' ' -f2-)"
-      vmlinuz_path="$(printf '%s' "$results_sorted" | grep -Ei '(hwe-)?(vmlinuz|zImage|uImage|Image|linux|vmlinux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | head -n 1)"
+      vmlinuz_path="$(printf '%s' "$results_sorted" | grep -Ei '(hwe-)?(vmlinuz|zImage|uImage|bzImage|Image|linux|vmlinux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | head -n 1)"
       initrd_path="$(printf '%s' "$results_sorted" | grep -Ei '(hwe-)?(initrd|uInitrd|initramfs|initramfs-linux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | head -n 1)"
     else
       echo "skipping dynamic kernal fetch"
@@ -39,7 +39,7 @@ if [ "$arch" = "aarch64" ]; then
     echo "kernal: $vmlinuz_path initrd: $initrd_path"
     echo "if you experience issues with kernal booting read the FAQ"
     cd "$opwd"
-    kbkernal="$(find "$kbdir" -maxdepth 1 -type f | grep -Ei '/(hwe-)?(vmlinuz|zImage|uImage|Image|linux|vmlinux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | head -n 1)"
+    kbkernal="$(find "$kbdir" -maxdepth 1 -type f | grep -Ei '/(hwe-)?(vmlinuz|zImage|uImage|bzImage|Image|linux|vmlinux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | head -n 1)"
     kbinitrd="$(find "$kbdir" -maxdepth 1 -type f | grep -Ei '/(hwe-)?(initrd|uInitrd|initramfs|initramfs-linux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | head -n 1)"
     qemu-system-aarch64 \
       -cpu "cortex-a72" \
@@ -63,6 +63,7 @@ if [ "$arch" = "aarch64" ]; then
       -drive "file=${cow},format=qcow2,if=none,id=disk0" \
       -device "virtio-blk-device,drive=disk0" \
       -nographic
+    exit $?
   fi
   mkdir -p "$fwrdir"
   fwrcode="$fwrdir/${1}_AAVMF_CODE_iso.fd"
