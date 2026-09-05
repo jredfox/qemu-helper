@@ -128,12 +128,11 @@ for file in "iso"/*.iso; do
                 ;;
         esac
         
+        qram_gen="$qram"
+        qcore_gen="$qcore"
         if [ "$bits32" = "true" ]; then
             qram_gen="$qram32"
             qcore_gen="$qcore32"
-        else
-            qram_gen="$qram"
-            qcore_gen="$qcore"
         fi
         echo "cd \"${install_dir}\"" >"$bootsh"
         echo "sh bootnormal.sh \"${name}\" ${arch} ${qram_gen} ${qcore_gen} ${LWDE}" >>"$bootsh"
