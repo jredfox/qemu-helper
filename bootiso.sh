@@ -17,7 +17,7 @@ if [ -z "$LWDE" ]; then
 fi
 
 if [ "$arch" = "aarch64" ]; then
-  kb="true"
+  kb="false"
   if [ "$kb" = "true" ]; then
     kbdir="disks/kb/${1}"
     rm -rf "$kbdir"
@@ -71,7 +71,7 @@ if [ "$arch" = "aarch64" ]; then
   cp "/usr/share/AAVMF/AAVMF_VARS.fd" "$fwrvars"
   qemu-system-aarch64 \
     -cpu "cortex-a72" \
-    -machine "virt,gic-version=2" \
+    -machine "virt,gic-version=2,acpi=off" \
     -m "$qram" \
     -smp "$qcore" \
     -device "qemu-xhci" \
@@ -84,10 +84,11 @@ if [ "$arch" = "aarch64" ]; then
     -netdev "user,id=net0" \
     -device "virtio-net-device,netdev=net0" \
     -device "virtio-rng-pci" \
-    -device "virtio-scsi-pci,id=scsi0" \
-    -drive "file=${iso},format=raw,readonly=on,if=none,id=cdrom0,media=cdrom" \
-    -device "scsi-cd,drive=cdrom0,bus=scsi0.0" \
-    -drive "file=${cow},format=qcow2,if=virtio" \
+    -drive "if=none,file=${iso},id=cdrom,media=cdrom" \
+    -device "virtio-scsi-device" \
+    -device "scsi-cd,drive=cdrom" \
+    -drive "if=none,file=${cow},id=hd0,format=qcow2" \
+    -device "virtio-blk-device,drive=hd0" \
     -nographic
   exit $?
 fi
@@ -101,7 +102,7 @@ if [ "$arch" = "arm" ]; then
   cp "/usr/share/AAVMF/AAVMF32_VARS.fd" "$fwrvars"
   qemu-system-arm \
     -cpu "cortex-a15" \
-    -machine "virt,gic-version=2" \
+    -machine "virt,gic-version=2,acpi=off" \
     -m "$qram" \
     -smp "$qcore" \
     -device "qemu-xhci" \
