@@ -59,7 +59,7 @@ if [ "$arch" = "aarch64" ]; then
       -device "virtio-scsi-device,id=scsi0" \
       -drive "file=${iso},format=raw,readonly=on,if=none,id=cdrom0,media=cdrom" \
       -device "scsi-cd,drive=cdrom0,bus=scsi0.0" \
-      -drive "file=${cow},format=qcow2,if=none,id=disk0" \
+      -drive "file=${cow},format=raw,if=none,id=disk0" \
       -device "virtio-blk-device,drive=disk0" \
       -nographic
     exit $?
