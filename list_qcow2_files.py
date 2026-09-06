@@ -96,9 +96,10 @@ def main():
     g.launch()
 
     try:
-        ls = [ "/" ]
         if (len(sys.argv) > 2):
             ls = sys.argv[2:]
+        else:
+            ls = [ "/" ]
         mount_all_filesystems(g)
         for path in list_files(g, ls):
             print(path)
