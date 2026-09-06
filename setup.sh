@@ -59,20 +59,12 @@ for file in "iso"/*.iso; do
     if [ -f "disks/${name}.qcow2" ]; then
         echo "Skipping ISO $name"
     else
-        lname="$(printf '%s' "$name" | tr '[:upper:]' '[:lower:]')"
-        kb="false"
-        case "$lname" in
-            *-kb|-kb-*) kb="true" ;;
-        esac
-        if [ "$kb" = "true" ]; then
-            qemu-img create -f raw "disks/${name}.qcow2" 50G
-        else
-            qemu-img create -f qcow2 "disks/${name}.qcow2" 50G
-        fi
+        qemu-img create -f qcow2 "disks/${name}.qcow2" 50G
         bootsh="boot/${name}.sh"
         bootisosh="boot/${name}_iso.sh"
         
         LWDE="false"
+        lname="$(printf '%s' "$name" | tr '[:upper:]' '[:lower:]')"
         #Enable LightWeight Deskop Enviorment Flag
         case "$lname" in
             *xfce*|*mate*|*lxqt*|*lxde*|*budgie*|*lubuntu*|*xubuntu*)
