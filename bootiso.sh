@@ -158,6 +158,41 @@ if [ "$arch" = "s390x" ]; then
   exit $?
 fi
 
+#PowerPC 64 bit little endian
+qemu-system-ppc64le \
+    -cpu power8  \
+    -machine "pseries-2.6,cap-htm=off"  \
+    -m 4G \
+    -smp 4 \
+    -hda "$cow" \
+    -cdrom "$iso" \
+    -boot d \
+    -device usb-kbd \
+    -device usb-mouse \
+    -nographic \
+    -prom-env 'auto-boot?=true' \
+    -prom-env 'vga-ndrv?=true' \
+    -prom-env 'boot-args=-v'
+exit $?
+
+#PowerPC 64 (bit Big Endian) Old MacOS Arch
+qemu-system-ppc64 \
+    -L pc-bios \
+    -machine "pseries-2.6,cap-htm=off"  \
+    -cpu power8  \
+    -m 4G \
+    -smp 4 \
+    -hda "$cow" \
+    -cdrom "$iso" \
+    -boot d \
+    -device usb-kbd \
+    -device usb-mouse \
+    -nographic \
+    -prom-env 'auto-boot?=true' \
+    -prom-env 'vga-ndrv?=true' \
+    -prom-env 'boot-args=-v'
+exit $?
+
 #Handle LightWeight Desktop Enviorment with -device qxl-vga,vram_size=134217728
 if [ "$LWDE" = "true" ]; then
   echo "Launching qemu with LWDE"
