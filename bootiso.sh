@@ -99,6 +99,31 @@ if [ "$arch" = "arm" ]; then
   mkdir -p "$fwrdir"
   fwrcode="$fwrdir/${1}_AAVMF_CODE_32_iso.fd"
   fwrvars="$fwrdir/${1}_AAVMF_VARS_32_iso.fd"
+  if [ -z "$kb" = "true" ]
+    qemu-system-arm \
+      -cpu "cortex-a15" \
+      -machine "virt,gic-version=2" \
+      -m "$qram" \
+      -smp "$qcore" \
+      -device "qemu-xhci" \
+      -device "usb-kbd" \
+      -device "usb-tablet" \
+      -device "virtio-keyboard-pci" \
+      -device "virtio-mouse-pci" \
+      -kernel "$kbkernal" \
+      -initrd "$kbinitrd" \
+      -append "console=ttyAMA0" \
+      -netdev "user,id=net0" \
+      -device "virtio-net-device,netdev=net0" \
+      -device "virtio-rng-pci" \
+      -drive "if=none,file=${iso},id=cdrom,media=cdrom" \
+      -device "virtio-scsi-device" \
+      -device "scsi-cd,drive=cdrom" \
+      -drive "if=none,file=${cow},id=hd0,format=qcow2" \
+      -device "virtio-blk-device,drive=hd0" \
+      -nographic
+      exit $?
+  fi
   cp "/usr/share/AAVMF/AAVMF32_CODE.fd" "$fwrcode"
   cp "/usr/share/AAVMF/AAVMF32_VARS.fd" "$fwrvars"
   qemu-system-arm \
