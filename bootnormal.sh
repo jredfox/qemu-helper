@@ -109,38 +109,21 @@ if [ "$arch" = "s390x" ]; then
 fi
 
 #PowerPC 64 bit little endian
-qemu-system-ppc64le \
-    -cpu power8  \
-    -machine "pseries-2.6,cap-htm=off"  \
-    -m 4G \
-    -smp 4 \
-    -hda "$cow" \
-    -cdrom "$iso" \
-    -boot d \
-    -device usb-kbd \
-    -device usb-mouse \
-    -nographic \
-    -prom-env 'auto-boot?=true' \
-    -prom-env 'vga-ndrv?=true' \
-    -prom-env 'boot-args=-v'
-exit $?
-
-#PowerPC 64 (bit Big Endian) Old MacOS Arch
-qemu-system-ppc64 \
-    -L pc-bios \
-    -boot d \
-    -M mac99  \
-    -cpu G4  \
-    -m 512 \
-    -hda "$cow" \
-    -cdrom "$iso" \
-    -device usb-kbd \
-    -device usb-mouse \
-    -prom-env 'auto-boot?=true' \
-    -no-reboot \
-    -prom-env 'vga-ndrv?=true' \
-    -prom-env 'boot-args=-v'
-exit $?
+if [ "$arch" = "ppc64le" ]; then
+  qemu-system-ppc64le \
+      -cpu power8  \
+      -machine "pseries-2.6,cap-htm=off"  \
+      -m 4G \
+      -smp 4 \
+      -hda "$cow" \
+      -device usb-kbd \
+      -device usb-mouse \
+      -nographic \
+      -prom-env 'auto-boot?=true' \
+      -prom-env 'vga-ndrv?=true' \
+      -prom-env 'boot-args=-v'
+  exit $?
+fi
 
 #Handle LightWeight Desktop Enviorment with -device qxl-vga,vram_size=134217728
 if [ "$LWDE" = "true" ]; then
