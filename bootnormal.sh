@@ -111,17 +111,18 @@ fi
 #PowerPC 64 bit little endian
 if [ "$arch" = "ppc64le" ]; then
   qemu-system-ppc64le \
-      -cpu power8  \
-      -machine "pseries-2.6,cap-htm=off"  \
-      -m 4G \
-      -smp 4 \
-      -hda "$cow" \
-      -device usb-kbd \
-      -device usb-mouse \
-      -nographic \
-      -prom-env 'auto-boot?=true' \
-      -prom-env 'vga-ndrv?=true' \
-      -prom-env 'boot-args=-v'
+    -L pc-bios \
+    -cpu power8  \
+    -machine "pseries-2.6,cap-htm=off"  \
+    -m 4G \
+    -smp 4 \
+    -hda "$cow" \
+    -device usb-kbd \
+    -device usb-mouse \
+    -nographic \
+    -prom-env 'auto-boot?=true' \
+    -prom-env 'vga-ndrv?=true' \
+    -prom-env 'boot-args=-v'
   exit $?
 fi
 
