@@ -128,17 +128,16 @@ exit $?
 #PowerPC 64 (bit Big Endian) Old MacOS Arch
 qemu-system-ppc64 \
     -L pc-bios \
-    -machine "pseries-2.6,cap-htm=off"  \
-    -cpu power8  \
-    -m 4G \
-    -smp 4 \
+    -boot d \
+    -M mac99  \
+    -cpu G4  \
+    -m 512 \
     -hda "$cow" \
     -cdrom "$iso" \
-    -boot d \
     -device usb-kbd \
     -device usb-mouse \
-    -nographic \
     -prom-env 'auto-boot?=true' \
+    -no-reboot \
     -prom-env 'vga-ndrv?=true' \
     -prom-env 'boot-args=-v'
 exit $?
