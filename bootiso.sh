@@ -45,7 +45,7 @@ if [ "$arch" = "aarch64" ]; then
   if [ "$kb" = "true" ]; then
     qemu-system-aarch64 \
       -cpu "cortex-a72" \
-      -machine "virt-2.6,gic-version=2" \
+      -machine "virt,gic-version=2" \
       -m "$qram" \
       -smp "$qcore" \
       -device "qemu-xhci" \
@@ -103,7 +103,7 @@ if [ "$arch" = "arm" ]; then
   if [ "$kb" = "true" ]; then
     qemu-system-arm \
       -cpu "cortex-a15" \
-      -machine "virt-2.6,gic-version=2" \
+      -machine "virt,gic-version=2" \
       -m "$qram" \
       -smp "$qcore" \
       -device "qemu-xhci" \
