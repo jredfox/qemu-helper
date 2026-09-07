@@ -166,8 +166,8 @@ if [ "$arch" = "ppc64le" ]; then
       -L pc-bios \
       -cpu power8  \
       -machine "pseries-2.6,cap-htm=off"  \
-      -m 4G \
-      -smp 4 \
+      -m "$qram" \
+      -smp "$qcore" \
       -hda "$cow" \
       -cdrom "$iso" \
       -boot d \
