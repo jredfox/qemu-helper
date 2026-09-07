@@ -16,6 +16,7 @@ if [ -z "$LWDE" ]; then
   LWDE="false"
 fi
 
+kb="false"
 if [ "$kb" = "true" ]; then
   kbdir="disks/kb/${1}"
   rm -rf "$kbdir"
@@ -41,7 +42,7 @@ if [ "$kb" = "true" ]; then
 fi
 
 if [ "$arch" = "aarch64" ]; then
-  if [ -z "$kb" = "true" ]
+  if [ "$kb" = "true" ]; then
     qemu-system-aarch64 \
       -cpu "cortex-a72" \
       -machine "virt,gic-version=2" \
@@ -99,7 +100,7 @@ if [ "$arch" = "arm" ]; then
   mkdir -p "$fwrdir"
   fwrcode="$fwrdir/${1}_AAVMF_CODE_32_iso.fd"
   fwrvars="$fwrdir/${1}_AAVMF_VARS_32_iso.fd"
-  if [ -z "$kb" = "true" ]
+  if [ "$kb" = "true" ]; then
     qemu-system-arm \
       -cpu "cortex-a15" \
       -machine "virt,gic-version=2" \
