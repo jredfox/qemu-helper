@@ -16,7 +16,7 @@ if [ -z "$LWDE" ]; then
   LWDE="false"
 fi
 
-kb="false"
+kb="true"
 if [ "$kb" = "true" ]; then
   kbdir="disks/kb/${1}"
   rm -rf "$kbdir"
@@ -45,7 +45,7 @@ if [ "$arch" = "aarch64" ]; then
   if [ "$kb" = "true" ]; then
     qemu-system-aarch64 \
       -cpu "cortex-a72" \
-      -machine "virt,gic-version=2" \
+      -machine "virt-2.6,gic-version=2" \
       -m "$qram" \
       -smp "$qcore" \
       -device "qemu-xhci" \
@@ -103,7 +103,7 @@ if [ "$arch" = "arm" ]; then
   if [ "$kb" = "true" ]; then
     qemu-system-arm \
       -cpu "cortex-a15" \
-      -machine "virt,gic-version=2" \
+      -machine "virt-2.6,gic-version=2" \
       -m "$qram" \
       -smp "$qcore" \
       -device "qemu-xhci" \
