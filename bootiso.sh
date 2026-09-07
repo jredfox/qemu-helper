@@ -16,7 +16,7 @@ if [ -z "$LWDE" ]; then
   LWDE="false"
 fi
 
-kb="true"
+kb="false"
 if [ "$kb" = "true" ]; then
   kbdir="disks/kb/${1}"
   rm -rf "$kbdir"
@@ -34,7 +34,7 @@ if [ "$kb" = "true" ]; then
   else
     echo "skipping dynamic kernal fetch"
   fi
-  7z e "${iso}" "$vmlinuz_path" "$initrd_path" -aou -y >/dev/null
+  7z e "${iso}" "$vmlinuz_path" "$initrd_path" -mtc -mta -mtm -aou -y >/dev/null
   echo "kernal: $vmlinuz_path initrd: $initrd_path"
   cd "$opwd"
   kbkernal="$(find "$kbdir" -maxdepth 1 -type f | grep -Ei '/(hwe-)?(vmlinuz|zImage|uImage|bzImage|Image|linux|vmlinux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | head -n 1)"
