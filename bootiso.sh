@@ -54,7 +54,7 @@ getFamily() {
         ;;
 
     # powerpc64 little edian
-    *ppc64el*|*ppc64le*|*powerpc64le*|*powerpc64el*|*ppc64*|*powerpc64*|*powerpc*|*ppc32*|*ppc?32*|*powerpc32*|*powerpc?32*)
+    *ppc64*|*ppc?64*|*powerpc*|*ppc32*|*ppc?32*)
         echo "powerpc"
         ;;
 
@@ -64,7 +64,7 @@ getFamily() {
         ;;
 
     # x86 64-bit
-    *x86?64*|*amd64*|*x64*|*64bit*|*64?bit*|*i[0-9]86*|*i[0-9][0-9]86*|*i[0-9][0-9][0-9]86*|*x86?32*|*x86*|*32bit*|*32?bit*|*x32*|*ia-32*)
+    *x86*|*amd64*|*x64*|*64bit*|*64?bit*|*i[0-9]86*|*i[0-9][0-9]86*|*i[0-9][0-9][0-9]86*|*32bit*|*32?bit*|*x32*|*ia-32*)
         echo "x86"
         ;;
 
