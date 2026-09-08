@@ -79,7 +79,7 @@ qarg() {
   args="$args $1"
 }
 
-qargfile() {
+qargs() {
   args="$args \"$1\""
 }
 
@@ -90,8 +90,8 @@ if [ "$family" = "$family_target" ]; then
   qarg "-m $qram"
   qarg "-cpu host"
   qarg "-smp $qcore"
-  qargfile "-cdrom $iso"
-  qargfile "-hda $cow"
+  qargs "-cdrom $iso"
+  qargs "-hda $cow"
   qarg "-boot d"
   #Check KVM Status
   if qemu-system-"$arch" -accel help 2>&1 | grep -qw kvm; then
