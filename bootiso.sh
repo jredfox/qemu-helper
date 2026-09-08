@@ -79,6 +79,7 @@ uarch=$(uname -m)
 family=$(getFamily "$uarch")
 family_target=$(getFamily "$arch")
 if [ "$family" = "$family_target" ]; then
+  
   #Check KVM Status
   if qemu-system-"$arch" -accel help 2>&1 | grep -qw kvm; then
       echo "qemu-system-$arch has KVM"
