@@ -79,17 +79,12 @@ if [ "$kb" = "true" ]; then
   kbinitrd="$(find "$kbdir" -maxdepth 1 -type f | grep -Ei '/(hwe-)?(initrd|uInitrd|initramfs|initramfs-linux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | head -n 1)"
   
   #Set the qemu console serial type needed for kernal booting
+  qconsole="ttyS0"
   if [ "$family_target" = "arm" ]; then
     qconsole="ttyAMA0"
   fi
-  if [ "$family_target" = "x86" ]; then
-    qconsole="ttyS0"
-  fi
-  if [ "$family_target" = "riscv" ]; then
-    qconsole="ttyS0"
-  fi
-  #handle s390x, ppc64le unkown arch
-  if [ -z "$family_target" ]; then
+  #handle s390x, powerpc
+  if [ "$family_target" = "s390x" ] || [ "$family_target" = "powerpc" && "$arch" != "ppc32" ]; then
     qconsole="hvc0"
   fi
 fi

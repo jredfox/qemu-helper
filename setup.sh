@@ -104,7 +104,7 @@ for file in "iso"/*.iso; do
 
             # powerpc64
             *ppc64*|*powerpc64*|*powerpc*)
-                arch="powerpc64"
+                arch="ppc64"
                 ;;
 
             # IBM Z
