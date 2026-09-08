@@ -79,10 +79,6 @@ qarg() {
   args="$args $1"
 }
 
-qargs() {
-  args="$args \"$1\""
-}
-
 uarch=$(uname -m)
 family=$(getFamily "$uarch")
 family_target=$(getFamily "$arch")
@@ -90,8 +86,8 @@ if [ "$family" = "$family_target" ]; then
   qarg "-m $qram"
   qarg "-cpu host"
   qarg "-smp $qcore"
-  qargs "-cdrom $iso"
-  qargs "-hda $cow"
+  qarg "-cdrom \"$iso\""
+  qarg "-hda \"$cow\""
   qarg "-boot d"
   #Check KVM Status
   if qemu-system-"$arch" -accel help 2>&1 | grep -qw kvm; then
@@ -107,7 +103,7 @@ if [ "$family" = "$family_target" ]; then
   fi
   
   #Launch QEMU with arguments
-  printf "%s" "$args" | xargs "qemu-system-$arch"
+  printf "%s" "$args" | xargs qemu-system-$arch
 
 fi
 
