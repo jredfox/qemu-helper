@@ -16,30 +16,6 @@ if [ -z "$LWDE" ]; then
   LWDE="false"
 fi
 
-if [ "$kb" = "true" ]; then
-  kbdir="disks/kb/${1}"
-  rm -rf "$kbdir"
-  mkdir -p "$kbdir"
-  #Extract kernal and initrd from the linux ISO
-  opwd="$PWD"
-  cd "$kbdir"
-  vmlinuz_path="$kb_path"
-  initrd_path="$kb_initrd"
-  if [ -z "$vmlinuz_path" ] || [ -z "$initrd_path" ]; then
-    results="$(7z l -ba "${iso}" | awk 'substr($3,1,1) != "D" { sub(/^([^ ]+ +){5}/, "") ; print }' | sed 's|^[^/]|/&|' | grep -Ei '^(/[^/]+){0,4}/(hwe-)?(vmlinuz|zImage|uImage|bzImage|Image|linux|vmlinux|initrd|uInitrd|initramfs|initramfs-linux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | sed 's|^/||')"
-    results_sorted="$(printf '%s' "$results" | awk '{print length, $0}' | sort -n | cut -d' ' -f2-)"
-    vmlinuz_path="$(printf '%s' "$results_sorted" | grep -Ei '(hwe-)?(vmlinuz|zImage|uImage|bzImage|Image|linux|vmlinux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | head -n 1)"
-    initrd_path="$(printf '%s' "$results_sorted" | grep -Ei '(hwe-)?(initrd|uInitrd|initramfs|initramfs-linux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | head -n 1)"
-  else
-    echo "skipping dynamic kernal fetch"
-  fi
-  7z e "${iso}" "$vmlinuz_path" "$initrd_path" -mtc -mta -mtm -aou -y >/dev/null
-  echo "kernal: $vmlinuz_path initrd: $initrd_path"
-  cd "$opwd"
-  kbkernal="$(find "$kbdir" -maxdepth 1 -type f | grep -Ei '/(hwe-)?(vmlinuz|zImage|uImage|bzImage|Image|linux|vmlinux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | head -n 1)"
-  kbinitrd="$(find "$kbdir" -maxdepth 1 -type f | grep -Ei '/(hwe-)?(initrd|uInitrd|initramfs|initramfs-linux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | head -n 1)"
-fi
-
 getFamily() {
 
   case "$1" in
@@ -75,13 +51,53 @@ getFamily() {
 
 }
 
+uarch=$(uname -m)
+family=$(getFamily "$uarch")
+family_target=$(getFamily "$arch")
+
+if [ "$kb" = "true" ]; then
+  kbdir="disks/kb/${1}"
+  rm -rf "$kbdir"
+  mkdir -p "$kbdir"
+  #Extract kernal and initrd from the linux ISO
+  opwd="$PWD"
+  cd "$kbdir"
+  vmlinuz_path="$kb_path"
+  initrd_path="$kb_initrd"
+  if [ -z "$vmlinuz_path" ] || [ -z "$initrd_path" ]; then
+    results="$(7z l -ba "${iso}" | awk 'substr($3,1,1) != "D" { sub(/^([^ ]+ +){5}/, "") ; print }' | sed 's|^[^/]|/&|' | grep -Ei '^(/[^/]+){0,4}/(hwe-)?(vmlinuz|zImage|uImage|bzImage|Image|linux|vmlinux|initrd|uInitrd|initramfs|initramfs-linux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | sed 's|^/||')"
+    results_sorted="$(printf '%s' "$results" | awk '{print length, $0}' | sort -n | cut -d' ' -f2-)"
+    vmlinuz_path="$(printf '%s' "$results_sorted" | grep -Ei '(hwe-)?(vmlinuz|zImage|uImage|bzImage|Image|linux|vmlinux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | head -n 1)"
+    initrd_path="$(printf '%s' "$results_sorted" | grep -Ei '(hwe-)?(initrd|uInitrd|initramfs|initramfs-linux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | head -n 1)"
+  else
+    echo "skipping dynamic kernal fetch"
+  fi
+  7z e "${iso}" "$vmlinuz_path" "$initrd_path" -mtc -mta -mtm -aou -y >/dev/null
+  echo "kernal: $vmlinuz_path initrd: $initrd_path"
+  cd "$opwd"
+  kbkernal="$(find "$kbdir" -maxdepth 1 -type f | grep -Ei '/(hwe-)?(vmlinuz|zImage|uImage|bzImage|Image|linux|vmlinux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | head -n 1)"
+  kbinitrd="$(find "$kbdir" -maxdepth 1 -type f | grep -Ei '/(hwe-)?(initrd|uInitrd|initramfs|initramfs-linux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | head -n 1)"
+  
+  #Set the qemu console serial type needed for kernal booting
+  if [ "$family_target" = "arm" ]; then
+    qconsole="ttyAMA0"
+  fi
+  if [ "$family_target" = "x86" ]; then
+    qconsole="ttyS0"
+  fi
+  if [ "$family_target" = "riscv" ]; then
+    qconsole="ttyS0"
+  fi
+  #handle s390x, ppc64le unkown arch
+  if [ -z "$family_target" ]; then
+    qconsole="hvc0"
+  fi
+fi
+
 qarg() {
   args="$args $1"
 }
 
-uarch=$(uname -m)
-family=$(getFamily "$uarch")
-family_target=$(getFamily "$arch")
 if [ "$family" = "$family_target" ]; then
   qarg "-m $qram"
   qarg "-cpu host"
@@ -89,6 +105,11 @@ if [ "$family" = "$family_target" ]; then
   qarg "-cdrom \"$iso\""
   qarg "-hda \"$cow\""
   qarg "-boot d"
+  if [ "$kb" = "true" ]; then
+      qarg "-kernel \"$kbkernal\""
+      qarg "-initrd \"$kbinitrd\""
+      qarg "-append \"console=$qconsole\""
+  fi
   #Check KVM Status
   if qemu-system-"$arch" -accel help 2>&1 | grep -qw kvm; then
       echo "qemu-system-$arch has KVM"
@@ -103,7 +124,7 @@ if [ "$family" = "$family_target" ]; then
       echo "qemu-system-$arch has LWDE"
       qarg "-device qxl-vga,vram_size=134217728"
     else
-      echo "ERROR Unsupported LWDE Arch $arch guessing virtio-gpu-pci"
+      echo "ERROR Unsupported LWDE arch $arch guessing virtio-gpu-pci"
       qarg "-device virtio-gpu-pci"
     fi
   fi
