@@ -127,6 +127,7 @@ if [ "$family" = "$family_target" ]; then
   fi
   
   #Launch QEMU with arguments
+  #printf "%s\n" "qemu-system-$arch $args"
   printf "%s" "$args" | xargs qemu-system-$arch
 
 fi
