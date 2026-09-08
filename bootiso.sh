@@ -40,6 +40,41 @@ if [ "$kb" = "true" ]; then
   kbinitrd="$(find "$kbdir" -maxdepth 1 -type f | grep -Ei '/(hwe-)?(initrd|uInitrd|initramfs|initramfs-linux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | head -n 1)"
 fi
 
+getFamily() {
+
+  case "$1" in
+    # ARM 64-bit
+    *aarch64*|*arm64*|*armv8*|*armv9*|*aarch32*|*arm32*|*armv[0-7]*|*armhf*|*armel*|*[!a-z]arm[!a-z]*|arm[!a-z]*|*[!a-z]arm)
+        echo "arm"
+        ;;
+
+    # RISC-V
+    *risc-v*|*riscv*|*risc64*|*risc?64*|*rv64*)
+        echo "riscv"
+        ;;
+
+    # powerpc64 little edian
+    *ppc64el*|*ppc64le*|*powerpc64le*|*powerpc64el*|*ppc64*|*powerpc64*|*powerpc*|*ppc32*|*ppc?32*|*powerpc32*|*powerpc?32*)
+        echo "powerpc"
+        ;;
+
+    # IBM Z
+    *ibm-z*|*s390x*|*[!a-z0-9]s390[!a-z0-9]*|s390[!a-z0-9]*|*[!a-z0-9]s390)
+        echo "s390x"
+        ;;
+
+    # x86 64-bit
+    *x86?64*|*amd64*|*x64*|*64bit*|*64?bit*|*i[0-9]86*|*i[0-9][0-9]86*|*i[0-9][0-9][0-9]86*|*x86?32*|*x86*|*32bit*|*32?bit*|*x32*|*ia-32*)
+        echo "x86"
+        ;;
+
+    *)
+        echo "unkown"
+        ;;
+  esac
+
+}
+
 uarch=$(uname -m)
 case "$uarch" in
     # ARM 64-bit
@@ -88,11 +123,13 @@ case "$uarch" in
         ;;
 
     *)
-        arch_host="x86_64"
+        arch_host="unkown"
         ;;
 esac
 
-if [ "$arch" = "$arch_host" ]; then
+family=$(getFamily "$arch_host")
+family_target=$(getFamily "$arch")
+if [ "$arch" = "$arch_host" ] || [ "$family" = "$family_target" ]; then
   #Check KVM Status
   if qemu-system-"$arch" -accel help 2>&1 | grep -qw kvm; then
       echo "qemu-system-$arch has KVM"
