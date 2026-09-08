@@ -69,7 +69,7 @@ getFamily() {
         ;;
 
     *)
-        echo "unkown"
+        echo "$1"
         ;;
   esac
 
