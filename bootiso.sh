@@ -115,7 +115,7 @@ if [ "$family" = "$family_target" ]; then
       qarg "-append \"${kb_args}console=$qconsole\""
   fi
   #Check KVM Status
-  if qemu-system-"$arch" -accel help 2>&1 | grep -qw kvm; then
+  if qemu-system-$arch -accel help 2>&1 | grep -qw kvm; then
       echo "qemu-system-$arch has KVM"
       qarg "-enable-kvm"
   else
@@ -127,7 +127,7 @@ if [ "$family" = "$family_target" ]; then
     qarg "-nographic"
   else
     if [ "$LWDE" = "true" ]; then
-      if qemu-system-"$arch" -device help 2>&1 | grep -qw "qxl-vga"; then
+      if qemu-system-$arch -device help 2>&1 | grep -qw "qxl-vga"; then
         echo "qemu-system-$arch has LWDE"
         qarg "-device qxl-vga,vram_size=134217728"
       else
