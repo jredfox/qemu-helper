@@ -104,7 +104,7 @@ if [ "$family" = "$family_target" ]; then
   qarg "-boot d"
   if [ "$kb" = "true" ]; then
       if [ "$family_target" != "arm" ]
-        echo "WARNING: Kernal Booting is broken outside of arm architectures as they expect random append strings! Errors and bugs are bound to happen!"
+        echo "WARNING: Kernal Booting is broken outside of arm archs as they expect random append strings! Errors and bugs are bound to happen!"
       fi
       qarg "-kernel \"$kbkernal\""
       qarg "-initrd \"$kbinitrd\""
