@@ -53,7 +53,7 @@ getFamily() {
         echo "riscv"
         ;;
 
-    # powerpc64 little edian
+    # powerpc
     *ppc64*|*ppc?64*|*powerpc*|*ppc32*|*ppc?32*)
         echo "powerpc"
         ;;
@@ -63,7 +63,7 @@ getFamily() {
         echo "s390x"
         ;;
 
-    # x86 64-bit
+    # x86 intel / amd 32 and 64 bit processors
     *x86*|*amd64*|*x64*|*64bit*|*64?bit*|*i[0-9]86*|*i[0-9][0-9]86*|*i[0-9][0-9][0-9]86*|*32bit*|*32?bit*|*x32*|*ia-32*)
         echo "x86"
         ;;
