@@ -75,40 +75,40 @@ getFamily() {
 
 }
 
+qarg() {
+  args="$args $1"
+}
+
+qargfile() {
+  args="$args \"$1\""
+}
+
 uarch=$(uname -m)
 family=$(getFamily "$uarch")
 family_target=$(getFamily "$arch")
 if [ "$family" = "$family_target" ]; then
+  qarg "-m $qram"
+  qarg "-cpu host"
+  qarg "-smp $qcore"
+  qargfile "-cdrom $iso"
+  qargfile "-hda $cow"
+  qarg "-boot d"
   #Check KVM Status
   if qemu-system-"$arch" -accel help 2>&1 | grep -qw kvm; then
       echo "qemu-system-$arch has KVM"
+      qarg "-enable-kvm"
   else
-    echo "ERROR KVM Not Avaliable qemu-system-$arch"
+    echo "ERROR qemu-system-$arch has no KVM!"
   fi
 
   #Handle LightWeight Desktop Enviorment with -device qxl-vga,vram_size=134217728
   if [ "$LWDE" = "true" ]; then
-    echo "Launching qemu with LWDE"
-    qemu-system-$arch \
-      -m "$qram" \
-      -cpu host \
-      -smp "$qcore" \
-      -cdrom "$iso" \
-      -hda "$cow" \
-      -boot d \
-      -enable-kvm \
-      -device "qxl-vga,vram_size=134217728"
-    exit $?
+    qarg "-device qxl-vga,vram_size=134217728"
   fi
+  
+  #Launch QEMU with arguments
+  printf "%s" "$args" | xargs "qemu-system-$arch"
 
-  qemu-system-$arch \
-    -m "$qram" \
-    -cpu host \
-    -smp "$qcore" \
-    -cdrom "$iso" \
-    -hda "$cow" \
-    -boot d \
-    -enable-kvm
 fi
 
 if [ "$arch" = "aarch64" ]; then
