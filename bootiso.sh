@@ -84,8 +84,10 @@ if [ "$kb" = "true" ]; then
     qconsole="ttyAMA0"
   fi
   #handle s390x, powerpc
-  if [ "$family_target" = "s390x" ] || [ "$family_target" = "powerpc" && "$arch" != "ppc32" ]; then
-    qconsole="hvc0"
+  if [ "$family_target" = "s390x" ] || [ "$family_target" = "powerpc" ]; then
+    if [ "$arch" != "ppc32" ]; then
+      qconsole="hvc0"
+    fi
   fi
 fi
 
