@@ -80,14 +80,17 @@ if [ "$kb" = "true" ]; then
   kbinitrd="$(find "$kbdir" -maxdepth 1 -type f | grep -Ei '/(hwe-)?(initrd|uInitrd|initramfs|initramfs-linux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | head -n 1)"
   
   #Set the qemu console serial type needed for kernal booting
-  qconsole="ttyS0"
-  if [ "$family_target" = "arm" ]; then
-    qconsole="ttyAMA0"
-  fi
-  #handle s390x, powerpc
-  if [ "$family_target" = "s390x" ] || [ "$family_target" = "powerpc" ]; then
-    if [ "$arch" != "ppc32" ]; then
-      qconsole="hvc0"
+  qconsole="$kb_console"
+  if [ -z "$qconsole" ]; then
+    qconsole="ttyS0"
+    if [ "$family_target" = "arm" ]; then
+      qconsole="ttyAMA0"
+    fi
+    #handle s390x, powerpc
+    if [ "$family_target" = "s390x" ] || [ "$family_target" = "powerpc" ]; then
+      if [ "$arch" != "ppc32" ]; then
+        qconsole="hvc0"
+      fi
     fi
   fi
 fi
@@ -109,7 +112,7 @@ if [ "$family" = "$family_target" ]; then
       fi
       qarg "-kernel \"$kbkernal\""
       qarg "-initrd \"$kbinitrd\""
-      qarg "-append \"console=$qconsole\""
+      qarg "-append \"${kb_args}console=$qconsole\""
   fi
   #Check KVM Status
   if qemu-system-"$arch" -accel help 2>&1 | grep -qw kvm; then
@@ -119,14 +122,18 @@ if [ "$family" = "$family_target" ]; then
     echo "ERROR qemu-system-$arch has no KVM!"
   fi
 
-  #Handle LightWeight Desktop Enviorment with -device qxl-vga,vram_size=134217728
-  if [ "$LWDE" = "true" ]; then
-    if qemu-system-"$arch" -device help 2>&1 | grep -qw "qxl-vga"; then
-      echo "qemu-system-$arch has LWDE"
-      qarg "-device qxl-vga,vram_size=134217728"
-    else
-      echo "ERROR Unsupported LWDE arch $arch guessing virtio-gpu-pci"
-      qarg "-device virtio-gpu-pci"
+  #Handle LightWeight Desktop Enviorment
+  if [ "$no_graphics" = "true" ]; then
+    qarg "-nographic"
+  else
+    if [ "$LWDE" = "true" ]; then
+      if qemu-system-"$arch" -device help 2>&1 | grep -qw "qxl-vga"; then
+        echo "qemu-system-$arch has LWDE"
+        qarg "-device qxl-vga,vram_size=134217728"
+      else
+        echo "ERROR Unsupported LWDE arch $arch guessing virtio-gpu-pci"
+        qarg "-device virtio-gpu-pci"
+      fi
     fi
   fi
   
