@@ -100,6 +100,7 @@ if [ "$family" = "$family_target" ]; then
   #Handle LightWeight Desktop Enviorment with -device qxl-vga,vram_size=134217728
   if [ "$LWDE" = "true" ]; then
     if qemu-system-"$arch" -device help 2>&1 | grep -qw "qxl-vga"; then
+      echo "qemu-system-$arch has LWDE"
       qarg "-device qxl-vga,vram_size=134217728"
     else
       echo "ERROR Unsupported LWDE Arch $arch guessing virtio-gpu-pci"
