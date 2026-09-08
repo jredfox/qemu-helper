@@ -93,6 +93,13 @@ case "$uarch" in
 esac
 
 if [ "$arch" = "$arch_host" ]; then
+  #Check KVM Status
+  if qemu-system-"$arch" -accel help 2>&1 | grep -qw kvm; then
+      echo "qemu-system-$arch has KVM"
+  else
+    echo "ERROR KVM Not Avaliable qemu-system-$arch"
+  fi
+
   #Handle LightWeight Desktop Enviorment with -device qxl-vga,vram_size=134217728
   if [ "$LWDE" = "true" ]; then
     echo "Launching qemu with LWDE"
