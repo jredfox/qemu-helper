@@ -76,60 +76,9 @@ getFamily() {
 }
 
 uarch=$(uname -m)
-case "$uarch" in
-    # ARM 64-bit
-    *aarch64*|*arm64*|*armv8*|*armv9*)
-        arch_host="aarch64"
-        ;;
-
-    # ARM 32-bit
-    *aarch32*|*arm32*|*armv[0-7]*|*armhf*|*armel*|*[!a-z]arm[!a-z]*|arm[!a-z]*|*[!a-z]arm)
-        arch_host="arm"
-        ;;
-
-    # RISC-V
-    *risc-v*|*riscv*|*risc64*|*risc?64*|*rv64*)
-        arch_host="riscv64"
-        ;;
-
-    # powerpc64 little edian
-    *ppc64el*|*ppc64le*|*powerpc64le*|*powerpc64el*)
-        arch_host="ppc64le"
-        ;;
-
-    # powerpc32
-    *ppc32*|*ppc?32*|*powerpc32*|*powerpc?32*)
-        arch_host="ppc32"
-        ;;
-
-    # powerpc64
-    *ppc64*|*powerpc64*|*powerpc*)
-        arch_host="powerpc64"
-        ;;
-
-    # IBM Z
-    *ibm-z*|*s390x*|*[!a-z0-9]s390[!a-z0-9]*|s390[!a-z0-9]*|*[!a-z0-9]s390)
-        arch_host="s390x"
-        ;;
-
-    # x86 64-bit
-    *x86?64*|*amd64*|*x64*|*64bit*|*64?bit*)
-        arch_host="x86_64"
-        ;;
-
-    # x86 32-bit
-    *i[0-9]86*|*i[0-9][0-9]86*|*i[0-9][0-9][0-9]86*|*x86?32*|*x86*|*32bit*|*32?bit*|*x32*|*ia-32*)
-        arch_host="i386"
-        ;;
-
-    *)
-        arch_host="unkown"
-        ;;
-esac
-
-family=$(getFamily "$arch_host")
+family=$(getFamily "$uarch")
 family_target=$(getFamily "$arch")
-if [ "$arch" = "$arch_host" ] || [ "$family" = "$family_target" ]; then
+if [ "$family" = "$family_target" ]; then
   #Check KVM Status
   if qemu-system-"$arch" -accel help 2>&1 | grep -qw kvm; then
       echo "qemu-system-$arch has KVM"
