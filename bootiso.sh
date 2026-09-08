@@ -1,6 +1,7 @@
-iso="iso/${1}.iso"
+dname="${1}"
+iso="iso/${dname}.iso"
 iso="$(realpath "$iso")"
-cow="disks/${1}.qcow2"
+cow="disks/${dname}.qcow2"
 fwrdir="disks/firmware"
 arch="$2"
 qram="$3"
@@ -56,7 +57,7 @@ family=$(getFamily "$uarch")
 family_target=$(getFamily "$arch")
 
 if [ "$kb" = "true" ]; then
-  kbdir="disks/kb/${1}"
+  kbdir="disks/kb/${dname}"
   rm -rf "$kbdir"
   mkdir -p "$kbdir"
   #Extract kernal and initrd from the linux ISO
@@ -162,8 +163,8 @@ if [ "$arch" = "aarch64" ]; then
     exit $?
   fi
   mkdir -p "$fwrdir"
-  fwrcode="$fwrdir/${1}_AAVMF_CODE_iso.fd"
-  fwrvars="$fwrdir/${1}_AAVMF_VARS_iso.fd"
+  fwrcode="$fwrdir/${dname}_AAVMF_CODE_iso.fd"
+  fwrvars="$fwrdir/${dname}_AAVMF_VARS_iso.fd"
   cp "/usr/share/AAVMF/AAVMF_CODE.fd" "$fwrcode"
   cp "/usr/share/AAVMF/AAVMF_VARS.fd" "$fwrvars"
   qemu-system-aarch64 \
@@ -192,8 +193,8 @@ fi
 #BOOT ARM32 ISO
 if [ "$arch" = "arm" ]; then
   mkdir -p "$fwrdir"
-  fwrcode="$fwrdir/${1}_AAVMF_CODE_32_iso.fd"
-  fwrvars="$fwrdir/${1}_AAVMF_VARS_32_iso.fd"
+  fwrcode="$fwrdir/${dname}_AAVMF_CODE_32_iso.fd"
+  fwrvars="$fwrdir/${dname}_AAVMF_VARS_32_iso.fd"
   if [ "$kb" = "true" ]; then
     qemu-system-arm \
       -cpu "cortex-a15" \
