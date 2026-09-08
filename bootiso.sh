@@ -16,7 +16,6 @@ if [ -z "$LWDE" ]; then
   LWDE="false"
 fi
 
-kb="false"
 if [ "$kb" = "true" ]; then
   kbdir="disks/kb/${1}"
   rm -rf "$kbdir"
@@ -39,6 +38,84 @@ if [ "$kb" = "true" ]; then
   cd "$opwd"
   kbkernal="$(find "$kbdir" -maxdepth 1 -type f | grep -Ei '/(hwe-)?(vmlinuz|zImage|uImage|bzImage|Image|linux|vmlinux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | head -n 1)"
   kbinitrd="$(find "$kbdir" -maxdepth 1 -type f | grep -Ei '/(hwe-)?(initrd|uInitrd|initramfs|initramfs-linux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | head -n 1)"
+fi
+
+uarch=$(uname -m)
+case "$uarch" in
+    # ARM 64-bit
+    *aarch64*|*arm64*|*armv8*|*armv9*)
+        arch_host="aarch64"
+        ;;
+
+    # ARM 32-bit
+    *aarch32*|*arm32*|*armv[0-7]*|*armhf*|*armel*|*[!a-z]arm[!a-z]*|arm[!a-z]*|*[!a-z]arm)
+        arch_host="arm"
+        ;;
+
+    # RISC-V
+    *risc-v*|*riscv*|*risc64*|*risc?64*|*rv64*)
+        arch_host="riscv64"
+        ;;
+
+    # powerpc64 little edian
+    *ppc64el*|*ppc64le*|*powerpc64le*|*powerpc64el*)
+        arch_host="ppc64le"
+        ;;
+
+    # powerpc32
+    *ppc32*|*ppc?32*|*powerpc32*|*powerpc?32*)
+        arch_host="ppc32"
+        ;;
+
+    # powerpc64
+    *ppc64*|*powerpc64*|*powerpc*)
+        arch_host="powerpc64"
+        ;;
+
+    # IBM Z
+    *ibm-z*|*s390x*|*[!a-z0-9]s390[!a-z0-9]*|s390[!a-z0-9]*|*[!a-z0-9]s390)
+        arch_host="s390x"
+        ;;
+
+    # x86 64-bit
+    *x86?64*|*amd64*|*x64*|*64bit*|*64?bit*)
+        arch_host="x86_64"
+        ;;
+
+    # x86 32-bit
+    *i[0-9]86*|*i[0-9][0-9]86*|*i[0-9][0-9][0-9]86*|*x86?32*|*x86*|*32bit*|*32?bit*|*x32*|*ia-32*)
+        arch_host="i386"
+        ;;
+
+    *)
+        arch_host="x86_64"
+        ;;
+esac
+
+if [ "$arch" = "$arch_host" ]; then
+  #Handle LightWeight Desktop Enviorment with -device qxl-vga,vram_size=134217728
+  if [ "$LWDE" = "true" ]; then
+    echo "Launching qemu with LWDE"
+    qemu-system-$arch \
+      -m "$qram" \
+      -cpu host \
+      -smp "$qcore" \
+      -cdrom "$iso" \
+      -hda "$cow" \
+      -boot d \
+      -enable-kvm \
+      -device "qxl-vga,vram_size=134217728"
+    exit $?
+  fi
+
+  qemu-system-$arch \
+    -m "$qram" \
+    -cpu host \
+    -smp "$qcore" \
+    -cdrom "$iso" \
+    -hda "$cow" \
+    -boot d \
+    -enable-kvm
 fi
 
 if [ "$arch" = "aarch64" ]; then
@@ -205,28 +282,4 @@ if [ "$arch" = "ppc64le" ]; then
       -prom-env 'boot-args=-v'
   exit $?
 fi
-
-#Handle LightWeight Desktop Enviorment with -device qxl-vga,vram_size=134217728
-if [ "$LWDE" = "true" ]; then
-  echo "Launching qemu with LWDE"
-  qemu-system-$arch \
-    -m "$qram" \
-    -cpu host \
-    -smp "$qcore" \
-    -cdrom "$iso" \
-    -hda "$cow" \
-    -boot d \
-    -enable-kvm \
-    -device "qxl-vga,vram_size=134217728"
-  exit $?
-fi
-
-qemu-system-$arch \
-  -m "$qram" \
-  -cpu host \
-  -smp "$qcore" \
-  -cdrom "$iso" \
-  -hda "$cow" \
-  -boot d \
-  -enable-kvm
 
