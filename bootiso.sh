@@ -187,62 +187,10 @@ fi
 
 qarg "-nographic"
 
-#WIP
+#Launch QEMU with arguments
+#printf "%s\n" "qemu-system-$arch $args"
+printf "%s\n" "$args" | xargs qemu-system-$arch
 exit $?
-
-if [ "$arch" = "aarch64" ]; then
-  if [ "$kb" = "true" ]; then
-    qemu-system-aarch64 \
-      -cpu "cortex-a72" \
-      -machine "virt,gic-version=2" \
-      -m "$qram" \
-      -smp "$qcore" \
-      -device "qemu-xhci" \
-      -device "usb-kbd" \
-      -device "usb-tablet" \
-      -device "virtio-keyboard-pci" \
-      -device "virtio-mouse-pci" \
-      -kernel "$kbkernal" \
-      -initrd "$kbinitrd" \
-      -append "console=ttyAMA0" \
-      -netdev "user,id=net0" \
-      -device "virtio-net-device,netdev=net0" \
-      -device "virtio-rng-pci" \
-      -device "virtio-scsi-device,id=scsi0" \
-      -drive "file=${iso},format=raw,readonly=on,if=none,id=cdrom0,media=cdrom" \
-      -device "scsi-cd,drive=cdrom0,bus=scsi0.0" \
-      -drive "file=${cow},format=qcow2,if=none,id=disk0" \
-      -device "virtio-blk-device,drive=disk0" \
-      -nographic
-    exit $?
-  fi
-  mkdir -p "$fwrdir"
-  fwrcode="$fwrdir/${dname}_AAVMF_CODE_iso.fd"
-  fwrvars="$fwrdir/${dname}_AAVMF_VARS_iso.fd"
-  cp "/usr/share/AAVMF/AAVMF_CODE.fd" "$fwrcode"
-  cp "/usr/share/AAVMF/AAVMF_VARS.fd" "$fwrvars"
-  qemu-system-aarch64 \
-    -cpu "cortex-a72" \
-    -machine "virt,gic-version=2,acpi=off" \
-    -m "$qram" \
-    -smp "$qcore" \
-    -device "qemu-xhci" \
-    -device "usb-kbd" \
-    -device "usb-tablet" \
-    -device "virtio-keyboard-pci" \
-    -device "virtio-mouse-pci" \
-    -drive "if=pflash,format=raw,unit=0,file=${fwrcode},readonly=on" \
-    -drive "if=pflash,format=raw,unit=1,file=${fwrvars}" \
-    -netdev "user,id=net0" \
-    -device "virtio-net-device,netdev=net0" \
-    -device "virtio-rng-pci" \
-    -device "virtio-scsi-pci,id=scsi0" \
-    -drive "file=${iso},format=raw,readonly=on,if=none,id=cdrom0,media=cdrom" \
-    -device "scsi-cd,drive=cdrom0,bus=scsi0.0" \
-    -drive "file=${cow},format=qcow2,if=virtio" \
-    -nographic
-  exit $?
-fi
 
 #BOOT ARM32 ISO
 if [ "$arch" = "arm" ]; then
