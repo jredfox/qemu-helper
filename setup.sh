@@ -52,6 +52,15 @@ mkdir -p "boot"
 mkdir -p "disks"
 mkdir -p "iso"
 mkdir -p "share"
+#copy the installation files if not already extracted to the install dir
+install_dir="$(realpath "$install_dir")"
+current_dir="$( cd -- "$(dirname "${0}")" >/dev/null 2>&1 ; pwd -P )"
+if [ "$install_dir" != "$current_dir" ]; then
+    echo "copying install files"
+    mv "$current_dir/iso"/* "$install_dir/iso/"
+    cp -rf "$current_dir"/*.sh "$install_dir/"
+    cp -rf "$current_dir"/*.txt "$install_dir/"
+fi
 #install cows
 for file in "iso"/*.iso; do
     name=$(basename "$file")
