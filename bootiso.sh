@@ -141,6 +141,7 @@ if [ "$family" = "$family_target" ]; then
   #printf "%s\n" "qemu-system-$arch $args"
   printf "%s" "$args" | xargs qemu-system-$arch
   exit $?
+
 fi
 
 if [ "$arch" = "aarch64" ]; then
@@ -176,7 +177,7 @@ if [ "$arch" = "aarch64" ]; then
   cp "/usr/share/AAVMF/AAVMF_VARS.fd" "$fwrvars"
   qemu-system-aarch64 \
     -cpu "cortex-a72" \
-    -machine "virt,gic-version=2" \
+    -machine "virt,gic-version=2,acpi=off" \
     -m "$qram" \
     -smp "$qcore" \
     -device "qemu-xhci" \

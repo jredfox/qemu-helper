@@ -27,7 +27,7 @@ if [ "$arch" = "aarch64" ]; then
   fi
   qemu-system-aarch64 \
     -cpu "cortex-a72" \
-    -machine "virt,gic-version=2" \
+    -machine "virt,gic-version=2,acpi=off" \
     -m "$qram" \
     -smp "$qcore" \
     -device "qemu-xhci" \
