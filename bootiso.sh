@@ -112,7 +112,7 @@ if [ "$family" = "$family_target" ]; then
       fi
       qarg "-kernel \"$kbkernal\""
       qarg "-initrd \"$kbinitrd\""
-      qarg "-append \"${kb_args}console=$qconsole\""
+      qarg "-append \"${kb_args}console=${qconsole}\""
   fi
   #Check KVM Status
   if qemu-system-$arch -accel help 2>&1 | grep -qw kvm; then
@@ -143,6 +143,51 @@ if [ "$family" = "$family_target" ]; then
   exit $?
 
 fi
+
+#disable acpi
+if [ "$no_acpi" = "true" ]; then
+  acpi=",acpi=off"
+fi
+
+#Support arm64
+if [ "$arch" = "aarch64" ]; then
+  qarg "-cpu \"cortex-a72\""
+  qarg "-machine \"virt,gic-version=2$acpi\""
+  qarg "-m $qram"
+  qarg "-smp $qcore"
+  qarg "-device \"qemu-xhci\""
+  qarg "-device \"usb-kbd\""
+  qarg "-device \"usb-tablet\""
+  qarg "-device \"virtio-keyboard-pci\""
+  qarg "-device \"virtio-mouse-pci\""
+  if [ "$kb" = "true" ]; then
+    qarg "-kernel \"$kbkernal\""
+    qarg "-initrd \"$kbinitrd\""
+    qarg "-append \"console=${qconsole}\""
+  else
+    #TODO:fix AAVMF_VARS.fd handling
+    fwrcode="$fwrdir/${dname}_AAVMF_CODE_iso.fd"
+    fwrvars="$fwrdir/${dname}_AAVMF_VARS_iso.fd"
+    cp "/usr/share/AAVMF/AAVMF_CODE.fd" "$fwrcode"
+    cp "/usr/share/AAVMF/AAVMF_VARS.fd" "$fwrvars"
+    qarg "-drive \"if=pflash,format=raw,unit=0,file=${fwrcode},readonly=on\""
+    qarg "-drive \"if=pflash,format=raw,unit=1,file=${fwrvars}\""
+  fi
+  qarg "-netdev \"user,id=net0\""
+  qarg "-device \"virtio-net-device,netdev=net0\""
+  qarg "-device \"virtio-rng-pci\""
+  #Drives
+  qarg "-device \"virtio-scsi-device,id=scsi0\""
+  qarg "-drive \"file=${iso},format=raw,readonly=on,if=none,id=cdrom0,media=cdrom\""
+  qarg "-device \"scsi-cd,drive=cdrom0,bus=scsi0.0\""
+  qarg "-drive \"file=${cow},format=qcow2,if=none,id=disk0\""
+  qarg "-device \"virtio-blk-device,drive=disk0\""
+fi
+
+qarg "-nographic"
+
+#WIP
+exit $?
 
 if [ "$arch" = "aarch64" ]; then
   if [ "$kb" = "true" ]; then
