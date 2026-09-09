@@ -166,6 +166,7 @@ if [ "$arch" = "aarch64" ]; then
     qarg "-append \"console=${qconsole}\""
   else
     #TODO:fix AAVMF_VARS.fd handling
+    mkdir -p "$fwrdir"
     fwrcode="$fwrdir/${dname}_AAVMF_CODE_iso.fd"
     fwrvars="$fwrdir/${dname}_AAVMF_VARS_iso.fd"
     cp "/usr/share/AAVMF/AAVMF_CODE.fd" "$fwrcode"
