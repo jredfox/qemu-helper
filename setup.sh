@@ -5,6 +5,7 @@ if [ -z "$install_dir" ]; then
     install_dir="$HOME/vms"
 fi
 install_dir="$(realpath "$install_dir")"
+current_dir="$( cd -- "$(dirname "${0}")" >/dev/null 2>&1 ; pwd -P )"
 #default ram to give qemu
 if [ -z "$qram" ]; then
     qram="4096"
@@ -54,7 +55,6 @@ mkdir -p "disks"
 mkdir -p "iso"
 mkdir -p "share"
 #copy the installation files if not already extracted to the install dir
-current_dir="$( cd -- "$(dirname "${0}")" >/dev/null 2>&1 ; pwd -P )"
 if [ "$install_dir" != "$current_dir" ]; then
     echo "copying install files"
     mv "$current_dir/iso"/* "$install_dir/iso/" >/dev/null 2>&1

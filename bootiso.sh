@@ -188,7 +188,7 @@ fi
 qarg "-nographic"
 
 #Launch QEMU with arguments
-#printf "%s\n" "qemu-system-$arch $args"
+printf "%s\n" "qemu-system-$arch $args"
 printf "%s\n" "$args" | xargs qemu-system-$arch
 exit $?
 
