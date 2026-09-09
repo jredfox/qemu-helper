@@ -48,8 +48,8 @@ fi
 #cd into the install dir
 cd "$install_dir"
 #create dirs
-mkdir -p "disks"
 mkdir -p "boot"
+mkdir -p "disks"
 mkdir -p "iso"
 mkdir -p "share"
 #install cows
