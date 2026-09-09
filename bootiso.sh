@@ -308,3 +308,39 @@ if [ "$arch" = "ppc64le" ]; then
   exit $?
 fi
 
+# x86_64 and x86 can work with graphics even when the host arch isn't x86 (32 or 64 bit)
+if [ "$arch" = "x86_64" ]; then
+    qemu-system-x86_64 \
+      -machine "q35" \
+      -cpu "qemu64" \
+      -smp "$qcore" \
+      -m "$qram" \
+      -hda "$cow" \
+      -cdrom "$iso" \
+      -boot d \
+      -vga "virtio" \
+      -display "default" \
+      -netdev "user,id=net0" \
+      -device "virtio-net-pci,netdev=net0"
+    exit $?
+fi
+
+# x86_64 and x86 can work with graphics even when the host arch isn't x86 (32 or 64 bit)
+if [ "$arch" = "i386" ]; then
+    qemu-system-i386 \
+      -machine "pc" \
+      -cpu "pentium3" \
+      -smp "$qcore" \
+      -m "$qram" \
+      -hda "$cow" \
+      -cdrom "$iso" \
+      -boot d \
+      -vga "std" \
+      -display "default" \
+      -netdev "user,id=net0" \
+      -device "rtl8139,netdev=net0"
+    exit $?
+fi
+
+echo "Unsupported Arch: $arch Exiting...."
+exit 1
