@@ -222,62 +222,6 @@ printf "%s\n\n" "qemu-system-${arch}${args}" >"tmp/run-${dname}.sh"
 exec sh "tmp/run-${dname}.sh"
 exit $?
 
-#BOOT ARM32 ISO
-if [ "$arch" = "arm" ]; then
-  mkdir -p "$fwrdir"
-  fwrcode="$fwrdir/${dname}_AAVMF_CODE_32_iso.fd"
-  fwrvars="$fwrdir/${dname}_AAVMF_VARS_32_iso.fd"
-  if [ "$kb" = "true" ]; then
-    qemu-system-arm \
-      -cpu "cortex-a15" \
-      -machine "virt,gic-version=2" \
-      -m "$qram" \
-      -smp "$qcore" \
-      -device "qemu-xhci" \
-      -device "usb-kbd" \
-      -device "usb-tablet" \
-      -device "virtio-keyboard-pci" \
-      -device "virtio-mouse-pci" \
-      -kernel "$kbkernal" \
-      -initrd "$kbinitrd" \
-      -append "console=ttyAMA0" \
-      -netdev "user,id=net0" \
-      -device "virtio-net-device,netdev=net0" \
-      -device "virtio-rng-pci" \
-      -drive "if=none,file=${iso},id=cdrom,media=cdrom" \
-      -device "virtio-scsi-device" \
-      -device "scsi-cd,drive=cdrom" \
-      -drive "if=none,file=${cow},id=hd0,format=qcow2" \
-      -device "virtio-blk-device,drive=hd0" \
-      -nographic
-      exit $?
-  fi
-  cp "/usr/share/AAVMF/AAVMF32_CODE.fd" "$fwrcode"
-  cp "/usr/share/AAVMF/AAVMF32_VARS.fd" "$fwrvars"
-  qemu-system-arm \
-    -cpu "cortex-a15" \
-    -machine "virt,gic-version=2" \
-    -m "$qram" \
-    -smp "$qcore" \
-    -device "qemu-xhci" \
-    -device "usb-kbd" \
-    -device "usb-tablet" \
-    -device "virtio-keyboard-pci" \
-    -device "virtio-mouse-pci" \
-    -drive "if=pflash,format=raw,unit=0,file=${fwrcode},readonly=on" \
-    -drive "if=pflash,format=raw,unit=1,file=${fwrvars}" \
-    -netdev "user,id=net0" \
-    -device "virtio-net-device,netdev=net0" \
-    -device "virtio-rng-pci" \
-    -drive "if=none,file=${iso},id=cdrom,media=cdrom" \
-    -device "virtio-scsi-device" \
-    -device "scsi-cd,drive=cdrom" \
-    -drive "if=none,file=${cow},id=hd0,format=qcow2" \
-    -device "virtio-blk-device,drive=hd0" \
-    -nographic
-  exit $?
-fi
-
 #BOOT RISC-V ISO
 if [ "$arch" = "riscv64" ]; then
   qemu-system-riscv64 \
