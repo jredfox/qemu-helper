@@ -18,6 +18,7 @@ if [ -z "$LWDE" ]; then
 fi
 #create the temp dir
 mkdir -p "tmp"
+run_tmp="tmp/${dname}_iso.sh"
 
 getArchy() {
   case "$1" in
@@ -209,8 +210,8 @@ if [ "$family" = "$family_target" ]; then
   fi
   
   #Launch QEMU with arguments
-  printf "%s\n\n" "qemu-system-${arch}${args}" >"tmp/run-${dname}.sh"
-  exec sh "tmp/run-${dname}.sh"
+  printf "%s\n\n" "qemu-system-${arch}${args}" >"$run_tmp"
+  exec sh "$run_tmp"
   exit $?
 
 fi
@@ -279,8 +280,8 @@ if [ "$allow_reboot" != "true" ]; then
 fi
 
 #Launch QEMU with arguments
-printf "%s\n\n" "qemu-system-${arch}${args}" >"tmp/run-${dname}.sh"
-exec sh "tmp/run-${dname}.sh"
+printf "%s\n\n" "qemu-system-${arch}${args}" >"$run_tmp"
+exec sh "$run_tmp"
 exit $?
 
 #BOOT RISC-V ISO
