@@ -67,7 +67,7 @@ getArchy() {
         ;;
 
     *)
-        echo "Unsupported"
+        echo "$1"
         ;;
     esac
 }
@@ -101,13 +101,12 @@ getFamily() {
         ;;
 
     *)
-        echo "$1"
+        echo "Unsupported"
         ;;
   esac
 
 }
 
-arch_org="$arch"
 arch=$(getArchy "$arch")
 uarch=$(uname -m)
 family=$(getFamily "$uarch")
@@ -211,8 +210,8 @@ if [ "$family" = "$family_target" ]; then
 fi
 
 #Unsupported Arch that doesn't match the host
-if [ "$arch" = "Unsupported" ]; then
-  echo "Unsupported Arch: $arch_org"
+if [ "$family_target" = "Unsupported" ]; then
+  echo "Unsupported Arch: $arch"
   exit 1
 fi
 
