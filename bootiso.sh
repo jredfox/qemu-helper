@@ -162,7 +162,7 @@ fi
 
 #Support arm64
 if [ "$family_target" = "arm" ]; then
-  if [ "$arch" = "aarch64" ];
+  if [ "$arch" = "aarch64" ]; then
     qarg "-cpu \"cortex-a72\""
   else
     qarg "-cpu \"cortex-a15\""
