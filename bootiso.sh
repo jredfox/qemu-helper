@@ -138,7 +138,7 @@ if [ "$family" = "$family_target" ]; then
   fi
   
   #Launch QEMU with arguments
-  printf "%s\n" "qemu-system-${arch}${args}" >"tmp/run-${dname}.sh"
+  printf "%s\n\n" "qemu-system-${arch}${args}" >"tmp/run-${dname}.sh"
   exec sh "tmp/run-${dname}.sh"
   exit $?
 
@@ -188,7 +188,7 @@ fi
 qarg "-nographic"
 
 #Launch QEMU with arguments
-printf "%s\n" "qemu-system-${arch}${args}" >"tmp/run-${dname}.sh"
+printf "%s\n\n" "qemu-system-${arch}${args}" >"tmp/run-${dname}.sh"
 exec sh "tmp/run-${dname}.sh"
 exit $?
 
