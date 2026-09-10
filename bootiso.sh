@@ -188,6 +188,7 @@ if [ "$arch" = "aarch64" ]; then
 fi
 
 qarg "-nographic"
+qarg "-no-reboot"
 
 #Launch QEMU with arguments
 printf "%s\n\n" "qemu-system-${arch}${args}" >"tmp/run-${dname}.sh"
