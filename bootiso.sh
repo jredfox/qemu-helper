@@ -20,7 +20,7 @@ fi
 mkdir -p "tmp"
 
 getArchy() {
-  case "$lname" in
+  case "$1" in
     # ARM 64-bit
     *aarch64*|*arm64*|*armv8*|*armv9*)
         echo "aarch64"
@@ -211,8 +211,8 @@ if [ "$family" = "$family_target" ]; then
 fi
 
 #Unsupported Arch that doesn't match the host
-if [ "$arch_org" = "Unsupported" ]; then
-  echo "Unsupported Arch: $arch"
+if [ "$arch" = "Unsupported" ]; then
+  echo "Unsupported Arch: $arch_org"
   exit 1
 fi
 
