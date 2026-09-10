@@ -138,6 +138,11 @@ if [ "$family" = "$family_target" ]; then
       fi
     fi
   fi
+
+  #Disable rebooting in the ISO installer by default if it causes an issue
+  if [ "$allow_reboot" != "true" ];
+    qarg "-no-reboot"
+  fi
   
   #Launch QEMU with arguments
   printf "%s\n\n" "qemu-system-${arch}${args}" >"tmp/run-${dname}.sh"
@@ -188,7 +193,9 @@ if [ "$arch" = "aarch64" ]; then
 fi
 
 qarg "-nographic"
-qarg "-no-reboot"
+if [ "$allow_reboot" != "true" ];
+  qarg "-no-reboot"
+fi
 
 #Launch QEMU with arguments
 printf "%s\n\n" "qemu-system-${arch}${args}" >"tmp/run-${dname}.sh"
