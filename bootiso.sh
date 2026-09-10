@@ -184,6 +184,7 @@ if [ "$family_target" = "arm" ]; then
     mkdir -p "$fwrdir"
     if [ "$arch" = "aarch64" ]; then
       AAVMF_CODE_PATH="/usr/share/AAVMF/AAVMF_CODE.fd"
+      AAVMF_VARS_PATH="/usr/share/AAVMF/AAVMF_VARS.fd"
       AAVMF_CODE="$fwrdir/AAVMF_CODE.fd"
       AAVMF_VARS="$fwrdir/${dname}_iso.fd"
     else
