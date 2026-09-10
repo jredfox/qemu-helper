@@ -162,7 +162,11 @@ fi
 
 #Support arm64
 if [ "$arch" = "aarch64" ]; then
-  qarg "-cpu \"cortex-a72\""
+  if [ "$arch" = "aarch64" ];
+    qarg "-cpu \"cortex-a72\""
+  else
+    qarg "-cpu \"cortex-a15\""
+  fi
   qarg "-machine \"virt,gic-version=2$acpi\""
   qarg "-m $qram"
   qarg "-smp $qcore"
