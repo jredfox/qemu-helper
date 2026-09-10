@@ -250,8 +250,8 @@ if [ "$family_target" = "arm" ]; then
     else
       AAVMF_CODE_PATH="/usr/share/AAVMF/AAVMF32_CODE.fd"
       AAVMF_VARS_PATH="/usr/share/AAVMF/AAVMF32_VARS.fd"
-      AAVMF_CODE="$fwrdir/AAVMF_CODE_32.fd"
-      AAVMF_VARS="$fwrdir/${dname}_32_iso.fd"
+      AAVMF_CODE="$fwrdir/AAVMF_CODE32.fd"
+      AAVMF_VARS="$fwrdir/${dname}32_iso.fd"
     fi
     #Optimization
     if [ ! -f "$AAVMF_CODE" ]; then
