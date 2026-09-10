@@ -183,7 +183,6 @@ if [ "$family" = "$family_target" ]; then
   fi
   #Check KVM Status
   if qemu-system-$arch -accel help 2>&1 | grep -qw kvm; then
-      echo "qemu-system-$arch has KVM"
       qarg "-enable-kvm"
   else
     echo "ERROR qemu-system-$arch has no KVM!"
