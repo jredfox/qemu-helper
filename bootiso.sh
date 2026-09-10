@@ -102,6 +102,10 @@ qarg() {
 }
 
 if [ "$family" = "$family_target" ]; then
+  #disable acpi
+  if [ "$no_acpi" = "true" ]; then
+    qarg "-machine acpi=off"
+  fi
   qarg "-m $qram"
   qarg "-cpu host"
   qarg "-smp $qcore"
