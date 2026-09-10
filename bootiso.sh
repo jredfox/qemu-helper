@@ -180,7 +180,6 @@ if [ "$family_target" = "arm" ]; then
     qarg "-initrd \"$kbinitrd\""
     qarg "-append \"${kb_args}console=${qconsole}\""
   else
-    #TODO:fix AAVMF_VARS.fd handling
     mkdir -p "$fwrdir"
     if [ "$arch" = "aarch64" ]; then
       AAVMF_CODE_PATH="/usr/share/AAVMF/AAVMF_CODE.fd"
@@ -197,6 +196,7 @@ if [ "$family_target" = "arm" ]; then
     if [ ! -f "$AAVMF_CODE" ]; then
       cp "$AAVMF_CODE_PATH" "$AAVMF_CODE"
     fi
+    #TODO:fix AAVMF_VARS.fd handling
     cp "$AAVMF_VARS_PATH" "$AAVMF_VARS"
     qarg "-drive \"if=pflash,format=raw,unit=0,file=${AAVMF_CODE},readonly=on\""
     qarg "-drive \"if=pflash,format=raw,unit=1,file=${AAVMF_VARS}\""
