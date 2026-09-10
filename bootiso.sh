@@ -178,7 +178,7 @@ if [ "$family_target" = "arm" ]; then
   if [ "$kb" = "true" ]; then
     qarg "-kernel \"$kbkernal\""
     qarg "-initrd \"$kbinitrd\""
-    qarg "-append \"console=${qconsole}\""
+    qarg "-append \"${kb_args}console=${qconsole}\""
   else
     #TODO:fix AAVMF_VARS.fd handling
     mkdir -p "$fwrdir"
