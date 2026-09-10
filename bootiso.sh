@@ -16,6 +16,8 @@ fi
 if [ -z "$LWDE" ]; then
   LWDE="false"
 fi
+#create the temp dir
+mkdir -p "tmp"
 
 getFamily() {
 
