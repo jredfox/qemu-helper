@@ -182,12 +182,23 @@ if [ "$family_target" = "arm" ]; then
   else
     #TODO:fix AAVMF_VARS.fd handling
     mkdir -p "$fwrdir"
-    fwrcode="$fwrdir/${dname}_AAVMF_CODE_iso.fd"
-    fwrvars="$fwrdir/${dname}_AAVMF_VARS_iso.fd"
-    cp "/usr/share/AAVMF/AAVMF_CODE.fd" "$fwrcode"
-    cp "/usr/share/AAVMF/AAVMF_VARS.fd" "$fwrvars"
-    qarg "-drive \"if=pflash,format=raw,unit=0,file=${fwrcode},readonly=on\""
-    qarg "-drive \"if=pflash,format=raw,unit=1,file=${fwrvars}\""
+    if [ "$arch" = "aarch64" ]; then
+      AAVMF_CODE_PATH="/usr/share/AAVMF/AAVMF_CODE.fd"
+      AAVMF_CODE="$fwrdir/AAVMF_CODE.fd"
+      AAVMF_VARS="$fwrdir/${dname}_iso.fd"
+    else
+      AAVMF_CODE_PATH="/usr/share/AAVMF/AAVMF32_CODE.fd"
+      AAVMF_VARS_PATH="/usr/share/AAVMF/AAVMF32_VARS.fd"
+      AAVMF_CODE="$fwrdir/AAVMF_CODE_32.fd"
+      AAVMF_VARS="$fwrdir/${dname}_32_iso.fd"
+    fi
+    #Optimization
+    if [ ! -f "$AAVMF_CODE" ]; then
+      cp "$AAVMF_CODE_PATH" "$AAVMF_CODE"
+    fi
+    cp "$AAVMF_VARS_PATH" "$AAVMF_VARS"
+    qarg "-drive \"if=pflash,format=raw,unit=0,file=${AAVMF_CODE},readonly=on\""
+    qarg "-drive \"if=pflash,format=raw,unit=1,file=${AAVMF_VARS}\""
   fi
   qarg "-netdev \"user,id=net0\""
   qarg "-device \"virtio-net-device,netdev=net0\""
