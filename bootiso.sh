@@ -161,7 +161,7 @@ if [ "$no_acpi" = "true" ]; then
 fi
 
 #Support arm64
-if [ "$arch" = "aarch64" ]; then
+if [ "$family_target" = "arm" ]; then
   if [ "$arch" = "aarch64" ];
     qarg "-cpu \"cortex-a72\""
   else
