@@ -19,6 +19,59 @@ fi
 #create the temp dir
 mkdir -p "tmp"
 
+getArchy() {
+  case "$lname" in
+    # ARM 64-bit
+    *aarch64*|*arm64*|*armv8*|*armv9*)
+        echo "aarch64"
+        ;;
+
+    # ARM 32-bit
+    *aarch32*|*arm32*|*armv[0-7]*|*armhf*|*armel*|*[!a-z]arm[!a-z]*|arm[!a-z]*|*[!a-z]arm)
+        echo "arm"
+        ;;
+
+    # RISC-V
+    *risc-v*|*riscv*|*risc64*|*risc?64*|*rv64*)
+        echo "riscv64"
+        ;;
+
+    # powerpc64 little edian
+    *ppc64el*|*ppc64le*|*powerpc64le*|*powerpc64el*)
+        echo "ppc64le"
+        ;;
+
+    # powerpc32
+    *ppc32*|*ppc?32*|*powerpc32*|*powerpc?32*)
+        echo "ppc32"
+        ;;
+
+    # powerpc64
+    *ppc64*|*powerpc64*|*powerpc*)
+        echo "ppc64"
+        ;;
+
+    # IBM Z
+    *ibm-z*|*s390x*|*[!a-z0-9]s390[!a-z0-9]*|s390[!a-z0-9]*|*[!a-z0-9]s390)
+        echo "s390x"
+        ;;
+
+    # x86 64-bit
+    *x86?64*|*amd64*|*x64*|*64bit*|*64?bit*)
+        echo "x86_64"
+        ;;
+
+    # x86 32-bit
+    *i[0-9]86*|*i[0-9][0-9]86*|*i[0-9][0-9][0-9]86*|*x86?32*|*x86*|*32bit*|*32?bit*|*x32*|*ia-32*)
+        echo "i386"
+        ;;
+
+    *)
+        echo "Unsupported"
+        ;;
+    esac
+}
+
 getFamily() {
 
   case "$1" in
@@ -54,6 +107,8 @@ getFamily() {
 
 }
 
+arch_org="$arch"
+arch=$(getArchy "$arch")
 uarch=$(uname -m)
 family=$(getFamily "$uarch")
 family_target=$(getFamily "$arch")
@@ -153,6 +208,12 @@ if [ "$family" = "$family_target" ]; then
   exec sh "tmp/run-${dname}.sh"
   exit $?
 
+fi
+
+#Unsupported Arch that doesn't match the host
+if [ "$arch_org" = "Unsupported" ]; then
+  echo "Unsupported Arch: $arch"
+  exit 1
 fi
 
 #disable acpi
@@ -311,6 +372,3 @@ if [ "$arch" = "i386" ]; then
       -device "rtl8139,netdev=net0"
     exit $?
 fi
-
-echo "Unsupported Arch: $arch Exiting...."
-exit 1
