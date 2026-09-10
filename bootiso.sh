@@ -139,7 +139,7 @@ if [ "$family" = "$family_target" ]; then
     fi
   fi
 
-  #Disable rebooting in the ISO installer by default if it causes an issue
+  #Disable rebooting in the ISO installer by default
   if [ "$allow_reboot" != "true" ];
     qarg "-no-reboot"
   fi
@@ -193,6 +193,7 @@ if [ "$arch" = "aarch64" ]; then
 fi
 
 qarg "-nographic"
+#Disable rebooting in the ISO installer by default
 if [ "$allow_reboot" != "true" ];
   qarg "-no-reboot"
 fi
