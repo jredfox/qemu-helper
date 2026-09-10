@@ -253,19 +253,35 @@ if [ "$family_target" = "arm" ]; then
       AAVMF_CODE_PATH="/usr/share/AAVMF/AAVMF_CODE.fd"
       AAVMF_VARS_PATH="/usr/share/AAVMF/AAVMF_VARS.fd"
       AAVMF_CODE="$fwrdir/AAVMF_CODE.fd"
-      AAVMF_VARS="$fwrdir/${dname}_AAVMF_VARS.fd"
+      AAVMF_VARS_NORMAL="$fwrdir/${dname}_AAVMF_VARS.fd"
+      AAVMF_VARS_ISO="$fwrdir/${dname}_AAVMF_VARS_iso.fd"
     else
       AAVMF_CODE_PATH="/usr/share/AAVMF/AAVMF32_CODE.fd"
       AAVMF_VARS_PATH="/usr/share/AAVMF/AAVMF32_VARS.fd"
       AAVMF_CODE="$fwrdir/AAVMF_CODE32.fd"
-      AAVMF_VARS="$fwrdir/${dname}_AAVMF32_VARS.fd"
+      AAVMF_VARS_NORMAL="$fwrdir/${dname}_AAVMF32_VARS.fd"
+      AAVMF_VARS_ISO="$fwrdir/${dname}_AAVMF32_VARS_iso.fd"
+    fi
+    if [ "$iso_boot" = "true" ]; then
+      AAVMF_VARS="$AAVMF_VARS_ISO"
+    else
+      AAVMF_VARS="$AAVMF_VARS_NORMAL"
+    fi
+    #Copy AAVMF_VARS_ISO to AAVMF_VARS_NORMAL if it has boot entries before clearing NVRAM
+    if [ ! -z $(virt-fw-vars -i "$AAVMF_VARS_ISO" --print 2>/dev/null | grep -E '^Boot[0-9]{4}') ]; then
+      cp "$AAVMF_VARS_ISO" "$AAVMF_VARS_NORMAL"
     fi
     #Optimization
     if [ ! -f "$AAVMF_CODE" ]; then
       cp "$AAVMF_CODE_PATH" "$AAVMF_CODE"
     fi
-    if [ ! -f "$AAVMF_VARS" ]; then
-       cp "$AAVMF_VARS_PATH" "$AAVMF_VARS"
+    if [ "$iso_boot" = "true" ]; then
+      cp "$AAVMF_VARS_PATH" "$AAVMF_VARS"
+    fi
+    if [ "$iso_boot" != "true" ]; then
+      if [ ! -f "$AAVMF_VARS" ]; then
+        cp "$AAVMF_VARS_PATH" "$AAVMF_VARS"
+      fi
     fi
     qarg "-drive \"if=pflash,format=raw,unit=0,file=${AAVMF_CODE},readonly=on\""
     qarg "-drive \"if=pflash,format=raw,unit=1,file=${AAVMF_VARS}\""
