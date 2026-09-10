@@ -1,4 +1,5 @@
 dname="${1}"
+iso_boot="true"
 iso="iso/${dname}.iso"
 iso="$(realpath "$iso")"
 cow="disks/${dname}.qcow2"
@@ -19,6 +20,13 @@ fi
 #create the temp dir
 mkdir -p "tmp"
 run_tmp="tmp/${dname}_iso.sh"
+
+#Sanity check to ensure both ISO boot and normal boot are not running at the same time or multiple instances of the same one
+if lsof "$cow" > /dev/null 2>&1; then
+  echo "${cow} is already running from QEMU or another program!"
+  read -p "Press Enter to Continue..." dummy
+  exit 1
+fi
 
 getArchy() {
   case "$1" in
@@ -245,19 +253,20 @@ if [ "$family_target" = "arm" ]; then
       AAVMF_CODE_PATH="/usr/share/AAVMF/AAVMF_CODE.fd"
       AAVMF_VARS_PATH="/usr/share/AAVMF/AAVMF_VARS.fd"
       AAVMF_CODE="$fwrdir/AAVMF_CODE.fd"
-      AAVMF_VARS="$fwrdir/${dname}_AAVMF_VARS_iso.fd"
+      AAVMF_VARS="$fwrdir/${dname}_AAVMF_VARS.fd"
     else
       AAVMF_CODE_PATH="/usr/share/AAVMF/AAVMF32_CODE.fd"
       AAVMF_VARS_PATH="/usr/share/AAVMF/AAVMF32_VARS.fd"
       AAVMF_CODE="$fwrdir/AAVMF_CODE32.fd"
-      AAVMF_VARS="$fwrdir/${dname}_AAVMF32_VARS_iso.fd"
+      AAVMF_VARS="$fwrdir/${dname}_AAVMF32_VARS.fd"
     fi
     #Optimization
     if [ ! -f "$AAVMF_CODE" ]; then
       cp "$AAVMF_CODE_PATH" "$AAVMF_CODE"
     fi
-    #TODO:fix AAVMF_VARS.fd handling
-    cp "$AAVMF_VARS_PATH" "$AAVMF_VARS"
+    if [ ! -f "$AAVMF_VARS" ]; then
+       cp "$AAVMF_VARS_PATH" "$AAVMF_VARS"
+    fi
     qarg "-drive \"if=pflash,format=raw,unit=0,file=${AAVMF_CODE},readonly=on\""
     qarg "-drive \"if=pflash,format=raw,unit=1,file=${AAVMF_VARS}\""
   fi
