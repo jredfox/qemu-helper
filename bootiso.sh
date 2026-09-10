@@ -112,6 +112,12 @@ uarch=$(uname -m)
 family=$(getFamily "$uarch")
 family_target=$(getFamily "$arch")
 
+#Unsupported Arch that doesn't match the host
+if [ "$family_target" = "Unsupported" ]; then
+  echo "Unsupported Arch: $arch"
+  exit 1
+fi
+
 if [ "$kb" = "true" ]; then
   kbdir="disks/kb/${dname}"
   rm -rf "$kbdir"
@@ -207,12 +213,6 @@ if [ "$family" = "$family_target" ]; then
   exec sh "tmp/run-${dname}.sh"
   exit $?
 
-fi
-
-#Unsupported Arch that doesn't match the host
-if [ "$family_target" = "Unsupported" ]; then
-  echo "Unsupported Arch: $arch"
-  exit 1
 fi
 
 #disable acpi
