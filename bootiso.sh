@@ -271,7 +271,7 @@ if [ "$family_target" = "arm" ]; then
     if virt-fw-vars "--help" > /dev/null 2>&1; then
       boot_entries="$(virt-fw-vars -i "$AAVMF_VARS_ISO" --print 2>/dev/null | grep -E '^Boot[0-9]{4}' | grep -iE '[/\\]File')"
     else
-      echo "fallback to strings command for EFI boot entries check!"
+      echo "WARNING: Falling back to strings command for EFI boot entries check!"
       boot_entries="$(strings -e l "$AAVMF_VARS_ISO" | grep -iE '\\EFI\\|/EFI/')"
     fi
     if [ ! -z "$boot_entries" ]; then
