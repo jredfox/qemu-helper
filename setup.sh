@@ -161,7 +161,7 @@ for file in "iso"/*.iso; do
         echo "cd \"${install_dir}\"" >"$bootsh"
         echo "sh bootnormal.sh \"${name}\" ${arch} ${qram_gen} ${qcore_gen} ${LWDE}" >>"$bootsh"
         echo "cd \"${install_dir}\"" >"$bootisosh"
-        if [ "$kb" = "true" ];
+        if [ "$kb" = "true" ]; then
             echo "export kb=\"true\"" >>"$bootisosh"
         fi
         echo "sh bootiso.sh \"${name}\" ${arch} ${qram_gen} ${qcore_gen} ${LWDE}" >>"$bootisosh"
