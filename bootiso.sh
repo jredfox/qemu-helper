@@ -268,7 +268,8 @@ if [ "$family_target" = "arm" ]; then
       AAVMF_VARS="$AAVMF_VARS_NORMAL"
     fi
     #Copy AAVMF_VARS_ISO to AAVMF_VARS_NORMAL if it has boot entries before clearing NVRAM
-    if [ ! -z $(virt-fw-vars -i "$AAVMF_VARS_ISO" --print 2>/dev/null | grep -E '^Boot[0-9]{4}') ]; then
+    boot_entries="$(virt-fw-vars -i "$AAVMF_VARS_ISO" --print 2>/dev/null | grep -E '^Boot[0-9]{4}')"
+    if [ ! -z "$boot_entries" ]; then
       echo "Setting NVRAM of normal boot"
       cp "$AAVMF_VARS_ISO" "$AAVMF_VARS_NORMAL"
       rm -f "$AAVMF_VARS_ISO"
