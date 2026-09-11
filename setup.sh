@@ -165,6 +165,15 @@ for file in "iso"/*.iso; do
                 no_acpi="true"
                 ;;
         esac
+
+        #Dynamically Determine if kernal boot needs to be enabled for arm32 and arm64 images
+        if [ "$arch" = "arm" ]; then
+            oefi="$(7z l -ba "iso/${name}.iso" | awk 'substr($3,1,1) == "D" { sub(/^([^ ]+ +){3}/, "") ; print }' | sed 's|^[^/]|/&|' | grep -Ei '^/(EFI|BOOT)(/)?$')"
+            if [ -z "$oefi" ]; then
+                kb="true"
+                echo "kb auto detected $name oefi \"$oefi\""
+            fi
+        fi 
         
         qram_gen="$qram"
         qcore_gen="$qcore"
