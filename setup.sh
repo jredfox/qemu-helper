@@ -34,7 +34,7 @@ if ! output=$(qemu-img "--version" > /dev/null 2>&1); then
         sudo apt install -y opensbi qemu-system-riscv64 qemu-efi-riscv64 u-boot-qemu
         #TODO: install 7z or py7zip depending upon what is avaliable
         if virt-fw-vars "--help" > /dev/null 2>&1; then
-            read -p "Do you want to install virt-fw-vars which is recomended for older Ubuntu Arm64 images? [Y/N] " result
+            read -p "Do you want to install virt-fw-vars which is recomended for older Ubuntu Arm64/ARM32 images? [Y/N] " result
             case "$result" in
                 [Yy]*) 
                     sudo apt install -y virt-fw-vars
