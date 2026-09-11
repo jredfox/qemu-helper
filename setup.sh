@@ -171,7 +171,6 @@ for file in "iso"/*.iso; do
             oefi="$(7z l -ba "iso/${name}.iso" | awk 'substr($3,1,1) == "D" { sub(/^([^ ]+ +){3}/, "") ; print }' | sed 's|^[^/]|/&|' | grep -Ei '^/(EFI|BOOT)(/)?$')"
             if [ -z "$oefi" ]; then
                 kb="true"
-                echo "kb auto detected $name oefi \"$oefi\""
             fi
         fi 
         
