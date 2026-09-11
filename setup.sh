@@ -166,7 +166,7 @@ for file in "iso"/*.iso; do
                 ;;
         esac
 
-        #Dynamically Determine if kernal boot needs to be enabled for arm32 and arm64 images
+        #Dynamically Determine if kernal boot needs to be enabled for arm32 images
         if [ "$arch" = "arm" ]; then
             oefi="$(7z l -ba "iso/${name}.iso" | awk 'substr($3,1,1) == "D" { sub(/^([^ ]+ +){3}/, "") ; print }' | sed 's|^[^/]|/&|' | grep -Ei '^/(EFI|BOOT)(/)?$')"
             if [ -z "$oefi" ]; then
