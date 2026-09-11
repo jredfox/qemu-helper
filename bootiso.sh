@@ -142,6 +142,11 @@ if [ "$kb" = "true" ]; then
   if [ -z "$vmlinuz_path" ] || [ -z "$initrd_path" ]; then
     results="$(7z l -ba "${iso}" | awk 'substr($3,1,1) != "D" { sub(/^([^ ]+ +){5}/, "") ; print }' | sed 's|^[^/]|/&|' | grep -Ei '^(/[^/]+){0,4}/(hwe-)?(vmlinuz|zImage|uImage|bzImage|Image|linux|vmlinux|vmlinuz-virt|initrd|uInitrd|initramfs|initramfs-linux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$')"
     results_sorted="$(printf '%s' "$results" | awk -F/ '{ print NF-1, $0 }' | sort -n -k1,1 -k2,2 | sed 's|^[^/]*/||')"
+    #Prefer netboot results to make Debian happy
+    netboot="$(printf '%s' "$results_sorted" | grep -Ei '^(install|boot)[^/]*/netboot/')"
+    if [ ! -z "$netboot" ]; then
+      results_sorted="$netboot"
+    fi
     vmlinuz_path="$(printf '%s' "$results_sorted" | grep -Ei '(hwe-)?(vmlinuz|zImage|uImage|bzImage|Image|linux|vmlinux|vmlinuz-virt)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | head -n 1)"
     initrd_path="$(printf '%s' "$results_sorted" | grep -Ei '(hwe-)?(initrd|uInitrd|initramfs|initramfs-linux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | head -n 1)"
   else
