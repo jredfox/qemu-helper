@@ -32,33 +32,33 @@ getArchy() {
   case "$1" in
     # ARM 64-bit
     *aarch64*|*arm64*|*armv8*|*armv9*)
-        echo "aarch64"
-        ;;
+      echo "aarch64"
+      ;;
 
     # ARM 32-bit
     *aarch32*|*arm32*|*armv[0-7]*|*armhf*|*armel*|*[!a-z]arm[!a-z]*|arm[!a-z]*|*[!a-z]arm)
-        echo "arm"
-        ;;
+      echo "arm"
+      ;;
 
     # RISC-V
     *risc-v*|*riscv*|*risc64*|*risc?64*|*rv64*)
-        echo "riscv64"
-        ;;
+      echo "riscv64"
+      ;;
 
     # powerpc64 little edian
     *ppc64el*|*ppc64le*|*powerpc64le*|*powerpc64el*)
-        echo "ppc64le"
-        ;;
+      echo "ppc64le"
+      ;;
 
     # powerpc32
     *ppc32*|*ppc?32*|*powerpc32*|*powerpc?32*)
-        echo "ppc32"
-        ;;
+      echo "ppc32"
+      ;;
 
     # powerpc64
     *ppc64*|*powerpc64*|*powerpc*)
-        echo "ppc64"
-        ;;
+      echo "ppc64"
+      ;;
 
     # IBM Z
     *ibm-z*|*s390x*|*[!a-z0-9]s390[!a-z0-9]*|s390[!a-z0-9]*|*[!a-z0-9]s390)
@@ -67,18 +67,18 @@ getArchy() {
 
     # x86 64-bit
     *x86?64*|*amd64*|*x64*|*64bit*|*64?bit*)
-        echo "x86_64"
-        ;;
+      echo "x86_64"
+      ;;
 
     # x86 32-bit
     *i[0-9]86*|*i[0-9][0-9]86*|*i[0-9][0-9][0-9]86*|*x86?32*|*x86*|*32bit*|*32?bit*|*x32*|*ia-32*)
-        echo "i386"
-        ;;
+      echo "i386"
+      ;;
 
     *)
-        echo "$1"
-        ;;
-    esac
+      echo "$1"
+      ;;
+  esac
 }
 
 getFamily() {
