@@ -89,32 +89,32 @@ getFamily() {
   case "$lname" in
     # ARM 64-bit
     *aarch64*|*arm64*|*armv8*|*armv9*|*aarch32*|*arm32*|*armv[0-7]*|*armhf*|*armel*|*[!a-z]arm[!a-z]*|arm[!a-z]*|*[!a-z]arm|arm)
-        echo "arm"
-        ;;
+      echo "arm"
+      ;;
 
     # RISC-V
     *risc-v*|*riscv*|*risc64*|*risc?64*|*rv64*)
-        echo "riscv"
-        ;;
+      echo "riscv"
+      ;;
 
     # powerpc
     *ppc64*|*ppc?64*|*powerpc*|*ppc32*|*ppc?32*)
-        echo "powerpc"
-        ;;
+      echo "powerpc"
+      ;;
 
     # IBM Z
     *ibm-z*|*s390x*|*[!a-z0-9]s390[!a-z0-9]*|s390[!a-z0-9]*|*[!a-z0-9]s390|s390)
-        echo "s390x"
-        ;;
+      echo "s390x"
+      ;;
 
     # x86 intel / amd 32 and 64 bit processors
     *x86*|*amd64*|*x64*|*64bit*|*64?bit*|*i[0-9]86*|*i[0-9][0-9]86*|*i[0-9][0-9][0-9]86*|*32bit*|*32?bit*|*x32*|*ia?32*|*ia32*)
-        echo "x86"
-        ;;
+      echo "x86"
+      ;;
 
     *)
-        echo "Unsupported"
-        ;;
+      echo "Unsupported"
+      ;;
   esac
 
 }
