@@ -88,13 +88,6 @@ for file in "iso"/*.iso; do
                 LWDE="true"
                 ;;
         esac
-        
-        #Enable Kernal Boot
-        case "$lname" in
-            *-kb[!a-z]*)
-                kb="true"
-                ;;
-        esac
 
         #Extract the arch from from the ISO and translate the arch aliases to be standard
         bits32="false"
@@ -151,6 +144,27 @@ for file in "iso"/*.iso; do
                 arch="x86_64"
                 ;;
         esac
+
+        #Enable Kernal Boot and Disable ACPI
+        no_acpi="false"
+        kb="false"
+        case "$lname" in
+            *-kb[!a-z]*|*-kb)
+                kb="true"
+                ;;
+
+            *-old[!a-z]*|*-old)
+                if [ "$arch" = "arm" ]; then
+                    kb="true"
+                else
+                    no_acpi="true"
+                fi
+                ;;
+
+            *-no-acpi[!a-z]*|*-no-acpi)
+                no_acpi="true"
+                ;;
+        esac
         
         qram_gen="$qram"
         qcore_gen="$qcore"
@@ -163,6 +177,9 @@ for file in "iso"/*.iso; do
         echo "cd \"${install_dir}\"" >"$bootisosh"
         if [ "$kb" = "true" ]; then
             echo "export kb=\"true\"" >>"$bootisosh"
+        fi
+        if [ "$no_acpi" = "true" ]; then
+            echo "export no_acpi=\"true\"" >>"$bootisosh"
         fi
         echo "sh bootiso.sh \"${name}\" ${arch} ${qram_gen} ${qcore_gen} ${LWDE}" >>"$bootisosh"
         chmod +x "$bootsh"
