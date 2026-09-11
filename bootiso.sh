@@ -282,7 +282,7 @@ if [ "$family_target" = "arm" ]; then
     fi
     #Copy AAVMF_VARS_ISO to AAVMF_VARS_NORMAL if it has boot entries before clearing NVRAM
     if virt-fw-vars "--help" > /dev/null 2>&1; then
-      boot_entries="$(virt-fw-vars -i "$AAVMF_VARS_ISO" --print 2>/dev/null | grep -E '^Boot[0-9]{4}' | grep -iE '[/\\]File')"
+      boot_entries="$(virt-fw-vars -i "$AAVMF_VARS_ISO" --print 2>/dev/null | grep -iE '^Boot[0-9]{4}' | grep -iE '[/\\]File')"
     else
       echo "WARNING: Falling back to strings command for EFI boot entries check!"
       boot_entries="$(strings -e l "$AAVMF_VARS_ISO" 2>/dev/null | grep -iE '\\EFI\\|/EFI/')"
