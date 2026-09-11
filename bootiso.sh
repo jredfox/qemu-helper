@@ -18,8 +18,8 @@ if [ -z "$LWDE" ]; then
   LWDE="false"
 fi
 #create the temp dir
-mkdir -p ".tmp"
-run_tmp=".tmp/${dname}_iso.sh"
+mkdir -p "tmp"
+run_tmp="tmp/${dname}_iso.sh"
 
 #Sanity check to ensure both ISO boot and normal boot are not running at the same time or multiple instances of the same one
 if lsof "$cow" > /dev/null 2>&1; then
