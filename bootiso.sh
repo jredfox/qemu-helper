@@ -305,6 +305,7 @@ if [ "$family_target" = "arm" ]; then
 fi
 
 qarg "-nographic"
+
 #Disable rebooting in the ISO installer by default
 if [ "$allow_reboot" != "true" ]; then
   qarg "-no-reboot"
