@@ -172,7 +172,7 @@ for file in "iso"/*.iso; do
             if [ -z "$oefi" ]; then
                 kb="true"
             fi
-        fi 
+        fi
         
         qram_gen="$qram"
         qcore_gen="$qcore"
