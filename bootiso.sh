@@ -29,14 +29,16 @@ if lsof "$cow" > /dev/null 2>&1; then
 fi
 
 getArchy() {
-  case "$1" in
+  uparch="$1"
+  lname="$(printf '%s' "$uparch" | tr '[:upper:]' '[:lower:]')"
+  case "$lname" in
     # ARM 64-bit
     *aarch64*|*arm64*|*armv8*|*armv9*)
       echo "aarch64"
       ;;
 
     # ARM 32-bit
-    *aarch32*|*arm32*|*armv[0-7]*|*armhf*|*armel*|*[!a-z]arm[!a-z]*|arm[!a-z]*|*[!a-z]arm)
+    *aarch32*|*arm32*|*armv[0-7]*|*armhf*|*armel*|*[!a-z]arm[!a-z]*|arm[!a-z]*|*[!a-z]arm|arm)
       echo "arm"
       ;;
 
@@ -61,7 +63,7 @@ getArchy() {
       ;;
 
     # IBM Z
-    *ibm-z*|*s390x*|*[!a-z0-9]s390[!a-z0-9]*|s390[!a-z0-9]*|*[!a-z0-9]s390)
+    *ibm-z*|*s390x*|*[!a-z0-9]s390[!a-z0-9]*|s390[!a-z0-9]*|*[!a-z0-9]s390|s390)
         echo "s390x"
         ;;
 
@@ -71,7 +73,7 @@ getArchy() {
       ;;
 
     # x86 32-bit
-    *i[0-9]86*|*i[0-9][0-9]86*|*i[0-9][0-9][0-9]86*|*x86?32*|*x86*|*32bit*|*32?bit*|*x32*|*ia-32*)
+    *i[0-9]86*|*i[0-9][0-9]86*|*i[0-9][0-9][0-9]86*|*x86?32*|*x86*|*32bit*|*32?bit*|*x32*|*ia?32*|*ia32*)
       echo "i386"
       ;;
 
@@ -82,10 +84,11 @@ getArchy() {
 }
 
 getFamily() {
-
-  case "$1" in
+  uparch="$1"
+  lname="$(printf '%s' "$uparch" | tr '[:upper:]' '[:lower:]')"
+  case "$lname" in
     # ARM 64-bit
-    *aarch64*|*arm64*|*armv8*|*armv9*|*aarch32*|*arm32*|*armv[0-7]*|*armhf*|*armel*|*[!a-z]arm[!a-z]*|arm[!a-z]*|*[!a-z]arm)
+    *aarch64*|*arm64*|*armv8*|*armv9*|*aarch32*|*arm32*|*armv[0-7]*|*armhf*|*armel*|*[!a-z]arm[!a-z]*|arm[!a-z]*|*[!a-z]arm|arm)
         echo "arm"
         ;;
 
@@ -100,12 +103,12 @@ getFamily() {
         ;;
 
     # IBM Z
-    *ibm-z*|*s390x*|*[!a-z0-9]s390[!a-z0-9]*|s390[!a-z0-9]*|*[!a-z0-9]s390)
+    *ibm-z*|*s390x*|*[!a-z0-9]s390[!a-z0-9]*|s390[!a-z0-9]*|*[!a-z0-9]s390|s390)
         echo "s390x"
         ;;
 
     # x86 intel / amd 32 and 64 bit processors
-    *x86*|*amd64*|*x64*|*64bit*|*64?bit*|*i[0-9]86*|*i[0-9][0-9]86*|*i[0-9][0-9][0-9]86*|*32bit*|*32?bit*|*x32*|*ia-32*)
+    *x86*|*amd64*|*x64*|*64bit*|*64?bit*|*i[0-9]86*|*i[0-9][0-9]86*|*i[0-9][0-9][0-9]86*|*32bit*|*32?bit*|*x32*|*ia?32*|*ia32*)
         echo "x86"
         ;;
 
