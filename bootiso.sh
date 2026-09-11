@@ -140,14 +140,14 @@ if [ "$kb" = "true" ]; then
   vmlinuz_path="$kb_path"
   initrd_path="$kb_initrd"
   if [ -z "$vmlinuz_path" ] || [ -z "$initrd_path" ]; then
-    results="$(7z l -ba "${iso}" | awk 'substr($3,1,1) != "D" { sub(/^([^ ]+ +){5}/, "") ; print }' | sed 's|^[^/]|/&|' | grep -Ei '^(/[^/]+){0,3}/(hwe-)?(vmlinuz|zImage|uImage|bzImage|Image|linux|vmlinux|vmlinuz-virt|initrd|uInitrd|initramfs|initramfs-linux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$')"
+    results="$(7z l -ba "${iso}" | awk 'substr($3,1,1) != "D" { sub(/^([^ ]+ +){5}/, "") ; print }' | sed 's|^[^/]|/&|' | grep -Ei '^(/[^/]+){0,4}/(hwe-)?(vmlinuz|zImage|uImage|bzImage|Image|linux|vmlinux|vmlinuz-virt|initrd|uInitrd|initramfs|initramfs-linux)(-lts)?(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$')"
     results_sorted="$(printf '%s' "$results" | awk -F/ '{ print NF-1, $0 }' | sort -n -k1,1 -k2,2 | sed 's|^[^/]*/||')"
     #Prefer vmlinuz/initrd one directory deep for install and boot dirs
     installboot="$(printf '%s' "$results_sorted" | grep -Ei '^(install|boot|efi)[^/]*/[^/]+$')"
     if [ ! -z "$installboot" ]; then
       results_sorted="$installboot"
     else
-      netboot="$(printf '%s' "$results_sorted" | grep -Ei '^(install|boot|efi)[^/]*/netboot/')"
+      netboot="$(printf '%s' "$results_sorted" | grep -Ei '^(install|boot|efi)[^/]*/netboot/([^/]+/)?[^/]+$')"
       if [ ! -z "$netboot" ]; then
         results_sorted="$netboot"
       fi
