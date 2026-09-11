@@ -185,6 +185,8 @@ for file in "iso"/*.iso; do
         echo "cd \"${install_dir}\"" >"$bootisosh"
         if [ "$kb" = "true" ]; then
             echo "export kb=\"true\"" >>"$bootisosh"
+            echo "#export kb_path=\"install/netboot/vmlinuz\"" >>"$bootisosh"
+            echo "#export kb_initrd=\"install/netboot/initrd.gz\"" >>"$bootisosh"
         fi
         if [ "$no_acpi" = "true" ]; then
             echo "export no_acpi=\"true\"" >>"$bootisosh"
