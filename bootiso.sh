@@ -256,6 +256,8 @@ if [ "$no_acpi" = "true" ]; then
 fi
 
 q_netdev="user,id=net0"
+q_netdev_device="virtio-net-device"
+q_rng="virtio-rng-pci"
 case "$arch" in
   aarch64|arm)
     q_cpu="cortex-a72"
@@ -263,8 +265,6 @@ case "$arch" in
       q_cpu="cortex-a15"
     fi
     q_machine="virt,gic-version=2"
-    q_netdev_device="virtio-net-device"
-    q_rng="virtio-rng-pci"
     ;;
   riscv64)
     q_cpu="rv64"
@@ -273,34 +273,57 @@ case "$arch" in
       acpi=",acpi=off"
     fi
     q_kernal="/usr/lib/u-boot/qemu-riscv64_smode/uboot.elf"
-    q_netdev_device="virtio-net-device"
-    q_rng="virtio-rng-pci"
     ;;
   ppc64le)
     q_cpu="power8"
     q_machine="pseries-2.6,cap-htm=off"
     q_location_bios="pc-bios"
-    q_netdev_device="virtio-net-device"
-    q_rng="virtio-rng-pci" #TODO: Check if it's ok
-    ;;
-  ppc32|ppc64)
-    echo "NOT IMPLEMENTED YET!"
-    exit 1
     ;;
   s390x)
     q_cpu="max"
     q_machine="s390-ccw-virtio"
     q_netdev_device="virtio-net-ccw"
+    q_rng=""
     ;;
   x86_64)
-    echo "x86_64"
+    q_cpu="qemu64"
+    q_machine="q35"
+    q_netdev_device="virtio-net-pci"
     ;;
   i386)
-    echo "i386"
+    q_cpu="pentium3"
+    q_machine="pc"
+    q_netdev_device="rtl8139"
+    q_rng=""
     ;;
   *)
+    echo "NOT IMPLEMENTED YET! Arch: ${arch}"
+    exit 1
     ;;
 esac
+
+#WIP QEMU ARGS
+qarg "-cpu \"${q_cpu}\""
+qarg "-machine \"${q_machine}${acpi}\""
+qarg "-m $qram"
+qarg "-smp $qcore"
+if [ "$kb" = "true" ]; then
+  qarg "-kernel \"${kbkernal}\""
+  qarg "-initrd \"${kbinitrd}\""
+  qarg "-append \"${kb_args}console=${qconsole}\""
+else
+  if [ ! -z "$q_kernal" ]; then
+    qarg "-kernel \"${q_kernal}\""
+  fi
+  if [ ! -z "$q_location_bios" ]; then
+    qarg "-L \"${q_location_bios}\""
+  fi
+fi
+qarg "-netdev \"${q_netdev}\""
+qarg "-device \"${q_netdev_device},netdev=net0\""
+if [ ! -z "$q_rng" ]; then
+  qarg "-device \"${q_rng}\""
+fi
 
 #Support arm64
 if [ "$family_target" = "arm" ]; then
