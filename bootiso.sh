@@ -392,7 +392,6 @@ case "$arch" in
     ;;
 esac
 
-#WIP QEMU ARGS
 qarg "-cpu \"${q_cpu}\""
 qarg "-machine \"${q_machine}${acpi}\""
 qarg "-m $qram"
@@ -416,41 +415,6 @@ qarg "-netdev \"${q_netdev}\""
 qarg "-device \"${q_netdev_device},netdev=net0\""
 if [ ! -z "$q_rng" ]; then
   qarg "-device \"${q_rng}\""
-fi
-
-#Support arm64
-if [ "$family_target" = "arm" ]; then
-  if [ "$arch" = "aarch64" ]; then
-    qarg "-cpu \"cortex-a72\""
-  else
-    qarg "-cpu \"cortex-a15\""
-  fi
-  qarg "-machine \"virt,gic-version=2$acpi\""
-  qarg "-m $qram"
-  qarg "-smp $qcore"
-  if [ "$kb" = "true" ]; then
-    qarg "-kernel \"$kbkernal\""
-    qarg "-initrd \"$kbinitrd\""
-    qarg "-append \"${kb_args}console=${qconsole}\""
-  else
-    load_arm_qfwr "INIT"
-  fi
-  #Devices
-  qarg "-device \"qemu-xhci\""
-  qarg "-device \"usb-kbd\""
-  qarg "-device \"usb-tablet\""
-  qarg "-device \"virtio-keyboard-pci\""
-  qarg "-device \"virtio-mouse-pci\""
-
-  qarg "-netdev \"user,id=net0\""
-  qarg "-device \"virtio-net-device,netdev=net0\""
-  qarg "-device \"virtio-rng-pci\""
-  #Drives
-  qarg "-device \"virtio-scsi-device,id=scsi0\""
-  qarg "-drive \"file=${iso},format=raw,readonly=on,if=none,id=cdrom0,media=cdrom\""
-  qarg "-device \"scsi-cd,drive=cdrom0,bus=scsi0.0\""
-  qarg "-drive \"file=${cow},format=qcow2,if=none,id=disk0\""
-  qarg "-device \"virtio-blk-device,drive=disk0\""
 fi
 
 #Merge $args and $qdrives
