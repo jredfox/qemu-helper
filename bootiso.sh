@@ -311,6 +311,7 @@ fi
 q_netdev="user,id=net0"
 q_netdev_device="virtio-net-device"
 q_rng="virtio-rng-pci"
+q_graphics="false"
 case "$arch" in
   aarch64|arm)
     q_cpu="cortex-a72"
@@ -369,6 +370,7 @@ case "$arch" in
     q_cpu="qemu64"
     q_machine="q35"
     q_netdev_device="virtio-net-pci"
+    q_graphics="true"
     qdrive "-hda \"$cow\""
     qdrive "-cdrom \"$iso\""
     qdrive "-boot d"
@@ -380,6 +382,7 @@ case "$arch" in
     q_machine="pc"
     q_netdev_device="rtl8139"
     q_rng=""
+    q_graphics="true"
     qdrive "-hda \"$cow\""
     qdrive "-cdrom \"$iso\""
     qdrive "-boot d"
@@ -392,6 +395,7 @@ case "$arch" in
     ;;
 esac
 
+#WIP QEMU ARGS
 qarg "-cpu \"${q_cpu}\""
 qarg "-machine \"${q_machine}${acpi}\""
 qarg "-m $qram"
@@ -421,7 +425,9 @@ fi
 args="${args}${qdrives}"
 
 #Disable Graphics
-qarg "-nographic"
+if [ q_graphics != "true" ]; then
+  qarg "-nographic"
+fi
 
 #Disable rebooting in the ISO installer by default
 if [ "$allow_reboot" != "true" ]; then
@@ -432,6 +438,41 @@ fi
 printf "%s\n\n" "qemu-system-${arch}${args}" >"$run_tmp"
 exec sh "$run_tmp"
 exit $?
+
+#Support arm64
+if [ "$family_target" = "arm" ]; then
+  if [ "$arch" = "aarch64" ]; then
+    qarg "-cpu \"cortex-a72\""
+  else
+    qarg "-cpu \"cortex-a15\""
+  fi
+  qarg "-machine \"virt,gic-version=2$acpi\""
+  qarg "-m $qram"
+  qarg "-smp $qcore"
+  if [ "$kb" = "true" ]; then
+    qarg "-kernel \"$kbkernal\""
+    qarg "-initrd \"$kbinitrd\""
+    qarg "-append \"${kb_args}console=${qconsole}\""
+  else
+    load_arm_qfwr "INIT"
+  fi
+  #Devices
+  qarg "-device \"qemu-xhci\""
+  qarg "-device \"usb-kbd\""
+  qarg "-device \"usb-tablet\""
+  qarg "-device \"virtio-keyboard-pci\""
+  qarg "-device \"virtio-mouse-pci\""
+
+  qarg "-netdev \"user,id=net0\""
+  qarg "-device \"virtio-net-device,netdev=net0\""
+  qarg "-device \"virtio-rng-pci\""
+  #Drives
+  qarg "-device \"virtio-scsi-device,id=scsi0\""
+  qarg "-drive \"file=${iso},format=raw,readonly=on,if=none,id=cdrom0,media=cdrom\""
+  qarg "-device \"scsi-cd,drive=cdrom0,bus=scsi0.0\""
+  qarg "-drive \"file=${cow},format=qcow2,if=none,id=disk0\""
+  qarg "-device \"virtio-blk-device,drive=disk0\""
+fi
 
 #BOOT RISC-V ISO
 if [ "$arch" = "riscv64" ]; then
