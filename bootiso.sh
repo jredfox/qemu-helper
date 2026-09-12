@@ -255,22 +255,42 @@ if [ "$no_acpi" = "true" ]; then
   acpi=",acpi=off"
 fi
 
+q_netdev="user,id=net0"
 case "$arch" in
   aarch64|arm)
-    echo "arm"
+    q_cpu="cortex-a72"
+    if [ "$arch" = "arm" ];
+      q_cpu="cortex-a15"
+    fi
+    q_machine="virt,gic-version=2"
+    q_netdev_device="virtio-net-device"
+    q_rng="virtio-rng-pci"
     ;;
   riscv64)
-    echo "riscv64"
+    q_cpu="rv64"
+    q_machine="virt"
+    if [ -z "$no_acpi" ];
+      acpi=",acpi=off"
+    fi
+    q_kernal="/usr/lib/u-boot/qemu-riscv64_smode/uboot.elf"
+    q_netdev_device="virtio-net-device"
+    q_rng="virtio-rng-pci"
     ;;
   ppc64le)
-    echo "ppc64le"
+    q_cpu="power8"
+    q_machine="pseries-2.6,cap-htm=off"
+    q_location_bios="pc-bios"
+    q_netdev_device="virtio-net-device"
+    q_rng="virtio-rng-pci" #TODO: Check if it's ok
     ;;
   ppc32|ppc64)
     echo "NOT IMPLEMENTED YET!"
     exit 1
     ;;
   s390x)
-    echo "s390x"
+    q_cpu="max"
+    q_machine="s390-ccw-virtio"
+    q_netdev_device="virtio-net-ccw"
     ;;
   x86_64)
     echo "x86_64"
