@@ -348,8 +348,8 @@ case "$arch" in
     qdrive "-hda \"$cow\""
     qdrive "-cdrom \"$iso\""
     qdrive "-boot d"
-    qdrive "-device usb-kbd"
-    qdrive "-device usb-mouse"
+    qdrive "-device \"usb-kbd\""
+    qdrive "-device \"usb-mouse\""
     qdrive "-prom-env 'auto-boot?=true'"
     qdrive "-prom-env 'vga-ndrv?=true'"
     qdrive "-prom-env 'boot-args=-v'"
@@ -433,50 +433,7 @@ if [ "$family_target" = "arm" ]; then
     qarg "-initrd \"$kbinitrd\""
     qarg "-append \"${kb_args}console=${qconsole}\""
   else
-    mkdir -p "$fwrdir"
-    if [ "$arch" = "aarch64" ]; then
-      AAVMF_CODE_PATH="/usr/share/AAVMF/AAVMF_CODE.fd"
-      AAVMF_VARS_PATH="/usr/share/AAVMF/AAVMF_VARS.fd"
-      AAVMF_CODE="$fwrdir/AAVMF_CODE.fd"
-      AAVMF_VARS_NORMAL="$fwrdir/${dname}_AAVMF_VARS.fd"
-      AAVMF_VARS_ISO="$fwrdir/${dname}_AAVMF_VARS_iso.fd"
-    else
-      AAVMF_CODE_PATH="/usr/share/AAVMF/AAVMF32_CODE.fd"
-      AAVMF_VARS_PATH="/usr/share/AAVMF/AAVMF32_VARS.fd"
-      AAVMF_CODE="$fwrdir/AAVMF_CODE32.fd"
-      AAVMF_VARS_NORMAL="$fwrdir/${dname}_AAVMF32_VARS.fd"
-      AAVMF_VARS_ISO="$fwrdir/${dname}_AAVMF32_VARS_iso.fd"
-    fi
-    if [ "$iso_boot" = "true" ]; then
-      AAVMF_VARS="$AAVMF_VARS_ISO"
-    else
-      AAVMF_VARS="$AAVMF_VARS_NORMAL"
-    fi
-    #Copy AAVMF_VARS_ISO to AAVMF_VARS_NORMAL if it has boot entries before clearing NVRAM
-    if virt-fw-vars "--help" > /dev/null 2>&1; then
-      boot_entries="$(virt-fw-vars -i "$AAVMF_VARS_ISO" --print 2>/dev/null | grep -iE '^Boot[0-9]{4}' | grep -iE '[/\\]File')"
-    else
-      echo "WARNING: Falling back to strings command for EFI boot entries check!"
-      boot_entries="$(strings -e l "$AAVMF_VARS_ISO" 2>/dev/null | grep -iE '\\EFI\\|/EFI/')"
-    fi
-    if [ ! -z "$boot_entries" ]; then
-      echo "Setting NVRAM of normal boot"
-      cp "$AAVMF_VARS_ISO" "$AAVMF_VARS_NORMAL"
-      rm -f "$AAVMF_VARS_ISO"
-    fi
-    #Optimization
-    if [ ! -f "$AAVMF_CODE" ]; then
-      cp "$AAVMF_CODE_PATH" "$AAVMF_CODE"
-    fi
-    if [ "$iso_boot" != "true" ]; then
-      if [ ! -f "$AAVMF_VARS" ]; then
-        cp "$AAVMF_VARS_PATH" "$AAVMF_VARS"
-      fi
-    else
-      cp "$AAVMF_VARS_PATH" "$AAVMF_VARS"
-    fi
-    qarg "-drive \"if=pflash,format=raw,unit=0,file=${AAVMF_CODE},readonly=on\""
-    qarg "-drive \"if=pflash,format=raw,unit=1,file=${AAVMF_VARS}\""
+    load_arm_qfwr "INIT"
   fi
   #Devices
   qarg "-device \"qemu-xhci\""
