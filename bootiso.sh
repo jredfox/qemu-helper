@@ -318,6 +318,13 @@ case "$arch" in
       q_cpu="cortex-a15"
     fi
     q_machine="virt,gic-version=2"
+    #Devices
+    qdrive "-device \"qemu-xhci\""
+    qdrive "-device \"usb-kbd\""
+    qdrive "-device \"usb-tablet\""
+    qdrive "-device \"virtio-keyboard-pci\""
+    qdrive "-device \"virtio-mouse-pci\""
+    #Drives
     qdrive "-device \"virtio-scsi-device,id=scsi0\""
     qdrive "-drive \"file=${iso},format=raw,readonly=on,if=none,id=cdrom0,media=cdrom\""
     qdrive "-device \"scsi-cd,drive=cdrom0,bus=scsi0.0\""
