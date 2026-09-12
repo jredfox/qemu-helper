@@ -7,8 +7,6 @@
 TODO:
 - cleanup code
 - acpi=off add as an option dynamcially via "-no-acpi" or "-old" in the file name or `$no_acpi` inside the boot script shell else leave acpi on
-- arm32/arm64 automatic old or kb except if iso contains "/EFI" or "/Boot"
-- fix Ubuntu < 18.0.4 from booting by adding the EFI boot entry to it's designated location either inside the firmware file or inside the qcow2 image
 - machine needs to be "virt" for non x86
 - virtio-gpu-pci or virtio-gpu need to be a device for non x86 family
 - if the arch requires a bios we need to add a bios for non x86
