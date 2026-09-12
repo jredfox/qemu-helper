@@ -395,7 +395,6 @@ case "$arch" in
     ;;
 esac
 
-#WIP QEMU ARGS
 qarg "-cpu \"${q_cpu}\""
 qarg "-machine \"${q_machine}${acpi}\""
 qarg "-m $qram"
