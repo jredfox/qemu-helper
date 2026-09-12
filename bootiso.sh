@@ -64,8 +64,8 @@ getArchy() {
 
     # IBM Z
     *ibm-z*|*s390x*|*[!a-z0-9]s390[!a-z0-9]*|s390[!a-z0-9]*|*[!a-z0-9]s390|s390)
-        echo "s390x"
-        ;;
+      echo "s390x"
+      ;;
 
     # x86 64-bit
     *x86?64*|*amd64*|*x64*|*64bit*|*64?bit*)
