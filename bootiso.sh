@@ -134,6 +134,20 @@ if [ "$kb" = "true" ]; then
   kbdir="disks/kb/${dname}"
   rm -rf "$kbdir"
   mkdir -p "$kbdir"
+  #kb_args add space if it doesn't end with one already
+  if [ ! -z "$kb_args" ]; then
+    case "$kb_args" in
+        *" ") 
+          kb_args="$kb_args"
+          ;;
+        *)    
+          kb_args="$kb_args "
+          ;;
+    esac
+  fi
+  #remove prepending slash from path variables as 7z doesn't want them
+  kb_path="${kb_path#/}"
+  kb_initrd="${kb_initrd#/}"
   #Extract kernal and initrd from the linux ISO
   opwd="$PWD"
   cd "$kbdir"
