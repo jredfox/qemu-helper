@@ -151,6 +151,7 @@ for file in "iso"/*.iso; do
         case "$lname" in
             *-kb[!a-z]*|*-kb)
                 kb="true"
+                checked="true"
                 ;;
 
             *-old[!a-z]*|*-old)
@@ -159,18 +160,22 @@ for file in "iso"/*.iso; do
                 else
                     no_acpi="true"
                 fi
+                checked="true"
                 ;;
 
             *-no-acpi[!a-z]*|*-no-acpi)
                 no_acpi="true"
+                checked="true"
                 ;;
         esac
 
         #Dynamically Determine if kernal boot needs to be enabled for arm32 images
         if [ "$arch" = "arm" ]; then
-            oefi="$(7z l -ba "iso/${name}.iso" | awk 'substr($3,1,1) == "D" { sub(/^([^ ]+ +){3}/, "") ; print }' | sed 's|^[^/]|/&|' | grep -Ei '^/(EFI|BOOT)(/)?$')"
-            if [ -z "$oefi" ]; then
-                kb="true"
+            if [ "$checked" != "true" ]; then
+                oefi="$(7z l -ba "iso/${name}.iso" | awk 'substr($3,1,1) == "D" { sub(/^([^ ]+ +){3}/, "") ; print }' | sed 's|^[^/]|/&|' | grep -Ei '^/(EFI|BOOT)(/)?$')"
+                if [ -z "$oefi" ]; then
+                    kb="true"
+                fi
             fi
         fi
         
