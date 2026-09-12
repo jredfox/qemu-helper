@@ -453,6 +453,10 @@ if [ "$family_target" = "arm" ]; then
   qarg "-device \"virtio-blk-device,drive=disk0\""
 fi
 
+#Merge $args and $qdrives
+args="${args}${qdrives}"
+
+#Disable Graphics
 qarg "-nographic"
 
 #Disable rebooting in the ISO installer by default
@@ -461,7 +465,7 @@ if [ "$allow_reboot" != "true" ]; then
 fi
 
 #Launch QEMU with arguments
-printf "%s\n\n" "qemu-system-${arch}${args}${qdrives}" >"$run_tmp"
+printf "%s\n\n" "qemu-system-${arch}${args}" >"$run_tmp"
 exec sh "$run_tmp"
 exit $?
 
