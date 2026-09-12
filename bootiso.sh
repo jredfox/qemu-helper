@@ -425,7 +425,7 @@ fi
 args="${args}${qdrives}"
 
 #Disable Graphics
-if [ q_graphics != "true" ]; then
+if [ "$q_graphics" != "true" ]; then
   qarg "-nographic"
 fi
 
