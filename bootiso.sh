@@ -420,7 +420,7 @@ if [ ! -z "$q_rng" ]; then
   qarg "-device \"${q_rng}\""
 fi
 
-#Merge $args and $qdrives
+#Merge arguments
 args="${args}${qdrives}"
 
 #Disable Graphics
