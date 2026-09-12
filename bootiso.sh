@@ -255,6 +255,33 @@ if [ "$no_acpi" = "true" ]; then
   acpi=",acpi=off"
 fi
 
+case "$arch" in
+  aarch64|arm)
+    echo "arm"
+    ;;
+  riscv64)
+    echo "riscv64"
+    ;;
+  ppc64le)
+    echo "ppc64le"
+    ;;
+  ppc32|ppc64)
+    echo "NOT IMPLEMENTED YET!"
+    exit 1
+    ;;
+  s390x)
+    echo "s390x"
+    ;;
+  x86_64)
+    echo "x86_64"
+    ;;
+  i386)
+    echo "i386"
+    ;;
+  *)
+    ;;
+esac
+
 #Support arm64
 if [ "$family_target" = "arm" ]; then
   if [ "$arch" = "aarch64" ]; then
