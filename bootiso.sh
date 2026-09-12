@@ -145,9 +145,11 @@ if [ "$kb" = "true" ]; then
           ;;
     esac
   fi
+
   #remove prepending slash from path variables as 7z doesn't want them
   kb_path="${kb_path#/}"
   kb_initrd="${kb_initrd#/}"
+  
   #Extract kernal and initrd from the linux ISO
   opwd="$PWD"
   cd "$kbdir"
