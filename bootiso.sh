@@ -197,6 +197,10 @@ qarg() {
   args="$args $1"
 }
 
+qdrive() {
+  qdrives="$qdrives $1"
+}
+
 load_arm_qfwr () {
 
     mkdir -p "$fwrdir"
@@ -310,40 +314,70 @@ q_rng="virtio-rng-pci"
 case "$arch" in
   aarch64|arm)
     q_cpu="cortex-a72"
-    if [ "$arch" = "arm" ];
+    if [ "$arch" = "arm" ]; then
       q_cpu="cortex-a15"
     fi
     q_machine="virt,gic-version=2"
+    qdrive "-device \"virtio-scsi-device,id=scsi0\""
+    qdrive "-drive \"file=${iso},format=raw,readonly=on,if=none,id=cdrom0,media=cdrom\""
+    qdrive "-device \"scsi-cd,drive=cdrom0,bus=scsi0.0\""
+    qdrive "-drive \"file=${cow},format=qcow2,if=none,id=disk0\""
+    qdrive "-device \"virtio-blk-device,drive=disk0\""
     ;;
   riscv64)
     q_cpu="rv64"
     q_machine="virt"
-    if [ -z "$no_acpi" ];
+    if [ -z "$no_acpi" ]; then
       acpi=",acpi=off"
     fi
     q_kernal="/usr/lib/u-boot/qemu-riscv64_smode/uboot.elf"
+    qdrive "-drive \"file=${iso},format=raw,readonly=on,if=virtio\""
+    qdrive "-drive \"file=${cow},format=qcow2,if=virtio\""
     ;;
   ppc64le)
     q_cpu="power8"
     q_machine="pseries-2.6,cap-htm=off"
     q_location_bios="pc-bios"
+    qdrive "-hda \"$cow\""
+    qdrive "-cdrom \"$iso\""
+    qdrive "-boot d"
+    qdrive "-device usb-kbd"
+    qdrive "-device usb-mouse"
+    qdrive "-prom-env 'auto-boot?=true'"
+    qdrive "-prom-env 'vga-ndrv?=true'"
+    qdrive "-prom-env 'boot-args=-v'"
     ;;
   s390x)
     q_cpu="max"
     q_machine="s390-ccw-virtio"
     q_netdev_device="virtio-net-ccw"
     q_rng=""
+    qdrive "-drive \"file=${iso},format=raw,readonly=on,if=none,id=cdrom0,media=cdrom\""
+    qdrive "-device \"virtio-scsi-ccw,id=scsi0\""
+    qdrive "-device \"scsi-cd,drive=cdrom0,bus=scsi0.0,bootindex=1\""
+    qdrive "-drive \"file=${cow},format=qcow2,if=none,id=disk0\""
+    qdrive "-device \"virtio-blk-ccw,drive=disk0,id=vdisk0,bootindex=2\""
     ;;
   x86_64)
     q_cpu="qemu64"
     q_machine="q35"
     q_netdev_device="virtio-net-pci"
+    qdrive "-hda \"$cow\""
+    qdrive "-cdrom \"$iso\""
+    qdrive "-boot d"
+    qdrive "-vga \"virtio\""
+    qdrive "-display \"default\""
     ;;
   i386)
     q_cpu="pentium3"
     q_machine="pc"
     q_netdev_device="rtl8139"
     q_rng=""
+    qdrive "-hda \"$cow\""
+    qdrive "-cdrom \"$iso\""
+    qdrive "-boot d"
+    qdrive "-vga \"std\""
+    qdrive "-display \"default\""
     ;;
   *)
     echo "NOT IMPLEMENTED YET! Arch: ${arch}"
@@ -387,11 +421,6 @@ if [ "$family_target" = "arm" ]; then
   qarg "-machine \"virt,gic-version=2$acpi\""
   qarg "-m $qram"
   qarg "-smp $qcore"
-  qarg "-device \"qemu-xhci\""
-  qarg "-device \"usb-kbd\""
-  qarg "-device \"usb-tablet\""
-  qarg "-device \"virtio-keyboard-pci\""
-  qarg "-device \"virtio-mouse-pci\""
   if [ "$kb" = "true" ]; then
     qarg "-kernel \"$kbkernal\""
     qarg "-initrd \"$kbinitrd\""
@@ -442,6 +471,13 @@ if [ "$family_target" = "arm" ]; then
     qarg "-drive \"if=pflash,format=raw,unit=0,file=${AAVMF_CODE},readonly=on\""
     qarg "-drive \"if=pflash,format=raw,unit=1,file=${AAVMF_VARS}\""
   fi
+  #Devices
+  qarg "-device \"qemu-xhci\""
+  qarg "-device \"usb-kbd\""
+  qarg "-device \"usb-tablet\""
+  qarg "-device \"virtio-keyboard-pci\""
+  qarg "-device \"virtio-mouse-pci\""
+
   qarg "-netdev \"user,id=net0\""
   qarg "-device \"virtio-net-device,netdev=net0\""
   qarg "-device \"virtio-rng-pci\""
@@ -461,7 +497,7 @@ if [ "$allow_reboot" != "true" ]; then
 fi
 
 #Launch QEMU with arguments
-printf "%s\n\n" "qemu-system-${arch}${args}" >"$run_tmp"
+printf "%s\n\n" "qemu-system-${arch}${args}${qdrives}" >"$run_tmp"
 exec sh "$run_tmp"
 exit $?
 
