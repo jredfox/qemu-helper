@@ -250,7 +250,11 @@ load_arm_qfwr () {
 
 }
 
-if [ "$family" = "$family_target" ]; then
+if [ "$LAUNCH_CLI" = "true" ]; then
+  LAUNCH_CLI_FLAG="OFF"
+fi
+
+if [ "${family}${LAUNCH_CLI_FLAG}" = "$family_target" ]; then
   #disable acpi
   if [ "$no_acpi" = "true" ]; then
     qarg "-machine acpi=off"
@@ -373,24 +377,29 @@ case "$arch" in
     q_cpu="qemu64"
     q_machine="q35"
     q_netdev_device="virtio-net-pci"
-    q_graphics="true"
     qdrive "-hda \"$cow\""
     qdrive "-cdrom \"$iso\""
     qdrive "-boot d"
-    qdrive "-vga \"virtio\""
-    qdrive "-display \"default\""
+    #q_graphics="true"
+    #qdrive "-vga \"virtio\""
+    #qdrive "-display \"default\""
     ;;
   i386)
     q_cpu="pentium3"
     q_machine="pc"
     q_netdev_device="rtl8139"
     q_rng=""
-    q_graphics="true"
     qdrive "-hda \"$cow\""
     qdrive "-cdrom \"$iso\""
     qdrive "-boot d"
-    qdrive "-vga \"std\""
-    qdrive "-display \"default\""
+    #q_graphics="true"
+    #qdrive "-vga \"std\""
+    #qdrive "-display \"default\""
+    #if [ -z "$kb_console" ]; then
+      #if [ "$qconsole" = "ttyS0" ]; then
+       # qconsole="tty0"
+      #fi
+    #fi
     ;;
   *)
     echo "NOT IMPLEMENTED YET! Arch: ${arch}"
