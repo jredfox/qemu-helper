@@ -384,8 +384,8 @@ case "$arch" in
       q_netdev_device="rtl8139"
       q_rng=""
     fi
-    qdrive "-hda \"$cow\""
     qdrive "-cdrom \"$iso\""
+    qdrive "-hda \"$cow\""
     qdrive "-boot d"
     if [ "$LAUNCH_INTEL_WITH_GRAPHICS" = "true" ]; then
       q_graphics="true"
