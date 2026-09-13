@@ -389,13 +389,7 @@ case "$arch" in
     qdrive "-cdrom \"$iso\""
     qdrive "-hda \"$cow\""
     qdrive "-boot d"
-    if [ "$kb" == "true" ]; then
-      if [ -z "$kb_console" ]; then
-        if [ "$qconsole" = "ttyS0" ]; then
-          qconsole="tty0"
-        fi
-      fi
-    else
+    if [ "$kb" != "true" ]; then
       q_graphics="true"
       qdrive "-vga \"${q_intel_vga}\""
       qdrive "-display \"default\""
