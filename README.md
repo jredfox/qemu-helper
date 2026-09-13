@@ -13,11 +13,16 @@
   A: This is usually safe to ignore as it should fall back to "ttysclp0" console and should only happen when kernal booting. To fix this error message and increase boot time by up to 1 second go into your alpine or ubuntu boot script and add this line `export kb_console=ttysclp0` this of course requires kernal booting to be on.
 
 # Kernal Boot
-Kernal boot mode is a mode that allows qemu-helper to boot kernal directly by dynamically getting the kernal and initrd file to boot linux. sometimes the kernal it finds is broken and doesn't work with qemu. When this happens you need to manually configure specify the kernal and initrd yourself. both kb_path and kb_
+Kernal boot mode is a mode that allows qemu-helper to boot kernal directly by dynamically getting the kernal and initrd file to boot linux. sometimes the kernal it finds is broken and doesn't work with qemu. When this happens you need to manually configure specify the kernal and initrd yourself. both kb_path and `kb_initrd`
 
-# Enable Kernal Boot:
-- change the ISO name to contain "-kb-"
+# Enable Kernal Boot By Changing File Names:
+- Change the ISO name to contain "-kb-"
 - run setup.sh again
+- if you already have an installed disk rename the qcow2 image to match the new empty one and run the normal boot script for that distro
+
+# Enable Kernal Boot By Using Export:
+- Open Open ~/vms/disks/<MyLinux_iso.sh> and ~/vms/disks/<MyLinux.sh>
+- Add `export kb="true"`
 
 # Kernal Boot Config:
 - run findkernal.sh <MyLinux.ISO> this will print most the kernal paths and initrd paths found within the ISO. if it fails to find you will have to manually mount the iso and locate the kernal (vmlinuz or linux) and initrd (initrd or initramfs).
