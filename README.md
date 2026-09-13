@@ -9,6 +9,8 @@
 - Q: How to download older Ubuntu x86(32 bit)/x86_64/ARM64/ARM Images
   A: http://old-releases.ubuntu.com
 - Q: How to download Ubuntu Server Risc-V Image? Download The RISC-V Framework image https://ubuntu.com/download/risc-v/canonical-built#deepcomputing-fml13v01 making sure NOT to download the live installer as that takes forever to boot just to give you a live usb session with no option to install ubuntu to the virtual disk
+- Q: Alpine / Ubuntu IMB-Z (s390x) `switch_root: can't open '/dev/hvc0': No such file or directory`
+  A: This is usually safe to ignore as it should fall back to "ttysclp0" console and should only happen when kernal booting. To fix this error message and increase boot time by up to 1 second go into your alpine or ubuntu boot script and add this line `export kb_console=ttysclp0` this of course requires kernal booting to be on.
 
 # Kernal Boot
 Kernal boot mode is a mode that allows qemu-helper to boot kernal directly by dynamically getting the kernal and initrd file to boot linux. sometimes the kernal it finds is broken and doesn't work with qemu. When this happens you need to manually configure specify the kernal and initrd yourself. both kb_path and kb_
