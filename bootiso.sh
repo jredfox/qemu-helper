@@ -336,7 +336,7 @@ case "$arch" in
     q_cpu="rv64"
     q_machine="virt"
     if [ -z "$no_acpi" ]; then
-      if [ "$kb" != "true" ];
+      if [ "$kb" != "true" ]; then
         acpi=",acpi=off"
       fi
     fi
