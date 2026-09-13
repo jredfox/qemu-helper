@@ -378,18 +378,20 @@ case "$arch" in
       q_cpu="qemu64"
       q_machine="q35"
       q_netdev_device="virtio-net-pci"
+      q_intel_vga="virtio"
     else
       q_cpu="pentium3"
       q_machine="pc"
       q_netdev_device="rtl8139"
       q_rng=""
+      q_intel_vga="std"
     fi
     qdrive "-cdrom \"$iso\""
     qdrive "-hda \"$cow\""
     qdrive "-boot d"
     if [ "$kb" != "true" ]; then
       q_graphics="true"
-      qdrive "-vga \"std\""
+      qdrive "-vga \"${q_intel_vga}\""
       qdrive "-display \"default\""
       if [ -z "$kb_console" ]; then
         if [ "$qconsole" = "ttyS0" ]; then
