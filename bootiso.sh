@@ -391,6 +391,11 @@ case "$arch" in
       q_graphics="true"
       qdrive "-vga \"std\""
       qdrive "-display \"default\""
+      if [ -z "$kb_console" ]; then
+        if [ "$qconsole" = "ttyS0" ]; then
+          qconsole="tty0"
+        fi
+      fi
     fi
     ;;
   *)
