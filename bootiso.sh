@@ -336,7 +336,9 @@ case "$arch" in
     q_cpu="rv64"
     q_machine="virt"
     if [ -z "$no_acpi" ]; then
-      acpi=",acpi=off"
+      if [ "$kb" != "true" ];
+        acpi=",acpi=off"
+      fi
     fi
     q_kernal="/usr/lib/u-boot/qemu-riscv64_smode/uboot.elf"
     qdrive "-drive \"file=${iso},format=raw,readonly=on,if=virtio\""
