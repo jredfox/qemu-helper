@@ -373,33 +373,30 @@ case "$arch" in
     qdrive "-drive \"file=${cow},format=qcow2,if=none,id=disk0\""
     qdrive "-device \"virtio-blk-ccw,drive=disk0,id=vdisk0,bootindex=2\""
     ;;
-  x86_64)
-    q_cpu="qemu64"
-    q_machine="q35"
-    q_netdev_device="virtio-net-pci"
+  i386|x86_64)
+    if [ "$arch" = "x86_64" ]; then
+      q_cpu="qemu64"
+      q_machine="q35"
+      q_netdev_device="virtio-net-pci"
+    else
+      q_cpu="pentium3"
+      q_machine="pc"
+      q_netdev_device="rtl8139"
+      q_rng=""
+    fi
     qdrive "-hda \"$cow\""
     qdrive "-cdrom \"$iso\""
     qdrive "-boot d"
-    #q_graphics="true"
-    #qdrive "-vga \"virtio\""
-    #qdrive "-display \"default\""
-    ;;
-  i386)
-    q_cpu="pentium3"
-    q_machine="pc"
-    q_netdev_device="rtl8139"
-    q_rng=""
-    qdrive "-hda \"$cow\""
-    qdrive "-cdrom \"$iso\""
-    qdrive "-boot d"
-    #q_graphics="true"
-    #qdrive "-vga \"std\""
-    #qdrive "-display \"default\""
-    #if [ -z "$kb_console" ]; then
-      #if [ "$qconsole" = "ttyS0" ]; then
-       # qconsole="tty0"
-      #fi
-    #fi
+    if [ "$LAUNCH_INTEL_WITH_GRAPHICS" = "true" ]; then
+      q_graphics="true"
+      qdrive "-vga \"std\""
+      qdrive "-display \"default\""
+      if [ -z "$kb_console" ]; then
+        if [ "$qconsole" = "ttyS0" ]; then
+          qconsole="tty0"
+        fi
+      fi
+    fi
     ;;
   *)
     echo "NOT IMPLEMENTED YET! Arch: ${arch}"
