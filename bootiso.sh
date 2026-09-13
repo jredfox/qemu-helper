@@ -174,9 +174,12 @@ if [ "$kb" = "true" ]; then
   7z e "${iso}" "$vmlinuz_path" "$initrd_path" -mtc -mta -mtm -aou -y >/dev/null
   echo "kernal: $vmlinuz_path initrd: $initrd_path"
   cd "$opwd"
-  kbkernal="$(find "$kbdir" -maxdepth 1 -type f | grep -Ei '/(hwe-)?(vmlinuz|zImage|uImage|bzImage|Image|linux|vmlinux|kernel\.ubuntu|kernal\.ubuntu)(\.ubuntu)?(-rt|-cloud|-virt|-vm|-generic|-lts|-hwe){0,7}(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | head -n 1)"
-  kbinitrd="$(find "$kbdir" -maxdepth 1 -type f | grep -Ei '/(hwe-)?(initrd|uInitrd|initramfs|initramfs-linux)(\.ubuntu)?(-rt|-cloud|-virt|-vm|-generic|-lts|-hwe){0,7}(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | head -n 1)"
-  
+  if [ -z "$vmlinuz_path" ]; then
+    echo "kernal not found!"
+    exit 1
+  fi
+  kbkernal="$(realpath "$kbdir")/$(basename "$vmlinuz_path")"
+  kbinitrd="$(realpath "$kbdir")/$(basename "$initrd_path")"
   #Set the qemu console serial type needed for kernal booting
   qconsole="$kb_console"
   if [ -z "$qconsole" ]; then
