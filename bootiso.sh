@@ -269,9 +269,6 @@ if [ "${family}${LAUNCH_CLI_FLAG}" = "$family_target" ]; then
   qarg "-hda \"$cow\""
   qarg "-boot d"
   if [ "$kb" = "true" ]; then
-      if [ "$family_target" != "arm" ]; then
-        echo "WARNING: Kernal Booting is broken outside of arm archs as they expect random append strings! Errors and bugs are bound to happen!"
-      fi
       qarg "-kernel \"$kbkernal\""
       qarg "-initrd \"$kbinitrd\""
       qarg "-append \"${kb_args}console=${qconsole}\""
