@@ -137,12 +137,12 @@ unzipKernal() {
 
     archive="$(realpath "$1")"
     outdir="$(realpath "$2")"
-    mkdir -p "$outdir"
     test_path="$(filterArchive "$archive")"
     if [ -z "$test_path" ]; then
         echo "kernal is uncompressed: $archive"
         return 0
     fi
+    mkdir -p "$outdir"
     isArchive="true"
     FILE_DONE="${outdir}/FILE_DONE.tmp.txt"
     echo "$FILE_DONE" > "$FILE_DONE"
