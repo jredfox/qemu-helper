@@ -22,7 +22,7 @@ mkdir -p "tmp"
 run_tmp="tmp/${dname}_iso.sh"
 
 #Sanity check to ensure both ISO boot and normal boot are not running at the same time or multiple instances of the same one
-if lsof "$cow" > /dev/null 2>&1; then
+if lsof "$cow" >/dev/null 2>&1; then
   echo "${cow} is already running from QEMU or another program!"
   read -p "Press Enter to Continue..." dummy
   exit 1
@@ -277,7 +277,7 @@ load_arm_qfwr () {
       AAVMF_VARS="$AAVMF_VARS_NORMAL"
     fi
     #Copy AAVMF_VARS_ISO to AAVMF_VARS_NORMAL if it has boot entries before clearing NVRAM
-    if virt-fw-vars "--help" > /dev/null 2>&1; then
+    if virt-fw-vars "--help" >/dev/null 2>&1; then
       boot_entries="$(virt-fw-vars -i "$AAVMF_VARS_ISO" --print 2>/dev/null | grep -iE '^Boot[0-9]{4}' | grep -iE '[/\\]File')"
     else
       echo "WARNING: Falling back to strings command for EFI boot entries check!"
