@@ -119,6 +119,51 @@ getFamily() {
 
 }
 
+filterArchive() {
+
+    type=$(file -b "$1")
+    type="$(printf '%s' "$type" | tr '[:upper:]' '[:lower:]')"
+    case "$type" in
+        *gzip*|*lzma*|*xz*|*cpio*|"zip "*|"tar "*|"gz "*|*" tar "*|*" gz "*|*" zip "*)
+            echo "$1"
+            ;;
+        *)
+            ;;
+    esac
+
+}
+
+unzipKernal() {
+
+    archive="$(realpath "$1")"
+    outdir="$(realpath "$2")"
+    mkdir -p "$outdir"
+    test_path="$(filterArchive "$archive")"
+    if [ -z "$test_path" ]; then
+        echo "not an archive file $archive"
+        exit 1
+    fi
+    isArchive="true"
+    FILE_DONE="${outdir}/FILE_DONE.tmp.txt"
+    echo "extracting: $archive"
+    7z e "$archive" -o"$outdir" -aoa -y >/dev/null
+    echo "$archive" > "$FILE_DONE"
+    archives="$(find "$outdir" -maxdepth 1 -type f | while IFS= read -r file; do filterArchive "$file"; done | grep -v -F -x -f "$FILE_DONE")"
+    while [ -n "$archives" ]; do
+        printf '%s\n' "$archives" | while IFS= read -r file; do
+            echo "extracting: $file"
+            7z e "$file" -o"$outdir" -aoa -y >/dev/null
+            echo "$file" >>"$FILE_DONE"
+            if [ "$file" != "$archive" ]; then
+                rm -f "$file"
+            fi
+        done
+        archives="$(find "$outdir" -maxdepth 1 -type f | while IFS= read -r file; do filterArchive "$file"; done | grep -v -F -x -f "$FILE_DONE")"
+    done
+    rm -f "$FILE_DONE"
+
+}
+
 arch=$(getArchy "$arch")
 uarch=$(uname -m)
 family=$(getFamily "$uarch")
