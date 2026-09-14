@@ -37,7 +37,7 @@ if ! output=$(qemu-img "--version" >/dev/null 2>&1); then
             read -p "Do you want to install virt-fw-vars which is recomended for older Ubuntu Arm64 images? [Y/N] " result
             case "$result" in
                 [Yy]*) 
-                    sudo apt install -y virt-fw-vars
+                    sudo apt install -y python3-virt-firmware virt-fw-vars
                     ;;
             esac
         fi
