@@ -413,9 +413,6 @@ qarg "-smp $qcore"
 if [ "$kb" = "true" ]; then
   qarg "-kernel \"${kbkernal}\""
   qarg "-initrd \"${kbinitrd}\""
-  if [ "$q_graphics" = "true" ]; then
-    qconsole="$qconsole_gui"
-  fi
   qarg "-append \"${kb_args}console=${qconsole}\""
 else
   if [ ! -z "$q_kernal" ]; then
