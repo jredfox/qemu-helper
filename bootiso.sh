@@ -182,6 +182,7 @@ if [ "$kb" = "true" ]; then
   kbinitrd="$(realpath "$kbdir")/$(basename "$initrd_path")"
   #Set the qemu console serial type needed for kernal booting
   qconsole="$kb_console"
+  qconsole_gui="tty0"
   if [ -z "$qconsole" ]; then
     qconsole="ttyS0"
     if [ "$family_target" = "arm" ]; then
@@ -191,6 +192,7 @@ if [ "$kb" = "true" ]; then
     if [ "$family_target" = "s390x" ] || [ "$family_target" = "powerpc" ]; then
       if [ "$arch" != "ppc32" ]; then
         qconsole="hvc0"
+        qconsole_gui="hvc0"
       fi
     fi
   fi
@@ -271,6 +273,9 @@ if [ "${family}${LAUNCH_CLI_FLAG}" = "$family_target" ]; then
   if [ "$kb" = "true" ]; then
       qarg "-kernel \"$kbkernal\""
       qarg "-initrd \"$kbinitrd\""
+      if [ "$no_graphics" != "true" ]; then
+        qconsole="$qconsole_gui"
+      fi
       qarg "-append \"${kb_args}console=${qconsole}\""
   fi
   #Check KVM Status
@@ -408,6 +413,9 @@ qarg "-smp $qcore"
 if [ "$kb" = "true" ]; then
   qarg "-kernel \"${kbkernal}\""
   qarg "-initrd \"${kbinitrd}\""
+  if [ "$q_graphics" = "true" ]; then
+    qconsole="$qconsole_gui"
+  fi
   qarg "-append \"${kb_args}console=${qconsole}\""
 else
   if [ ! -z "$q_kernal" ]; then
