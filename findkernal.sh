@@ -3,7 +3,7 @@ if [ -z "$iso" ]; then
 	read -p "Enter Linux ISO:" iso
 	iso="$(printf '%s' "$iso" | sed 's/^["'\'']//; s/["'\'']$//')"
 fi
-results="$(7z l -ba "${iso}" | awk 'toupper(substr($3,1,1)) != "D" { max = (substr($1,1,1) == "." ? 3 : 5); for (i=1; i<=max && i<NF; i++) $i=""; sub(/^[[:space:]]+/, ""); print }' | sed 's|^[^/]|/&|' | grep -Ei '^(/[^/]+){0,4}/(hwe-)?(vmlinuz|zImage|uImage|bzImage|Image|linux|vmlinux|kernel\.ubuntu|kernal\.ubuntu|initrd|uInitrd|initramfs|initramfs-linux)(\.ubuntu)?(\.efi)?(-rt|-cloud|-virt|-vm|-generic|-lts|-hwe){0,7}(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$')"
+results="$(7z l -ba "${iso}" | awk 'toupper(substr($3,1,1)) != "D" { max = (substr($1,1,1) != "." ? 5 : 3); for (i=1; i<=max && i<NF; i++) $i=""; sub(/^[[:space:]]+/, ""); print }' | sed 's|^[^/]|/&|' | grep -Ei '^(/[^/]+){0,4}/(hwe-)?(vmlinuz|zImage|uImage|bzImage|Image|linux|vmlinux|kernel\.ubuntu|kernal\.ubuntu|initrd|uInitrd|initramfs|initramfs-linux)(\.ubuntu)?(\.efi)?(-rt|-cloud|-virt|-vm|-generic|-lts|-hwe){0,7}(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$')"
 results_sorted="$(printf '%s' "$results" | awk -F/ '{ print NF-1, $0 }' | sort -n -k1,1 -k2,2 | sed 's|^[^/]*/||')"
 vmlinuz_path="$(printf '%s' "$results_sorted" | grep -Ei '(hwe-)?(vmlinuz|zImage|uImage|bzImage|Image|linux|vmlinux|kernel\.ubuntu|kernal\.ubuntu)(\.ubuntu)?(\.efi)?(-rt|-cloud|-virt|-vm|-generic|-lts|-hwe){0,7}(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$')"
 initrd_path="$(printf '%s' "$results_sorted" | grep -Ei '(hwe-)?(initrd|uInitrd|initramfs|initramfs-linux)(\.ubuntu)?(\.efi)?(-rt|-cloud|-virt|-vm|-generic|-lts|-hwe){0,7}(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$')"
