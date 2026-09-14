@@ -57,7 +57,7 @@ if ! output=$(qemu-img "--version" > /dev/null 2>&1); then
 fi
 #cd into the install dir
 mkdir -p "$install_dir"
-cd "$install_dir"
+cd "$install_dir" || exit 1
 #create dirs
 mkdir -p "boot"
 mkdir -p "disks"
