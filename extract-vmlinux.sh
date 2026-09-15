@@ -5,6 +5,7 @@ try_decompress()
 
 	#Kernal is already decompressed do nothing
 	if [ "$isDecompressed" = "true" ]; then
+		echo "already decompressed! $3"
 		return 1
 	fi
 
@@ -56,6 +57,9 @@ extract_vmlinux() {
 	try_decompress '\002!L\030'   xxx   'lz4 -d'
 	try_decompress '(\265/\375'   xxx   unzstd
 
+	#Cleanup
+	rm -f "$img_tmp"
+	
 	if [ "$isDecompressed" != "true" ]; then
 		echo "Vmlinux cannot be found! Has it already been decompressed?" >&2
 		return 1
