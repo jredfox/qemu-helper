@@ -133,6 +133,21 @@ filterArchive() {
 
 }
 
+#Creates vmlinux decompressed kernal from an already unzipped kernal
+decompressKernal() {
+  
+  archive="$(realpath "$1")"
+
+  #Decompress Kernal to make qemu happy
+  SCRIPTPATH="$( cd -- "$(dirname "${0}")" >/dev/null 2>&1 ; pwd -P )"
+  sh "$SCRIPTPATH/extract-vmlinux" "$archive" >"${archive}.vmlinux"
+  ecode=$?
+  if [ "$ecode" = "0" ]; then
+    cp -f "${archive}.vmlinux" "$archive"
+  fi
+
+}
+
 unzipKernal() {
 
     archive="$(realpath "$1")"
@@ -229,6 +244,7 @@ if [ "$kb" = "true" ]; then
   kbkernal="$(realpath "$kbdir")/$(basename "$vmlinuz_path")"
   kbinitrd="$(realpath "$kbdir")/$(basename "$initrd_path")"
   unzipKernal "$kbkernal" "$kbdir/tmp"
+  decompressKernal "$kbkernal"
   #Set the qemu console serial type needed for kernal booting
   qconsole="$kb_console"
   qconsole_gui="tty0"
