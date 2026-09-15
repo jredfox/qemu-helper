@@ -144,8 +144,9 @@ decompressKernal() {
   ecode=$?
   if [ "$ecode" = "0" ]; then
     cp -f "${archive}.vmlinux" "$archive"
-    rm -f "${archive}.vmlinux"
   fi
+  #Remove vmlinux temp file
+  rm -f "${archive}.vmlinux"
 
 }
 
