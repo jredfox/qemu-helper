@@ -68,6 +68,7 @@ if [ "$install_dir" != "$current_dir" ]; then
     echo "copying install files"
     mv "$current_dir/iso"/* "$install_dir/iso/" >/dev/null 2>&1
     cp -rf "$current_dir"/*.sh "$install_dir/"
+    cp -f "$current_dir/extract-vmlinux" "$install_dir/extract-vmlinux"
     cp -rf "$current_dir"/*.txt "$install_dir/" >/dev/null 2>&1
 fi
 #install cows

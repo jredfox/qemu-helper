@@ -140,10 +140,11 @@ decompressKernal() {
 
   #Decompress Kernal to make qemu happy
   SCRIPTPATH="$( cd -- "$(dirname "${0}")" >/dev/null 2>&1 ; pwd -P )"
-  sh "$SCRIPTPATH/extract-vmlinux" "$archive" >"${archive}.vmlinux"
+  sh "$SCRIPTPATH/extract-vmlinux" "$archive">"${archive}.vmlinux"
   ecode=$?
   if [ "$ecode" = "0" ]; then
     cp -f "${archive}.vmlinux" "$archive"
+    rm -f "${archive}.vmlinux"
   fi
 
 }
