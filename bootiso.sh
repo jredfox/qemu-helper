@@ -161,7 +161,7 @@ decompressKernal() {
 
   # Comment out gzip as qemu already properly handles
   isDecompressed="false"
-  try_decompress '\037\213\010' xy    gunzip
+  #try_decompress '\037\213\010' xy    gunzip
   try_decompress '\3757zXZ\000' abcde unxz
   try_decompress 'BZh'          xy    bunzip2
   try_decompress '\135\0\0\0'   xxx   unlzma
