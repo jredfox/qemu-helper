@@ -69,6 +69,5 @@ extract_vmlinux() {
 
 }
 
-
 extract_vmlinux "$1" "$2"
 exit $?
