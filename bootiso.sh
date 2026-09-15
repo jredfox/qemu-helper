@@ -135,7 +135,7 @@ try_decompress()
   do
     pos=${pos%%:*}
     tail -c+$pos "$img" | $3 > "$img_tmp" 2> /dev/null
-    if file "$img_tmp" | grep -q 'Linux kernel.*boot executable' ||
+    if file -b "$img_tmp" | grep -q 'Linux kernel.*boot executable' ||
       readelf -h "$img_tmp" > /dev/null 2>&1
     then
       isDecompressed="true"
