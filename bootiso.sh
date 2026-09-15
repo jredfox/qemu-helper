@@ -163,10 +163,10 @@ unzipKernal() {
     mkdir -p "$outdir"
     isArchive="true"
     FILE_DONE="${outdir}/FILE_DONE.tmp.txt"
-    echo "$FILE_DONE" > "$FILE_DONE"
+    echo "$FILE_DONE" >"$FILE_DONE"
     echo "extracting: $archive"
     7z e "$archive" -o"$outdir" -aoa -y >/dev/null
-    echo "$archive" >> "$FILE_DONE"
+    echo "$archive" >>"$FILE_DONE"
     archives="$(find "$outdir" -maxdepth 1 -type f | while IFS= read -r file; do filterArchive "$file"; done | grep -v -F -x -f "$FILE_DONE")"
     while [ -n "$archives" ]; do
         printf '%s\n' "$archives" | while IFS= read -r file; do
