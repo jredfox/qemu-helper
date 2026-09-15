@@ -161,10 +161,16 @@ decompressKernal() {
 
   # Comment out gzip as qemu already properly handles
   isDecompressed="false"
-  #try_decompress '\037\213\010' xy    gunzip
+  #QEMU already handles this plus causes issues on older archs such as x86 32 bit
+  if [ "$kb_decompress_gzip" = "true" ]; then
+    try_decompress '\037\213\010' xy    gunzip
+  fi
   try_decompress '\3757zXZ\000' abcde unxz
   try_decompress 'BZh'          xy    bunzip2
-  try_decompress '\135\0\0\0'   xxx   unlzma
+  #LZMA could try thousands or even hundred of thousands of times per kernal instead of 1-5
+  if [ "$kb_decompress_lzma" = "true" ]; then
+    try_decompress '\135\0\0\0'   xxx   unlzma
+  fi
   try_decompress '\211\114\132' xy    'lzop -d'
   try_decompress '\002!L\030'   xxx   'lz4 -d'
   try_decompress '(\265/\375'   xxx   unzstd
