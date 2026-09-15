@@ -58,8 +58,8 @@ try_decompress '\211\114\132' xy    'lzop -d'
 try_decompress '\002!L\030'   xxx   'lz4 -d'
 try_decompress '(\265/\375'   xxx   unzstd
 
-# Finally check for uncompressed images or objects:
-check_vmlinux "$img" cat 0
+# Commentted out if we failed to extract then there was nothing to extract
+#check_vmlinux "$img" cat 0
 
 # Bail out:
 echo "$me: Cannot find vmlinux." >&2
