@@ -179,7 +179,7 @@ decompressKernal() {
   rm -f "$img_tmp"
   
   if [ "$isDecompressed" != "true" ]; then
-    echo "Vmlinux cannot be found! Has it already been decompressed?" >&2
+    echo "vmlinux cannot be found! Has it already been decompressed?" >&2
     return 1
   fi
 
