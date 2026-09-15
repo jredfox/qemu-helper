@@ -155,7 +155,7 @@ unzipKernal() {
     outdir="$(realpath "$2")"
     test_path="$(filterArchive "$archive")"
     if [ -z "$test_path" ]; then
-        echo "kernal is uncompressed: $archive"
+        echo "kernal is unzipped: $archive"
         return 0
     fi
     mkdir -p "$outdir"
