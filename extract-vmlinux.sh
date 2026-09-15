@@ -30,7 +30,6 @@ try_decompress()
 	return 1
 }
 
-# Check invocation:
 extract_vmlinux() {
 
 	img="$1"
