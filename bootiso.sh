@@ -150,9 +150,7 @@ try_decompress()
 
 decompressKernal() {
 
-  img="$1"
-  img_out="$2"
-  if [ -z "$img" ]; then
+  if [ -z "$1" ]; then
     echo "extract-vmlinux.sh <kernal> <kernal_extracted>"
     return 1
   fi
