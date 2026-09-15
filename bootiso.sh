@@ -270,7 +270,7 @@ if [ "$kb" = "true" ]; then
   vmlinuz_path="$kb_path"
   initrd_path="$kb_initrd"
   if [ -z "$vmlinuz_path" ] || [ -z "$initrd_path" ]; then
-    results="$(7z l -ba "${iso}" | awk 'toupper(substr($3,1,1)) != "D" { max = (substr($1,1,1) != "." ? 5 : 3); for (i=1; i<=max && i<NF; i++) $i=""; sub(/^[[:space:]]+/, ""); print }' | sed 's|^[^/]|/&|' | grep -Ei '^(/[^/]+){0,4}/(hwe-)?(vmlinuz|zImage|uImage|bzImage|Image|linux|vmlinux|kernel\.ubuntu|kernal\.ubuntu|initrd|uInitrd|initramfs|initramfs-linux)(\.ubuntu)?(\.efi)?(-rt|-cloud|-virt|-vm|-generic|-lts|-hwe){0,7}(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$')"
+    results="$(7z l -ba "${iso}" | awk 'toupper(substr($3,1,1)) != "D" { max = (substr($1,1,1) != "." ? 5 : 3); for (i=1; i<=max && i<NF; i++) $i=""; sub(/^[[:space:]]+/, ""); print }' | sed 's|^[^/]|/&|' | grep -Ei '^(/[^/]+){0,4}/(hwe-)?(vmlinuz|zImage|uImage|bzImage|Image|linux|vmlinux|kernel\.ubuntu|kernal\.ubuntu|initrd|uInitrd|initramfs|initramfs-linux)(\.ubuntu)?(-rt|-cloud|-virt|-vm|-generic|-lts|-hwe){0,7}(\.efi|\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$')"
     results_sorted="$(printf '%s' "$results" | awk -F/ '{ print NF-1, $0 }' | sort -n -k1,1 -k2,2 | sed 's|^[^/]*/||')"
     #Prefer vmlinuz/initrd one directory deep for install and boot dirs
     installboot="$(printf '%s' "$results_sorted" | grep -Ei '^(install|boot|efi)[^/]*/[^/]+$')"
@@ -282,8 +282,8 @@ if [ "$kb" = "true" ]; then
         results_sorted="$netboot"
       fi
     fi
-    vmlinuz_path="$(printf '%s' "$results_sorted" | grep -Ei '(hwe-)?(vmlinuz|zImage|uImage|bzImage|Image|linux|vmlinux|kernel\.ubuntu|kernal\.ubuntu)(\.ubuntu)?(\.efi)?(-rt|-cloud|-virt|-vm|-generic|-lts|-hwe){0,7}(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | head -n 1)"
-    initrd_path="$(printf '%s' "$results_sorted" | grep -Ei '(hwe-)?(initrd|uInitrd|initramfs|initramfs-linux)(\.ubuntu)?(\.efi)?(-rt|-cloud|-virt|-vm|-generic|-lts|-hwe){0,7}(\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | head -n 1)"
+    vmlinuz_path="$(printf '%s' "$results_sorted" | grep -Ei '(hwe-)?(vmlinuz|zImage|uImage|bzImage|Image|linux|vmlinux|kernel\.ubuntu|kernal\.ubuntu)(\.ubuntu)?(-rt|-cloud|-virt|-vm|-generic|-lts|-hwe){0,7}(\.efi|\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | head -n 1)"
+    initrd_path="$(printf '%s' "$results_sorted" | grep -Ei '(hwe-)?(initrd|uInitrd|initramfs|initramfs-linux)(\.ubuntu)?(-rt|-cloud|-virt|-vm|-generic|-lts|-hwe){0,7}(\.efi|\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$' | head -n 1)"
   else
     echo "skipping dynamic kernal fetch"
   fi
