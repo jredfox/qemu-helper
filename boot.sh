@@ -17,9 +17,14 @@ fi
 if [ -z "$LWDE" ]; then
   LWDE="false"
 fi
+if [ "$iso_boot" = "true" ]; then
+  sname="_iso"
+else
+  sname=""
+fi
 #create the temp dir
 mkdir -p "tmp"
-run_tmp="tmp/${dname}_iso.sh"
+run_tmp="tmp/${dname}${sname}.sh"
 
 #Sanity check to ensure both ISO boot and normal boot are not running at the same time or multiple instances of the same one
 if lsof "$cow" >/dev/null 2>&1; then
@@ -247,7 +252,7 @@ if [ "$family_target" = "Unsupported" ]; then
 fi
 
 if [ "$kb" = "true" ]; then
-  kbdir="disks/kb/${dname}"
+  kbdir="disks/kb/${dname}${sname}"
   rm -rf "$kbdir"
   mkdir -p "$kbdir"
   #kb_args add space if it doesn't end with one already
@@ -385,9 +390,13 @@ if [ "${family}${LAUNCH_CLI_FLAG}" = "$family_target" ]; then
   qarg "-m $qram"
   qarg "-cpu host"
   qarg "-smp $qcore"
-  qarg "-cdrom \"$iso\""
+  if [ "$iso_boot" = "true" ]; then
+    qarg "-cdrom \"$iso\""
+  fi
   qarg "-hda \"$cow\""
-  qarg "-boot d"
+  if [ "$iso_boot" = "true" ]; then
+    qarg "-boot d"
+  fi
   if [ "$kb" = "true" ]; then
       qarg "-kernel \"$kbkernal\""
       qarg "-initrd \"$kbinitrd\""
@@ -453,9 +462,11 @@ case "$arch" in
     qdrive "-device \"virtio-keyboard-pci\""
     qdrive "-device \"virtio-mouse-pci\""
     #Drives
-    qdrive "-device \"virtio-scsi-device,id=scsi0\""
-    qdrive "-drive \"file=${iso},format=raw,readonly=on,if=none,id=cdrom0,media=cdrom\""
-    qdrive "-device \"scsi-cd,drive=cdrom0,bus=scsi0.0\""
+    if [ "$iso_boot" = "true" ]; then
+      qdrive "-device \"virtio-scsi-device,id=scsi0\""
+      qdrive "-drive \"file=${iso},format=raw,readonly=on,if=none,id=cdrom0,media=cdrom\""
+      qdrive "-device \"scsi-cd,drive=cdrom0,bus=scsi0.0\""
+    fi
     qdrive "-drive \"file=${cow},format=qcow2,if=none,id=disk0\""
     qdrive "-device \"virtio-blk-device,drive=disk0\""
     ;;
@@ -468,7 +479,9 @@ case "$arch" in
       fi
     fi
     q_kernal="/usr/lib/u-boot/qemu-riscv64_smode/uboot.elf"
-    qdrive "-drive \"file=${iso},format=raw,readonly=on,if=virtio\""
+    if [ "$iso_boot" = "true" ]; then
+      qdrive "-drive \"file=${iso},format=raw,readonly=on,if=virtio\""
+    fi
     qdrive "-drive \"file=${cow},format=qcow2,if=virtio\""
     ;;
   ppc64le)
@@ -476,9 +489,13 @@ case "$arch" in
     q_machine="pseries-2.6,cap-htm=off"
     q_location_bios="pc-bios"
     q_netdev_device="virtio-net-pci"
-    qdrive "-cdrom \"$iso\""
+    if [ "$iso_boot" = "true" ]; then
+      qdrive "-cdrom \"$iso\""
+    fi
     qdrive "-hda \"$cow\""
-    qdrive "-boot d"
+    if [ "$iso_boot" = "true" ]; then
+      qdrive "-boot d"
+    fi
     qdrive "-device \"usb-kbd\""
     qdrive "-device \"usb-mouse\""
     qdrive "-prom-env 'auto-boot?=true'"
@@ -490,11 +507,16 @@ case "$arch" in
     q_machine="s390-ccw-virtio"
     q_netdev_device="virtio-net-ccw"
     q_rng=""
-    qdrive "-drive \"file=${iso},format=raw,readonly=on,if=none,id=cdrom0,media=cdrom\""
-    qdrive "-device \"virtio-scsi-ccw,id=scsi0\""
-    qdrive "-device \"scsi-cd,drive=cdrom0,bus=scsi0.0,bootindex=1\""
+    if [ "$iso_boot" = "true" ]; then
+      cowindex="2"
+      qdrive "-drive \"file=${iso},format=raw,readonly=on,if=none,id=cdrom0,media=cdrom\""
+      qdrive "-device \"virtio-scsi-ccw,id=scsi0\""
+      qdrive "-device \"scsi-cd,drive=cdrom0,bus=scsi0.0,bootindex=1\""
+    else
+      cowindex="1"
+    fi
     qdrive "-drive \"file=${cow},format=qcow2,if=none,id=disk0\""
-    qdrive "-device \"virtio-blk-ccw,drive=disk0,id=vdisk0,bootindex=2\""
+    qdrive "-device \"virtio-blk-ccw,drive=disk0,id=vdisk0,bootindex=${cowindex}\""
     ;;
   i386|x86_64)
     if [ "$arch" = "x86_64" ]; then
@@ -509,9 +531,13 @@ case "$arch" in
       q_rng=""
       q_intel_vga="std"
     fi
-    qdrive "-cdrom \"$iso\""
+    if [ "$iso_boot" = "true" ]; then
+      qdrive "-cdrom \"$iso\""
+    fi
     qdrive "-hda \"$cow\""
-    qdrive "-boot d"
+    if [ "$iso_boot" = "true" ]; then
+      qdrive "-boot d"
+    fi
     if [ "$kb" != "true" ]; then
       q_graphics="true"
       qdrive "-vga \"${q_intel_vga}\""
