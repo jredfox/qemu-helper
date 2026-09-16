@@ -337,13 +337,13 @@ load_arm_qfwr () {
       AAVMF_VARS_PATH="/usr/share/AAVMF/AAVMF_VARS.fd"
       AAVMF_CODE="$fwrdir/AAVMF_CODE.fd"
       AAVMF_VARS_NORMAL="$fwrdir/${dname}_AAVMF_VARS.fd"
-      AAVMF_VARS_ISO="$fwrdir/${dname}_AAVMF_VARS_iso.fd"
+      AAVMF_VARS_ISO="$fwrdir/${dname}_AAVMF_VARS${sname}.fd"
     else
       AAVMF_CODE_PATH="/usr/share/AAVMF/AAVMF32_CODE.fd"
       AAVMF_VARS_PATH="/usr/share/AAVMF/AAVMF32_VARS.fd"
       AAVMF_CODE="$fwrdir/AAVMF_CODE32.fd"
       AAVMF_VARS_NORMAL="$fwrdir/${dname}_AAVMF32_VARS.fd"
-      AAVMF_VARS_ISO="$fwrdir/${dname}_AAVMF32_VARS_iso.fd"
+      AAVMF_VARS_ISO="$fwrdir/${dname}_AAVMF32_VARS${sname}.fd"
     fi
     if [ "$iso_boot" = "true" ]; then
       AAVMF_VARS="$AAVMF_VARS_ISO"
