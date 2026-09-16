@@ -197,7 +197,7 @@ for file in "iso"/*.iso; do
         fi
         echo "sh boot.sh \"${name}\" true ${arch} ${qram_gen} ${qcore_gen} ${LWDE}" >>"$bootisosh"
         echo "sh boot.sh \"${name}\" false ${arch} ${qram_gen} ${qcore_gen} ${LWDE}" >>"$bootsh"
-        chmod +x "$bootsh"
         chmod +x "$bootisosh"
+        chmod +x "$bootsh"
     fi
 done
