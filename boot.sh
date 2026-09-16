@@ -508,10 +508,10 @@ case "$arch" in
     q_netdev_device="virtio-net-ccw"
     q_rng=""
     if [ "$iso_boot" = "true" ]; then
-      cowindex="2"
       qdrive "-drive \"file=${iso},format=raw,readonly=on,if=none,id=cdrom0,media=cdrom\""
       qdrive "-device \"virtio-scsi-ccw,id=scsi0\""
       qdrive "-device \"scsi-cd,drive=cdrom0,bus=scsi0.0,bootindex=1\""
+      cowindex="2"
     else
       cowindex="1"
     fi
