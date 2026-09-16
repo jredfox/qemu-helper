@@ -185,16 +185,18 @@ for file in "iso"/*.iso; do
             qram_gen="$qram32"
             qcore_gen="$qcore32"
         fi
-        echo "cd \"${install_dir}\"" >"$bootsh"
-        echo "sh bootnormal.sh \"${name}\" ${arch} ${qram_gen} ${qcore_gen} ${LWDE}" >>"$bootsh"
         echo "cd \"${install_dir}\"" >"$bootisosh"
+        echo "cd \"${install_dir}\"" >"$bootsh"
         if [ "$kb" = "true" ]; then
             echo "export kb=\"true\"" >>"$bootisosh"
+            echo "export kb=\"true\"" >>"$bootsh"
         fi
         if [ "$no_acpi" = "true" ]; then
             echo "export no_acpi=\"true\"" >>"$bootisosh"
+            echo "export no_acpi=\"true\"" >>"$bootsh"
         fi
-        echo "sh bootiso.sh \"${name}\" ${arch} ${qram_gen} ${qcore_gen} ${LWDE}" >>"$bootisosh"
+        echo "sh boot.sh \"${name}\" true ${arch} ${qram_gen} ${qcore_gen} ${LWDE}" >>"$bootisosh"
+        echo "sh boot.sh \"${name}\" false ${arch} ${qram_gen} ${qcore_gen} ${LWDE}" >>"$bootsh"
         chmod +x "$bootsh"
         chmod +x "$bootisosh"
     fi

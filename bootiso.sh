@@ -1,13 +1,13 @@
 dname="${1}"
-iso_boot="true"
 iso="iso/${dname}.iso"
 iso="$(realpath "$iso")"
 cow="disks/${dname}.qcow2"
 fwrdir="disks/firmware"
-arch="$2"
-qram="$3"
-qcore="$4"
-LWDE="$5"
+iso_boot="$2"
+arch="$3"
+qram="$4"
+qcore="$5"
+LWDE="$6"
 if [ -z "$qram" ]; then
   qram="4096"
 fi
