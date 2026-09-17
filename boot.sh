@@ -250,6 +250,7 @@ family_target=$(getFamily "$arch")
 #Unsupported Arch that doesn't match the host
 if [ "$family_target" = "Unsupported" ]; then
   echo "Unsupported Arch: $arch"
+  read -p "Press Enter to Continue..." dummy
   exit 1
 fi
 
@@ -299,6 +300,7 @@ if [ "$kb" = "true" ]; then
   cd "$opwd"
   if [ -z "$vmlinuz_path" ]; then
     echo "kernal not found!"
+    read -p "Press Enter to Continue..." dummy
     exit 1
   fi
   kbkernal="$(realpath "$kbdir")/$(basename "$vmlinuz_path")"
