@@ -98,7 +98,7 @@ for file in "iso"/*.iso; do
                 ;;
 
             # ARM 32-bit
-            *aarch32*|*arm32*|*armv[0-7]*|*armhf*|*armel*|*[!a-z]arm[!a-z]*|arm[!a-z]*|*[!a-z]arm)
+            *aarch32*|*arm32*|*armv[0-7]*|*armhf*|*armel*|*[!a-z]arm[!a-z]*|arm[!a-z]*|*[!a-z]arm|arm)
                 arch="arm"
                 bits32="true"
                 ;;
@@ -125,7 +125,7 @@ for file in "iso"/*.iso; do
                 ;;
 
             # IBM Z
-            *ibm-z*|*s390x*|*[!a-z0-9]s390[!a-z0-9]*|s390[!a-z0-9]*|*[!a-z0-9]s390)
+            *ibm-z*|*s390x*|*[!a-z0-9]s390[!a-z0-9]*|s390[!a-z0-9]*|*[!a-z0-9]s390|s390)
                 arch="s390x"
                 ;;
 
@@ -135,7 +135,7 @@ for file in "iso"/*.iso; do
                 ;;
 
             # x86 32-bit
-            *i[0-9]86*|*i[0-9][0-9]86*|*i[0-9][0-9][0-9]86*|*x86?32*|*x86*|*32bit*|*32?bit*|*x32*|*ia-32*)
+            *i[0-9]86*|*i[0-9][0-9]86*|*i[0-9][0-9][0-9]86*|*x86?32*|*x86*|*32bit*|*32?bit*|*x32*|*ia?32*|*ia32*)
                 arch="i386"
                 bits32="true"
                 ;;
