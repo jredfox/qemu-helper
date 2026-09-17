@@ -60,7 +60,7 @@ getArchy() {
       ;;
 
     # powerpc32
-    *ppc32*|*ppc?32*|*powerpc32*|*powerpc?32*)
+    *ppc32*|*ppc?32*|*powerpc32*|*powerpc?32*|ppc)
       echo "ppc32"
       ;;
 
