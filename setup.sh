@@ -21,6 +21,7 @@ fi
 #default cores to give qemu for 32 bits
 if [ -z "$qcore32" ]; then
     qcore32="2"
+    qcoreppc32="1"
 fi
 
 #install qemu
@@ -117,6 +118,7 @@ for file in "iso"/*.iso; do
             *ppc32*|*ppc?32*|*powerpc32*|*powerpc?32*)
                 arch="ppc32"
                 bits32="true"
+                qcore32="$qcoreppc32"
                 ;;
 
             # powerpc64
