@@ -548,6 +548,7 @@ case "$arch" in
     ;;
   *)
     echo "NOT IMPLEMENTED YET! Arch: ${arch}"
+    read -p "Press Enter to Continue..."
     exit 1
     ;;
 esac
