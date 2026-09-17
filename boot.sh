@@ -59,14 +59,14 @@ getArchy() {
       echo "ppc64le"
       ;;
 
-    # powerpc32
-    *ppc32*|*ppc?32*|*powerpc32*|*powerpc?32*)
-      echo "ppc32"
+    # powerpc64
+    *ppc64*|*ppc?64*|*powerpc64*|*powerpc?64*)
+      echo "ppc64"
       ;;
 
-    # powerpc64
-    *ppc64*|*powerpc64*|*powerpc*)
-      echo "ppc64"
+    # powerpc32
+    *ppc32*|*ppc?32*|*powerpc*)
+      echo "ppc32"
       ;;
 
     # IBM Z
@@ -486,7 +486,7 @@ case "$arch" in
     fi
     qdrive "-drive \"file=${cow},format=qcow2,if=virtio\""
     ;;
-  ppc64le)
+  ppc64le|ppc64)
     q_cpu="power8"
     q_machine="pseries-2.6,cap-htm=off"
     q_location_bios="pc-bios"
