@@ -59,14 +59,14 @@ getArchy() {
       echo "ppc64le"
       ;;
 
-    # powerpc64
-    *ppc64*|*ppc?64*|*powerpc64*|*powerpc?64*)
-      echo "ppc64"
+    # powerpc32
+    *ppc32*|*ppc?32*|*powerpc32*|*powerpc?32*)
+      echo "ppc32"
       ;;
 
-    # powerpc32
-    *ppc32*|*ppc?32*|*powerpc*)
-      echo "ppc32"
+    # powerpc64
+    *ppc64*|*powerpc64*|*powerpc*)
+      echo "ppc64"
       ;;
 
     # IBM Z
@@ -250,7 +250,6 @@ family_target=$(getFamily "$arch")
 #Unsupported Arch that doesn't match the host
 if [ "$family_target" = "Unsupported" ]; then
   echo "Unsupported Arch: $arch"
-  read -p "Press Enter to Continue..." dummy
   exit 1
 fi
 
@@ -300,7 +299,6 @@ if [ "$kb" = "true" ]; then
   cd "$opwd"
   if [ -z "$vmlinuz_path" ]; then
     echo "kernal not found!"
-    read -p "Press Enter to Continue..." dummy
     exit 1
   fi
   kbkernal="$(realpath "$kbdir")/$(basename "$vmlinuz_path")"
@@ -550,7 +548,6 @@ case "$arch" in
     ;;
   *)
     echo "NOT IMPLEMENTED YET! Arch: ${arch}"
-    read -p "Press Enter to Continue..."
     exit 1
     ;;
 esac

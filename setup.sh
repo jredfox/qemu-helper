@@ -110,19 +110,19 @@ for file in "iso"/*.iso; do
 
             # powerpc64 little edian
             *ppc64el*|*ppc64le*|*powerpc64le*|*powerpc64el*)
-              arch="ppc64le"
-              ;;
-
-            # powerpc64
-            *ppc64*|*ppc?64*|*powerpc64*|*powerpc?64*)
-              arch="ppc64"
-              ;;
+                arch="ppc64le"
+                ;;
 
             # powerpc32
-            *ppc32*|*ppc?32*|*powerpc*)
-              arch="ppc32"
-              bits32="true"
-              ;;
+            *ppc32*|*ppc?32*|*powerpc32*|*powerpc?32*)
+                arch="ppc32"
+                bits32="true"
+                ;;
+
+            # powerpc64
+            *ppc64*|*powerpc64*|*powerpc*)
+                arch="ppc64"
+                ;;
 
             # IBM Z
             *ibm-z*|*s390x*|*[!a-z0-9]s390[!a-z0-9]*|s390[!a-z0-9]*|*[!a-z0-9]s390)
@@ -135,7 +135,7 @@ for file in "iso"/*.iso; do
                 ;;
 
             # x86 32-bit
-            *i[0-9]86*|*i[0-9][0-9]86*|*i[0-9][0-9][0-9]86*|*x86?32*|*x86*|*32bit*|*32?bit*|*x32*|*ia?32*|*ia32*)
+            *i[0-9]86*|*i[0-9][0-9]86*|*i[0-9][0-9][0-9]86*|*x86?32*|*x86*|*32bit*|*32?bit*|*x32*|*ia-32*)
                 arch="i386"
                 bits32="true"
                 ;;
