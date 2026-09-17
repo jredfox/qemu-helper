@@ -105,7 +105,7 @@ getFamily() {
       ;;
 
     # powerpc
-    *ppc64*|*ppc?64*|*powerpc*|*ppc32*|*ppc?32*)
+    *ppc64*|*ppc?64*|*powerpc*|*ppc32*|*ppc?32*|ppc)
       echo "powerpc"
       ;;
 
