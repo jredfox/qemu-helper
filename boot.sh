@@ -584,7 +584,7 @@ fi
 
 if [ "$no_wifi" = "true" ]; then
   net_append=",restrict=on"
-fi
+f
 qarg "-netdev \"${q_netdev}${net_append}\""
 qarg "-device \"${q_netdev_device},netdev=net0\""
 if [ ! -z "$q_rng" ]; then
