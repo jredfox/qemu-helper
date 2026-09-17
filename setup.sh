@@ -187,6 +187,10 @@ for file in "iso"/*.iso; do
         fi
         echo "cd \"${install_dir}\"" >"$bootisosh"
         echo "cd \"${install_dir}\"" >"$bootsh"
+        if [ "$LWDE" = "true" ]; then
+            echo "export LWDE=\"true\"" >>"$bootisosh"
+            echo "export LWDE=\"true\"" >>"$bootsh"
+        fi
         if [ "$kb" = "true" ]; then
             echo "export kb=\"true\"" >>"$bootisosh"
             echo "export kb=\"true\"" >>"$bootsh"
@@ -195,8 +199,8 @@ for file in "iso"/*.iso; do
             echo "export no_acpi=\"true\"" >>"$bootisosh"
             echo "export no_acpi=\"true\"" >>"$bootsh"
         fi
-        echo "sh boot.sh \"${name}\" true ${arch} ${qram_gen} ${qcore_gen} ${LWDE}" >>"$bootisosh"
-        echo "sh boot.sh \"${name}\" false ${arch} ${qram_gen} ${qcore_gen} ${LWDE}" >>"$bootsh"
+        echo "sh boot.sh \"${name}\" true ${arch} ${qram_gen} ${qcore_gen}" >>"$bootisosh"
+        echo "sh boot.sh \"${name}\" false ${arch} ${qram_gen} ${qcore_gen}" >>"$bootsh"
         chmod +x "$bootisosh"
         chmod +x "$bootsh"
     fi

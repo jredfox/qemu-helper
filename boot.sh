@@ -7,7 +7,6 @@ iso_boot="$2"
 arch="$3"
 qram="$4"
 qcore="$5"
-LWDE="$6"
 if [ -z "$qram" ]; then
   qram="4096"
 fi
