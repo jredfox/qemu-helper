@@ -486,9 +486,14 @@ case "$arch" in
     fi
     qdrive "-drive \"file=${cow},format=qcow2,if=virtio\""
     ;;
-  ppc64le|ppc64)
-    q_cpu="power8"
-    q_machine="pseries-2.6,cap-htm=off"
+  ppc64le|ppc64|ppc32)
+    if [ "$arch" != "ppc32" ]; then
+      q_cpu="power8"
+      q_machine="pseries-2.6,cap-htm=off"
+    else
+      q_cpu="G4"
+      q_machine="mac99"
+    fi
     q_location_bios="pc-bios"
     q_netdev_device="virtio-net-pci"
     if [ "$iso_boot" = "true" ]; then
