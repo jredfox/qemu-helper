@@ -414,6 +414,11 @@ if [ "${family}${LAUNCH_CLI_FLAG}" = "$family_target" ]; then
     echo "ERROR qemu-system-$arch has no KVM!"
   fi
 
+  #Disable WIFI
+  if [ "$no_wifi" = "true" ]; then
+    qarg "-net none"
+  fi
+
   #Handle LightWeight Desktop Enviorment
   if [ "$no_graphics" = "true" ]; then
     qarg "-nographic"
@@ -576,8 +581,14 @@ else
     load_arm_qfwr "INIT"
   fi
 fi
-qarg "-netdev \"${q_netdev}\""
-qarg "-device \"${q_netdev_device},netdev=net0\""
+
+if [ "$no_wifi" != "true" ]; then
+  qarg "-netdev \"${q_netdev}\""
+  qarg "-device \"${q_netdev_device},netdev=net0\""
+else
+  #Disable WIFI
+  qarg "-net none"
+fi
 if [ ! -z "$q_rng" ]; then
   qarg "-device \"${q_rng}\""
 fi
