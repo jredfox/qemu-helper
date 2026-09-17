@@ -110,17 +110,18 @@ for file in "iso"/*.iso; do
 
             # powerpc64 little edian
             *ppc64el*|*ppc64le*|*powerpc64le*|*powerpc64el*)
-              echo "ppc64le"
+              arch="ppc64le"
               ;;
 
             # powerpc64
             *ppc64*|*ppc?64*|*powerpc64*|*powerpc?64*)
-              echo "ppc64"
+              arch="ppc64"
               ;;
 
             # powerpc32
             *ppc32*|*ppc?32*|*powerpc*)
-              echo "ppc32"
+              arch="ppc32"
+              bits32="true"
               ;;
 
             # IBM Z
