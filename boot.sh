@@ -61,7 +61,7 @@ getArchy() {
 
     # powerpc32
     *ppc32*|*ppc?32*|*powerpc32*|*powerpc?32*|ppc)
-      echo "ppc32"
+      echo "ppc"
       ;;
 
     # powerpc64
@@ -315,7 +315,7 @@ if [ "$kb" = "true" ]; then
     fi
     #handle s390x, powerpc
     if [ "$family_target" = "s390x" ] || [ "$family_target" = "powerpc" ]; then
-      if [ "$arch" != "ppc32" ]; then
+      if [ "$arch" != "ppc" ]; then
         qconsole="hvc0"
         qconsole_gui="hvc0"
       fi
@@ -486,8 +486,8 @@ case "$arch" in
     fi
     qdrive "-drive \"file=${cow},format=qcow2,if=virtio\""
     ;;
-  ppc64le|ppc64|ppc32)
-    if [ "$arch" != "ppc32" ]; then
+  ppc64le|ppc64|ppc)
+    if [ "$arch" != "ppc" ]; then
       q_cpu="power8"
       q_machine="pseries-2.6,cap-htm=off"
     else

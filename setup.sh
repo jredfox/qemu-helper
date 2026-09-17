@@ -115,7 +115,7 @@ for file in "iso"/*.iso; do
                 ;;
 
             # powerpc32
-            *ppc32*|*ppc?32*|*powerpc32*|*powerpc?32*)
+            *ppc32*|*ppc?32*|*powerpc32*|*powerpc?32*|ppc)
                 arch="ppc32"
                 bits32="true"
                 qcore32="$qcoreppc32"
