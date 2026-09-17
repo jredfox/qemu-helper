@@ -18,6 +18,9 @@ if [ -z "$LWDE" ]; then
 fi
 if [ "$iso_boot" = "true" ]; then
   sname="_iso"
+  if [ -z "$no_reboot" ]; then
+    no_reboot="true"
+  fi
 else
   sname=""
 fi
@@ -426,8 +429,8 @@ if [ "${family}${LAUNCH_CLI_FLAG}" = "$family_target" ]; then
     fi
   fi
 
-  #Disable rebooting in the ISO installer by default
-  if [ "$allow_reboot" != "true" ]; then
+  #Disable rebooting
+  if [ "$no_reboot" = "true" ]; then
     qarg "-no-reboot"
   fi
   
@@ -582,8 +585,8 @@ if [ "$q_graphics" != "true" ]; then
   qarg "-nographic"
 fi
 
-#Disable rebooting in the ISO installer by default
-if [ "$allow_reboot" != "true" ]; then
+#Disable rebooting
+if [ "$no_reboot" = "true" ]; then
   qarg "-no-reboot"
 fi
 
