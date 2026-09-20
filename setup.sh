@@ -21,7 +21,6 @@ fi
 #default cores to give qemu for 32 bits
 if [ -z "$qcore32" ]; then
     qcore32="2"
-    qcoreppc32="1"
 fi
 #default cores to give qemu for powerpc 32 bits
 if [ -z "$qcoreppc32" ]; then
