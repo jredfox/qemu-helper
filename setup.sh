@@ -23,6 +23,10 @@ if [ -z "$qcore32" ]; then
     qcore32="2"
     qcoreppc32="1"
 fi
+org_qram="$qram"
+org_qcore="$qcore"
+org_qram32="$qram32"
+org_qcore32="$qcore32"
 
 #install qemu
 if ! output=$(qemu-img "--version" >/dev/null 2>&1); then
@@ -181,11 +185,9 @@ for file in "iso"/*.iso; do
             fi
         fi
         
-        qram_gen="$qram"
-        qcore_gen="$qcore"
         if [ "$bits32" = "true" ]; then
-            qram_gen="$qram32"
-            qcore_gen="$qcore32"
+            qram="$qram32"
+            qcore="$qcore32"
         fi
         echo "cd \"${install_dir}\"" >"$bootisosh"
         echo "cd \"${install_dir}\"" >"$bootsh"
@@ -201,9 +203,15 @@ for file in "iso"/*.iso; do
             echo "export no_acpi=\"true\"" >>"$bootisosh"
             echo "export no_acpi=\"true\"" >>"$bootsh"
         fi
-        echo "sh boot.sh \"${name}\" true ${arch} ${qram_gen} ${qcore_gen}" >>"$bootisosh"
-        echo "sh boot.sh \"${name}\" false ${arch} ${qram_gen} ${qcore_gen}" >>"$bootsh"
+        echo "sh boot.sh \"${name}\" true ${arch} ${qram} ${qcore}" >>"$bootisosh"
+        echo "sh boot.sh \"${name}\" false ${arch} ${qram} ${qcore}" >>"$bootsh"
         chmod +x "$bootisosh"
         chmod +x "$bootsh"
+
+        #Reset Variables
+        qram="$org_qram"
+        qcore="$org_qcore"
+        qram32="$org_qram32"
+        qcore32="$org_qcore32"
     fi
 done
