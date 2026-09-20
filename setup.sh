@@ -4,9 +4,6 @@
 if [ -z "$install_dir" ]; then
     install_dir="$HOME/vms"
 fi
-mkdir -p "$install_dir"
-install_dir="$(realpath "$install_dir")"
-current_dir="$( cd -- "$(dirname "${0}")" >/dev/null 2>&1 ; pwd -P )"
 #default ram to give qemu
 if [ -z "$qram" ]; then
     qram="4096"
@@ -69,6 +66,10 @@ if ! output=$(qemu-img "--version" >/dev/null 2>&1); then
         exit 1
     fi
 fi
+#make install_dir absolute
+mkdir -p "$install_dir"
+install_dir="$(realpath "$install_dir")"
+current_dir="$( cd -- "$(dirname "${0}")" >/dev/null 2>&1 ; pwd -P )"
 #cd into the install dir
 cd "$install_dir" || exit 1
 #create dirs
