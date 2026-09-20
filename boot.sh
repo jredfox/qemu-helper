@@ -60,7 +60,7 @@ getArchy() {
       ;;
 
     # powerpc32
-    *ppc32*|*ppc?32*|*powerpc32*|*powerpc?32*|ppc)
+    *ppc32*|*ppc?32*|*powerpc32*|*powerpc?32*|*[!a-z0-9]ppc[!a-z0-9]*|ppc[!a-z0-9]*|*[!a-z0-9]ppc|ppc)
       echo "ppc"
       ;;
 
@@ -105,7 +105,7 @@ getFamily() {
       ;;
 
     # powerpc
-    *ppc64*|*ppc?64*|*powerpc*|*ppc32*|*ppc?32*|ppc)
+    *ppc64*|*ppc?64*|*powerpc*|*ppc32*|*ppc?32*|*[!a-z0-9]ppc[!a-z0-9]*|ppc[!a-z0-9]*|*[!a-z0-9]ppc|ppc)
       echo "powerpc"
       ;;
 

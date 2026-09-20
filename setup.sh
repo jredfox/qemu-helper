@@ -83,6 +83,10 @@ if [ "$install_dir" != "$current_dir" ]; then
 fi
 #install cows
 for file in "iso"/*.iso; do
+    if [ ! -f "$file" ]; then
+        echo "Skipping non file: $file"
+        continue
+    fi
     name=$(basename "$file")
     name="${name%.*}"
     if [ -f "disks/${name}.qcow2" ]; then
@@ -131,7 +135,7 @@ for file in "iso"/*.iso; do
                 ;;
 
             # powerpc32
-            *ppc32*|*ppc?32*|*powerpc32*|*powerpc?32*|ppc)
+            *ppc32*|*ppc?32*|*powerpc32*|*powerpc?32*|*[!a-z0-9]ppc[!a-z0-9]*|ppc[!a-z0-9]*|*[!a-z0-9]ppc|ppc)
                 arch="ppc32"
                 bits32="true"
                 qcore32="$qcoreppc32"
