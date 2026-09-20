@@ -1,3 +1,5 @@
+#!/bin/sh
+
 iso="${1}"
 if [ -z "$iso" ]; then
 	read -p "Enter Linux ISO:" iso

@@ -1,3 +1,5 @@
+#!/bin/sh
+
 dname="${1}"
 iso="iso/${dname}.iso"
 iso="$(realpath "$iso")"
