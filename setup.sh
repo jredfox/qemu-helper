@@ -92,7 +92,6 @@ for file in "iso"/*.iso; do
 
         #Extract the arch from from the ISO and translate the arch aliases to be standard
         bits32="false"
-        qcore32_gen="$qcore32"
         case "$lname" in
             # ARM 64-bit
             *aarch64*|*arm64*|*armv8*|*armv9*)
@@ -119,7 +118,7 @@ for file in "iso"/*.iso; do
             *ppc32*|*ppc?32*|*powerpc32*|*powerpc?32*|ppc)
                 arch="ppc32"
                 bits32="true"
-                qcore32_gen="$qcoreppc32"
+                qcore32="$qcoreppc32"
                 ;;
 
             # powerpc64
@@ -186,7 +185,7 @@ for file in "iso"/*.iso; do
         qcore_gen="$qcore"
         if [ "$bits32" = "true" ]; then
             qram_gen="$qram32"
-            qcore_gen="$qcore32_gen"
+            qcore_gen="$qcore32"
         fi
         echo "cd \"${install_dir}\"" >"$bootisosh"
         echo "cd \"${install_dir}\"" >"$bootsh"
