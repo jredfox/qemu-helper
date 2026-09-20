@@ -186,7 +186,7 @@ decompressKernal() {
   rm -f "$img_tmp"
   
   if [ "$isDecompressed" != "true" ]; then
-    echo "vmlinux is already decompressed?" >&2
+    echo "vmlinux is already  decompressed?" >&2
     return 1
   fi
 
