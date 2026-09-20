@@ -23,6 +23,9 @@ if [ -z "$qcore32" ]; then
     qcore32="2"
     qcoreppc32="1"
 fi
+if [ -z "$qcoreppc32" ]; then
+    qcoreppc32="1"
+fi
 org_qram="$qram"
 org_qcore="$qcore"
 org_qram32="$qram32"
@@ -92,7 +95,7 @@ for file in "iso"/*.iso; do
         kb="false"
         checked="false"
         lname="$(printf '%s' "$name" | tr '[:upper:]' '[:lower:]')"
-        
+
         #Enable LightWeight Deskop Enviorment Flag
         case "$lname" in
             *xfce*|*mate*|*lxqt*|*lxde*|*budgie*|*lubuntu*|*xubuntu*)
