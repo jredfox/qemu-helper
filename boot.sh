@@ -326,7 +326,7 @@ if [ "$kb" = "true" ]; then
   decompressKernal "$kbkernal"
   #Set the qemu console serial type needed for kernal booting
   qconsole="$kb_console"
-  qconsole_gui="tty0"
+  qconsole_gui="${kb_console_gui:-tty0}"
   if [ -z "$qconsole" ]; then
     qconsole="ttyS0"
     if [ "$family_target" = "arm" ]; then
