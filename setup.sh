@@ -106,7 +106,7 @@ for file in "iso"/*.iso; do
 
         #Enable LightWeight Deskop Enviorment Flag
         case "$lname" in
-            *xfce*|*mate*|*lxqt*|*lxde*|*budgie*|*lubuntu*|*xubuntu*)
+            *xfce*|*[!a-z]mate*|mate*|*lxqt*|*lxde*|*budgie*|*lubuntu*|*xubuntu*)
                 LWDE="true"
                 ;;
         esac
