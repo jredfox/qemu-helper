@@ -85,8 +85,14 @@ for file in "iso"/*.iso; do
         bootsh="boot/${name}.sh"
         bootisosh="boot/${name}_iso.sh"
         
+        #Set Local Variables Initial State per iteration
         LWDE="false"
+        bits32="false"
+        no_acpi="false"
+        kb="false"
+        checked="false"
         lname="$(printf '%s' "$name" | tr '[:upper:]' '[:lower:]')"
+        
         #Enable LightWeight Deskop Enviorment Flag
         case "$lname" in
             *xfce*|*mate*|*lxqt*|*lxde*|*budgie*|*lubuntu*|*xubuntu*)
@@ -95,7 +101,6 @@ for file in "iso"/*.iso; do
         esac
 
         #Extract the arch from from the ISO and translate the arch aliases to be standard
-        bits32="false"
         case "$lname" in
             # ARM 64-bit
             *aarch64*|*arm64*|*armv8*|*armv9*)
@@ -152,9 +157,6 @@ for file in "iso"/*.iso; do
         esac
 
         #Enable Kernal Boot and Disable ACPI
-        no_acpi="false"
-        kb="false"
-        checked="false"
         case "$lname" in
             *-kb[!a-z]*|*-kb)
                 kb="true"
