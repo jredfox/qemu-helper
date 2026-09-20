@@ -336,7 +336,8 @@ if [ "$kb" = "true" ]; then
     if [ "$family_target" = "s390x" ] || [ "$family_target" = "powerpc" ]; then
       if [ "$arch" != "ppc" ]; then
         qconsole="hvc0"
-        qconsole_gui="hvc0"
+      else
+        qconsole="ttyPZ0"
       fi
     fi
   fi
