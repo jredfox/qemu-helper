@@ -27,6 +27,7 @@ fi
 if [ -z "$qcoreppc32" ]; then
     qcoreppc32="1"
 fi
+#default max disk space for the qcow2 image
 if [ -z "$qdisk" ]; then
     qdisk="50G"
 fi
