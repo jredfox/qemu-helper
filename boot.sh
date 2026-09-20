@@ -285,14 +285,14 @@ if [ "$kb" = "true" ]; then
       results_sorted="$(printf '%s' "$results_sorted" | grep -vEi '^(install|boot|efi)[^/]*/e500mc/')"
       #prefer powerpc64 when 64 bit
       if [ "$arch" = "ppc64" ]; then
-        installboot="$(printf '%s' "$results_sorted" | grep -Ei '^(install|boot|efi)[^/]*/(powerpc64|ppc64)(/|$)')"
+        installboot="$(printf '%s' "$results_sorted" | grep -Ei '^(install|boot|efi)[^/]*/(powerpc64|ppc64)(-[a-z0-9]+)?(/|$)')"
         if [ ! -z "$installboot" ]; then
           results_sorted="$installboot"
         fi
       fi
       #prefer powerpc32 when 32 bit
       if [ "$arch" = "ppc" ]; then
-        installboot="$(printf '%s' "$results_sorted" | grep -Ei '^(install|boot|efi)[^/]*/(powerpc|ppc)(32)?(/|$)')"
+        installboot="$(printf '%s' "$results_sorted" | grep -Ei '^(install|boot|efi)[^/]*/(powerpc|ppc|pmac|chrp)(32)?(-[a-z0-9]+)?(/|$)')"
         if [ ! -z "$installboot" ]; then
           results_sorted="$installboot"
         fi
