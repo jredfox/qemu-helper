@@ -154,6 +154,7 @@ for file in "iso"/*.iso; do
         #Enable Kernal Boot and Disable ACPI
         no_acpi="false"
         kb="false"
+        checked="false"
         case "$lname" in
             *-kb[!a-z]*|*-kb)
                 kb="true"
