@@ -31,7 +31,8 @@ run_tmp="tmp/${dname}${sname}.sh"
 #Sanity check to ensure both ISO boot and normal boot are not running at the same time or multiple instances of the same one
 if lsof "$cow" >/dev/null 2>&1; then
   echo "${cow} is already running from QEMU or another program!"
-  read -p "Press Enter to Continue..." dummy
+  printf "%s" "Press Enter to Continue..."
+  read result
   exit 1
 fi
 
