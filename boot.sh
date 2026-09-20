@@ -210,8 +210,8 @@ filterArchive() {
 
 unzipKernal() {
 
-    archive="$(realpath "$1")"
-    outdir="$(realpath "$2")"
+    archive="$1"
+    outdir="$2"
     test_path="$(filterArchive "$archive")"
     if [ -z "$test_path" ]; then
         echo "kernal is unzipped: $archive"
