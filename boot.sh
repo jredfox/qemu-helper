@@ -279,6 +279,25 @@ if [ "$kb" = "true" ]; then
   if [ -z "$vmlinuz_path" ] || [ -z "$initrd_path" ]; then
     results="$(7z l -ba "${iso}" | awk 'toupper(substr($3,1,1)) != "D" { max = (substr($1,1,1) != "." ? 5 : 3); for (i=1; i<=max && i<NF; i++) $i=""; sub(/^[[:space:]]+/, ""); print }' | sed 's|^[^/]|/&|' | grep -Ei '^(/[^/]+){0,4}/(hwe-)?(vmlinuz|zImage|uImage|bzImage|Image|linux|vmlinux|kernel\.ubuntu|kernal\.ubuntu|initrd|uInitrd|initramfs|initramfs-linux)(\.ubuntu)?(-rt|-cloud|-virt|-vm|-generic|-lts|-hwe){0,7}(\.efi|\.gz|\.lz|\.img|\.tar\.gz|\.cpio\.gz)?$')"
     results_sorted="$(printf '%s' "$results" | awk -F/ '{ print NF-1, $0 }' | sort -n -k1,1 -k2,2 | sed 's|^[^/]*/||')"
+    #Handle PowerPC 32 / 64 bit
+    if [ "$family_target" = "powerpc" ]; then
+      #powerpc generic filter
+      results_sorted="$(printf '%s' "$results_sorted" | grep -vEi '^(install|boot|efi)[^/]*/e500mc/')"
+      #prefer powerpc64 when 64 bit
+      if [ "$arch" = "ppc64" ]; then
+        installboot="$(printf '%s' "$results_sorted" | grep -Ei '^(install|boot|efi)[^/]*/(powerpc64|ppc64)')"
+        if [ ! -z "$installboot" ]; then
+          results_sorted="$installboot"
+        fi
+      fi
+      #prefer powerpc32 when 32 bit
+      if [ "$arch" = "ppc" ]; then
+        installboot="$(printf '%s' "$results_sorted" | grep -Ei '^(install|boot|efi)[^/]*/(powerpc|ppc)(32)?(/|$)')"
+        if [ ! -z "$installboot" ]; then
+          results_sorted="$installboot"
+        fi
+      fi
+    fi
     #Prefer vmlinuz/initrd one directory deep for install and boot dirs
     installboot="$(printf '%s' "$results_sorted" | grep -Ei '^(install|boot|efi)[^/]*/[^/]+$')"
     if [ ! -z "$installboot" ]; then
