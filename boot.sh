@@ -32,7 +32,7 @@ run_tmp="tmp/${dname}${sname}.sh"
 if lsof "$cow" >/dev/null 2>&1; then
   echo "${cow} is already running from QEMU or another program!"
   printf "%s" "Press Enter to Continue..."
-  read result
+  read -r result
   exit 1
 fi
 

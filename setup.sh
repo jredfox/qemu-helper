@@ -48,7 +48,7 @@ if ! output=$(qemu-img "--version" >/dev/null 2>&1); then
         #TODO: install 7z or py7zip depending upon what is avaliable
         if ! virt-fw-vars "--help" >/dev/null 2>&1; then
             printf "%s" "Do you want to install virt-fw-vars which is recomended for older Ubuntu Arm64 images? [Y/N] "
-            read result
+            read -r result
             case "$result" in
                 [Yy]*) 
                     sudo apt install -y python3-virt-firmware virt-fw-vars
