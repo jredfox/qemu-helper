@@ -27,6 +27,9 @@ fi
 if [ -z "$qcoreppc32" ]; then
     qcoreppc32="1"
 fi
+if [ -z "$qdisk" ]; then
+    qdisk="50G"
+fi
 org_qram="$qram"
 org_qcore="$qcore"
 org_qram32="$qram32"
@@ -84,7 +87,7 @@ for file in "iso"/*.iso; do
     if [ -f "disks/${name}.qcow2" ]; then
         echo "Skipping ISO $name"
     else
-        qemu-img create -f qcow2 "disks/${name}.qcow2" 50G
+        qemu-img create -f qcow2 "disks/${name}.qcow2" "$qdisk"
         bootsh="boot/${name}.sh"
         bootisosh="boot/${name}_iso.sh"
         
