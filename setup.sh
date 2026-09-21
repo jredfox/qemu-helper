@@ -117,7 +117,7 @@ for file in "iso"/*.iso; do
     if [ "$arch" = "ppc64" ]; then
         #prevent accidental overwrite of similar ISO files
         if [ -f "$lnk_name" ] && [ ! -L "$lnk_name" ]; then
-            echo "cannot create symlink for powerpc32"
+            echo "cannot create symlink for powerpc32 as $lnk_name already exists"
             continue
         fi
         oefi="$(7z l -ba "iso/${name}.iso" | awk 'toupper(substr($1,1,1)) == "D" || toupper(substr($3,1,1)) == "D" { max = (toupper(substr($1,1,1)) != "D" ? 3 : 1); for (i=1; i<=max && i<NF; i++) $i=""; sub(/^[[:space:]]+/, ""); print }' | sed 's|^[^/]|/&|' | grep -vEi '^/(install|boot|efi)[^/]*/e500mc(/|$)' | grep -vEi '^/(install|boot|efi)[^/]*/(powerpc64|ppc64)(-[a-z0-9]+)?(/|$)' | grep -Ei '^/(install|boot|efi)[^/]*/(powerpc|ppc|pmac|chrp)(32)?(-[a-z0-9]+)?(/|$)')"
