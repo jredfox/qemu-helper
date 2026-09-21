@@ -83,6 +83,46 @@ if [ "$install_dir" != "$current_dir" ]; then
     mv "$current_dir/iso"/* "$install_dir/iso/" >/dev/null 2>&1
     cp -rf "$current_dir"/*.sh "$install_dir/"
 fi
+
+#create powerpc32 symlinks
+for file in "iso"/*.iso; do
+    if [ ! -L "$file" ]; then
+        name=$(basename "$file")
+        name="${name%.*}"
+        lname="$(printf '%s' "$name" | tr '[:upper:]' '[:lower:]')"
+        case "$lname" in
+            # powerpc64 little edian
+            *ppc64el*|*ppc64le*|*powerpc64le*|*powerpc64el*)
+                arch="ppc64le"
+                ;;
+
+            # powerpc32
+            *ppc32*|*ppc?32*|*powerpc32*|*powerpc?32*|*[!a-z0-9]ppc[!a-z0-9]*|ppc[!a-z0-9]*|*[!a-z0-9]ppc|ppc)
+                arch="ppc32"
+                bits32="true"
+                qcore32="$qcoreppc32"
+                ;;
+
+            # powerpc64
+            *ppc64*|*powerpc64*|*powerpc*)
+                arch="ppc64"
+                kb="true"
+                ;;
+            *)
+                arch=""
+                ;;
+        esac
+        #Enable kernal boot for powerpc64 and create a powerpc32 symlink iso
+        if [ "$arch" = "ppc64" ]; then
+            oefi="$(7z l -ba "iso/${name}.iso" | awk 'toupper(substr($1,1,1)) == "D" || toupper(substr($3,1,1)) == "D" { max = (toupper(substr($1,1,1)) != "D" ? 3 : 1); for (i=1; i<=max && i<NF; i++) $i=""; sub(/^[[:space:]]+/, ""); print }' | sed 's|^[^/]|/&|' | grep -vEi '^/(install|boot|efi)[^/]*/e500mc(/|$)' | grep -vEi '^/(install|boot|efi)[^/]*/(powerpc64|ppc64)(-[a-z0-9]+)?(/|$)' | grep -Ei '^/(install|boot|efi)[^/]*/(powerpc|ppc|pmac|chrp)(32)?(-[a-z0-9]+)?(/|$)')"
+            if [ ! -z "$oefi" ]; then
+                echo "ppc32 found: $oefi"
+                ln -sfn "${name}.iso" "iso/${name}-ppc32.iso"
+            fi
+        fi
+    fi
+done
+
 #install cows
 for file in "iso"/*.iso; do
     if [ ! -f "$file" ]; then
@@ -146,6 +186,7 @@ for file in "iso"/*.iso; do
             # powerpc64
             *ppc64*|*powerpc64*|*powerpc*)
                 arch="ppc64"
+                kb="true"
                 ;;
 
             # IBM Z
@@ -198,16 +239,6 @@ for file in "iso"/*.iso; do
                 if [ -z "$oefi" ]; then
                     kb="true"
                 fi
-            fi
-        fi
-
-        #Enable kernal boot for powerpc64 and create a powerpc32 symlink iso
-        if [ "$arch" = "ppc64" ]; then
-            kb="true"
-            oefi="$(7z l -ba "iso/${name}.iso" | awk 'toupper(substr($1,1,1)) == "D" || toupper(substr($3,1,1)) == "D" { max = (toupper(substr($1,1,1)) != "D" ? 3 : 1); for (i=1; i<=max && i<NF; i++) $i=""; sub(/^[[:space:]]+/, ""); print }' | sed 's|^[^/]|/&|' | grep -vEi '^/(install|boot|efi)[^/]*/e500mc(/|$)' | grep -vEi '^/(install|boot|efi)[^/]*/(powerpc64|ppc64)(-[a-z0-9]+)?(/|$)' | grep -Ei '^/(install|boot|efi)[^/]*/(powerpc|ppc|pmac|chrp)(32)?(-[a-z0-9]+)?(/|$)')"
-            if [ ! -z "$oefi" ]; then
-                echo "ppc32 found: $oefi"
-                ln -sfn "${name}.iso" "iso/${name}-ppc32.iso"
             fi
         fi
         
