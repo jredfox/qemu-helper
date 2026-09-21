@@ -73,7 +73,6 @@ if ! command -v qemu-system-ppc64le >/dev/null 2>&1; then
         qppc64le="$(dirname "$qemu_system_ppc64")/qemu-system-ppc64le"
         echo "creating symlink $qppc64le -> qemu-system-ppc64"
         sudo ln -sfn "qemu-system-ppc64" "$qppc64le"
-        sudo chmod +x "$qppc64le"
     fi
 fi
 #make install_dir absolute
