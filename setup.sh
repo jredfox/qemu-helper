@@ -66,6 +66,13 @@ if ! output=$(qemu-img "--version" >/dev/null 2>&1); then
         exit 1
     fi
 fi
+#create qemu-system-ppc64le symlink if it does not exist
+if ! command -v "qemu-system-ppc64le" >/dev/null 2>&1; then
+    qemu_ppc64="$(command -v "qemu-system-ppc64" 2>/dev/null)"
+    if [ ! -z "$qemu_ppc64" ]; then
+        sudo ln -sn "$qemu_ppc64" "$(dirname "$qemu_ppc64")/qemu-system-ppc64le"
+    fi
+fi
 #make install_dir absolute
 mkdir -p "$install_dir"
 install_dir="$(realpath "$install_dir")"
