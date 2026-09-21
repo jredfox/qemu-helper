@@ -114,7 +114,6 @@ for file in "iso"/*.iso; do
             ;;
     esac
     
-    #Enable kernal boot for powerpc64 and create a powerpc32 symlink iso
     if [ "$arch" = "ppc64" ]; then
         #prevent accidental overwrite of similar ISO files
         if [ ! -f "$lnk_name" ] || [ -L "$lnk_name" ]; then
