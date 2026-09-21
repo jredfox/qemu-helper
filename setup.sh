@@ -99,14 +99,11 @@ for file in "iso"/*.iso; do
             # powerpc32
             *ppc32*|*ppc?32*|*powerpc32*|*powerpc?32*|*[!a-z0-9]ppc[!a-z0-9]*|ppc[!a-z0-9]*|*[!a-z0-9]ppc|ppc)
                 arch="ppc32"
-                bits32="true"
-                qcore32="$qcoreppc32"
                 ;;
 
             # powerpc64
             *ppc64*|*powerpc64*|*powerpc*)
                 arch="ppc64"
-                kb="true"
                 ;;
             *)
                 arch=""
