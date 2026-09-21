@@ -200,6 +200,16 @@ for file in "iso"/*.iso; do
                 fi
             fi
         fi
+
+        #Enable kernal boot for powerpc64 and create a powerpc32 symlink iso
+        if [ "$arch" = "ppc64" ]; then
+            kb="true"
+            oefi="$(7z l -ba "iso/${name}.iso" | awk 'toupper(substr($1,1,1)) == "D" || toupper(substr($3,1,1)) == "D" { max = (toupper(substr($1,1,1)) != "D" ? 3 : 1); for (i=1; i<=max && i<NF; i++) $i=""; sub(/^[[:space:]]+/, ""); print }' | sed 's|^[^/]|/&|' | grep -vEi '^/(install|boot|efi)[^/]*/e500mc(/|$)' | grep -vEi '^/(install|boot|efi)[^/]*/(powerpc64|ppc64)(-[a-z0-9]+)?(/|$)' | grep -Ei '^/(install|boot|efi)[^/]*/(powerpc|ppc|pmac|chrp)(32)?(-[a-z0-9]+)?(/|$)')"
+            if [ ! -z "$oefi" ]; then
+                echo "ppc32 found: $oefi"
+                ln -sf "iso/${name}.iso" "iso/${name}-ppc32.iso"
+            fi
+        fi
         
         if [ "$bits32" = "true" ]; then
             qram="$qram32"
