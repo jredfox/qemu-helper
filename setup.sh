@@ -86,7 +86,7 @@ fi
 
 #create powerpc32 symlinks
 for file in "iso"/*.iso; do
-    if [ ! -f "$file" ] || [ -L "$file" ] ; then
+    if [ ! -f "$file" ] || [ -L "$file" ]; then
         continue
     fi
     name=$(basename "$file")
