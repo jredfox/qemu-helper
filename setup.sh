@@ -73,8 +73,11 @@ if [ ! -z "$qemu_system_ppc64" ]; then
     if ! command -v qemu-system-ppc64le >/dev/null 2>&1; then
         dir_ppc64="$(dirname "$qemu_system_ppc64")"
         qppc64le="$dir_ppc64/qemu-system-ppc64le"
-        #TODO: check macOS timestamps
-        sudo cp -a "$dir_ppc64/qemu-system-ppc64el" "$qppc64le" >/dev/null 2>&1
+        qppc64el="$dir_ppc64/qemu-system-ppc64el"
+        if [ -f "$qppc64el" ]; then
+            #TODO: check macOS timestamps
+            sudo cp -a "$qppc64el" "$qppc64le" >/dev/null 2>&1
+        fi
         if ! command -v qemu-system-ppc64le >/dev/null 2>&1; then
             echo "creating symlink $qppc64le -> qemu-system-ppc64"
             sudo ln -sfn "qemu-system-ppc64" "$qppc64le"
