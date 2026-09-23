@@ -68,9 +68,9 @@ if ! output=$(qemu-img "--version" >/dev/null 2>&1); then
 fi
 
 #repair or create qemu-system-ppc64le symlink if it does not exist
-qemu_system_ppc64="$(command -v qemu-system-ppc64 2>/dev/null)"
-if [ ! -z "$qemu_system_ppc64" ]; then
-    if ! command -v qemu-system-ppc64le >/dev/null 2>&1; then
+if ! command -v qemu-system-ppc64le >/dev/null 2>&1; then
+    qemu_system_ppc64="$(command -v qemu-system-ppc64 2>/dev/null)"
+    if [ ! -z "$qemu_system_ppc64" ]; then
         dir_ppc64="$(dirname "$qemu_system_ppc64")"
         qppc64le="$dir_ppc64/qemu-system-ppc64le"
         qppc64el="$dir_ppc64/qemu-system-ppc64el"
