@@ -467,16 +467,17 @@ if [ "${family}${LAUNCH_CLI_FLAG}" = "$family_target" ]; then
 
   #Devices
   if [ "$family_target" = "x86" ]; then
-    qarg "-usb"
+    q_usb_cmd="-usb"
     q_audio="AC97"
   else
-    qarg "-device \"qemu-xhci\""
+    q_usb_cmd="-device \"qemu-xhci\""
     q_audio="usb-audio"
   fi
+  qarg "$q_usb_cmd"
   qarg "-device \"usb-kbd\""
   qarg "-device \"usb-mouse\""
   if [ "$no_graphics" != "true" ]; then
-    qarg "-device \"${q_audio}\""
+      qarg "-device \"${q_audio}\""
   fi
   
   #Launch QEMU with arguments
@@ -495,6 +496,8 @@ q_netdev="user,id=net0"
 q_netdev_device="virtio-net-device"
 q_rng="virtio-rng-pci"
 q_graphics="false"
+q_audio="usb-audio"
+q_usb_cmd="-device \"qemu-xhci\""
 case "$arch" in
   aarch64|arm)
     q_cpu="cortex-a72"
@@ -502,12 +505,6 @@ case "$arch" in
       q_cpu="cortex-a15"
     fi
     q_machine="virt,gic-version=2"
-    #Devices
-    qdrive "-device \"qemu-xhci\""
-    qdrive "-device \"usb-kbd\""
-    qdrive "-device \"usb-tablet\""
-    qdrive "-device \"virtio-keyboard-pci\""
-    qdrive "-device \"virtio-mouse-pci\""
     #Drives
     if [ "$iso_boot" = "true" ]; then
       qdrive "-device \"virtio-scsi-device,id=scsi0\""
@@ -548,8 +545,6 @@ case "$arch" in
     if [ "$iso_boot" = "true" ]; then
       qdrive "-boot d"
     fi
-    qdrive "-device \"usb-kbd\""
-    qdrive "-device \"usb-mouse\""
     qdrive "-prom-env 'auto-boot?=true'"
     qdrive "-prom-env 'vga-ndrv?=true'"
     qdrive "-prom-env 'boot-args=-v'"
@@ -583,6 +578,8 @@ case "$arch" in
       q_rng=""
       q_intel_vga="std"
     fi
+    q_audio="AC97"
+    q_usb_cmd="-usb"
     if [ "$iso_boot" = "true" ]; then
       qdrive "-cdrom \"$iso\""
     fi
@@ -640,6 +637,14 @@ if [ "$q_graphics" != "true" ]; then
   printf '\033]0;%s\007' "$title"
 else
   qarg "-name \"$title\""
+fi
+
+#Devices
+qarg "$q_usb_cmd"
+qarg "-device \"usb-kbd\""
+qarg "-device \"usb-mouse\""
+if [ "$q_graphics" = "true" ]; then
+    qarg "-device \"${q_audio}\""
 fi
 
 #Disable rebooting
