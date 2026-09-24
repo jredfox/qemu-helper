@@ -464,6 +464,20 @@ if [ "${family}${LAUNCH_CLI_FLAG}" = "$family_target" ]; then
   if [ "$no_reboot" = "true" ]; then
     qarg "-no-reboot"
   fi
+
+  #Devices
+  if [ "$family_target" = "x86" ]; then
+    qarg "-usb"
+    q_audio="AC97"
+  else
+    qarg "-device \"qemu-xhci\""
+    q_audio="usb-audio"
+  fi
+  qarg "-device \"usb-kbd\""
+  qarg "-device \"usb-mouse\""
+  if [ "$no_graphics" != "true" ]; then
+    qarg "-device \"${q_audio}\""
+  fi
   
   #Launch QEMU with arguments
   printf "%s\n\n" "qemu-system-${arch}${args}" >"$run_tmp"
