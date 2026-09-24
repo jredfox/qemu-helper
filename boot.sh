@@ -26,6 +26,7 @@ if [ "$iso_boot" = "true" ]; then
 else
   sname=""
 fi
+title="${title:-$dname}"
 #create the temp dir
 mkdir -p "tmp"
 run_tmp="tmp/${dname}${sname}.sh"
@@ -461,6 +462,9 @@ if [ "${family}${LAUNCH_CLI_FLAG}" = "$family_target" ]; then
   if [ "$no_reboot" = "true" ]; then
     qarg "-no-reboot"
   fi
+
+  #Add title
+  qarg "-name \"$title\""
   
   #Launch QEMU with arguments
   printf "%s\n\n" "qemu-system-${arch}${args}" >"$run_tmp"
@@ -620,6 +624,9 @@ args="${args}${qdrives}"
 #Disable Graphics
 if [ "$q_graphics" != "true" ]; then
   qarg "-nographic"
+  printf '\033]0;%s\007' "$title"
+else
+  qarg "-name \"$title\""
 fi
 
 #Disable rebooting
