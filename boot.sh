@@ -27,6 +27,12 @@ else
   sname=""
 fi
 title="${title:-$dname}"
+if [ -z "$q_audio" ]; then
+  q_audio="usb-audio"
+fi
+if [ -z "${q_mouse}" ]; then
+  q_mouse="usb-mouse"
+fi
 #create the temp dir
 mkdir -p "tmp"
 run_tmp="tmp/${dname}${sname}.sh"
@@ -468,14 +474,12 @@ if [ "${family}${LAUNCH_CLI_FLAG}" = "$family_target" ]; then
   #Devices
   if [ "$family_target" = "x86" ]; then
     q_usb_cmd="-usb"
-    q_audio="AC97"
   else
     q_usb_cmd="-device \"qemu-xhci\""
-    q_audio="usb-audio"
   fi
   qarg "$q_usb_cmd"
   qarg "-device \"usb-kbd\""
-  qarg "-device \"usb-tablet\""
+  qarg "-device \"${q_mouse}\""
   if [ "$no_graphics" != "true" ]; then
       qarg "-device \"${q_audio}\""
   fi
@@ -496,7 +500,6 @@ q_netdev="user,id=net0"
 q_netdev_device="virtio-net-device"
 q_rng="virtio-rng-pci"
 q_graphics="false"
-q_audio="usb-audio"
 q_usb_cmd="-device \"qemu-xhci\""
 case "$arch" in
   aarch64|arm)
@@ -578,7 +581,6 @@ case "$arch" in
       q_rng=""
       q_intel_vga="std"
     fi
-    q_audio="AC97"
     q_usb_cmd="-usb"
     if [ "$iso_boot" = "true" ]; then
       qdrive "-cdrom \"$iso\""
@@ -642,7 +644,7 @@ fi
 #Devices
 qarg "$q_usb_cmd"
 qarg "-device \"usb-kbd\""
-qarg "-device \"usb-tablet\""
+qarg "-device \"${q_mouse}\""
 if [ "$q_graphics" = "true" ]; then
     qarg "-device \"${q_audio}\""
 fi
