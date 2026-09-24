@@ -446,6 +446,7 @@ if [ "${family}${LAUNCH_CLI_FLAG}" = "$family_target" ]; then
   #Handle LightWeight Desktop Enviorment
   if [ "$no_graphics" = "true" ]; then
     qarg "-nographic"
+    printf '\033]0;%s\007' "$title"
   else
     if [ "$LWDE" = "true" ]; then
       if qemu-system-$arch -device help 2>&1 | grep -qw "qxl-vga"; then
@@ -456,15 +457,13 @@ if [ "${family}${LAUNCH_CLI_FLAG}" = "$family_target" ]; then
         qarg "-device virtio-gpu-pci"
       fi
     fi
+    qarg "-name \"$title\""
   fi
 
   #Disable rebooting
   if [ "$no_reboot" = "true" ]; then
     qarg "-no-reboot"
   fi
-
-  #Add title
-  qarg "-name \"$title\""
   
   #Launch QEMU with arguments
   printf "%s\n\n" "qemu-system-${arch}${args}" >"$run_tmp"
