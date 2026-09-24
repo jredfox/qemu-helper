@@ -475,7 +475,7 @@ if [ "${family}${LAUNCH_CLI_FLAG}" = "$family_target" ]; then
   fi
   qarg "$q_usb_cmd"
   qarg "-device \"usb-kbd\""
-  qarg "-device \"usb-mouse\""
+  qarg "-device \"usb-tablet\""
   if [ "$no_graphics" != "true" ]; then
       qarg "-device \"${q_audio}\""
   fi
@@ -642,7 +642,7 @@ fi
 #Devices
 qarg "$q_usb_cmd"
 qarg "-device \"usb-kbd\""
-qarg "-device \"usb-mouse\""
+qarg "-device \"usb-tablet\""
 if [ "$q_graphics" = "true" ]; then
     qarg "-device \"${q_audio}\""
 fi
