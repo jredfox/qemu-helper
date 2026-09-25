@@ -31,7 +31,7 @@ if [ -z "$q_audio" ]; then
   q_audio="usb-audio"
 fi
 if [ -z "${q_mouse}" ]; then
-  q_mouse="usb-mouse"
+  q_mouse="usb-tablet"
 fi
 #create the temp dir
 mkdir -p "tmp"
