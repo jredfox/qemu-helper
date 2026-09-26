@@ -48,7 +48,7 @@ if ! output=$(qemu-img "--version" >/dev/null 2>&1); then
             read -r result
             case "$result" in
                 [Yy]*) 
-                    sudo apt install -y python3-virt-firmware virt-fw-vars
+                    sudo apt install -y python3-virt-firmware
                     ;;
             esac
         fi
@@ -148,7 +148,6 @@ done
 #install cows
 for file in "iso"/*.iso; do
     if [ ! -f "$file" ]; then
-        echo "Skipping non file: $file"
         continue
     fi
     name=$(basename "$file")
