@@ -1,12 +1,43 @@
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 #include <ctype.h>
 #include <errno.h>
 #include <string.h>
+
+//changes the icon directly requires the icon to already be in ARGB format, length is (width * height) + 2 of the icon
+void change_icon(Display *disp, Window window, unsigned long ARGB_BUFFER[], int length) {
+	XChangeProperty(disp, window,
+				XInternAtom(disp, "_NET_WM_ICON", False),
+				XInternAtom(disp, "CARDINAL", False),
+				32, PropModeReplace, (const unsigned char*) ARGB_BUFFER, length);
+	XFlush(disp);
+}
+
+unsigned long* getARGB(char* png_file, int* size) {
+    int w, h, channels;
+    uint8_t* rgba = stbi_load(png_file, &w, &h, &channels, 4); // force 4 channels
+    *size = w * h;
+    unsigned long *argb = (unsigned long *) malloc(*size * sizeof(unsigned long));
+    for (int i = 0; i < (*size); i++) {
+        uint8_t r = rgba[i*4 + 0];
+        uint8_t g = rgba[i*4 + 1];
+        uint8_t b = rgba[i*4 + 2];
+        uint8_t a = rgba[i*4 + 3];
+        unsigned long pixel = (unsigned long) ((uint32_t)a << 24) | ((uint32_t)r << 16) | ((uint32_t)g << 8) | b;
+        //printf("%lu, ARGB(%u, %u, %u, %u)\n", pixel, a, r, g, b);
+        argb[i] = pixel;
+    }
+    stbi_image_free(rgba);
+    return argb;
+}
 
 static long get_property(Display *dpy, Window w, Atom prop, Atom req_type,
                           unsigned char **out_data) {
@@ -76,7 +107,7 @@ static int isVisible(Display *dpy, Window w)
     return 1;
 }
 
-void walk_windows(Display *dpy, Window window, unsigned long pid) //, char* title, bool ignore_case, bool child)
+void walk_windows(Display *dpy, Window window, unsigned long* image_buff, int size, unsigned long pid) //, char* title, bool ignore_case, bool child)
 {
     Window root, parent;
     Window *children = NULL;
@@ -101,10 +132,11 @@ void walk_windows(Display *dpy, Window window, unsigned long pid) //, char* titl
     if (pid != 0 && pid == pid_window)
     {
 		printf("Window Found: 0x%lx Window title %s\n", window, title_window);
+		change_icon(dpy, window, image_buff, size);
     }
 
     for (unsigned int i = 0; i < nchildren; ++i) {
-        walk_windows(dpy, children[i], pid);
+        walk_windows(dpy, children[i], image_buff, size, pid);
     }
 
     if (children)
@@ -113,7 +145,10 @@ void walk_windows(Display *dpy, Window window, unsigned long pid) //, char* titl
 
 //change_icon --pid -p <pid> --title -t <regex> --ignore_case -i --child -c --set_title "title"
 int main(int argc, char **argv) {
-	unsigned long pid_target = strtoul(argv[1], NULL, 10);
+	int size = 0;
+	unsigned long* icon_buff = getARGB(argv[1], &size);
+	unsigned long pid_target = strtoul(argv[2], NULL, 10);
+	size += 2;
 	
 	//X11 Display Server
 	Display *display = XOpenDisplay(NULL);
@@ -125,23 +160,14 @@ int main(int argc, char **argv) {
     //Walk through all windows of all screens and all children of the default root window
     int nscreens = ScreenCount(display);
     Window rootDisplay = DefaultRootWindow(display);
-    walk_windows(display, rootDisplay, pid_target);
+    walk_windows(display, rootDisplay, icon_buff, size, pid_target);
     for (int screen = 0; screen < nscreens; ++screen) {
         Window root = RootWindow(display, screen);
         if (root == rootDisplay) {
         	continue;
         }
-        walk_windows(display, root, pid_target);
+        walk_windows(display, root, icon_buff, size, pid_target);
     }
 
     XCloseDisplay(display);
-}
-
-//changes the icon directly requires the icon to already be in ARGB format, length is (width * height) + 2 of the icon
-void change_icon(Display *disp, Window window, unsigned long ARGB_BUFFER[], int length) {
-	XChangeProperty(disp, window,
-				XInternAtom(disp, "_NET_WM_ICON", False),
-				XInternAtom(disp, "CARDINAL", False),
-				32, PropModeReplace, (const unsigned char*) ARGB_BUFFER, length);
-	XFlush(disp);
 }
