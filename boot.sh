@@ -415,10 +415,18 @@ if [ "$no_acpi" = "true" ]; then
   acpi=",acpi=off"
 fi
 
+#Enable Graphics
+if [ -z "no_graphics" ]; then
+  if [ "$family" = "$family_target" ] || [ "$family_target" = "x86" ]; then
+    no_graphics="false"
+  else
+    no_graphics="true"
+  fi
+fi
+
 q_netdev="user,id=net0"
 q_netdev_device="virtio-net-device"
 q_rng="virtio-rng-pci"
-q_graphics="false"
 q_usb_cmd="-device \"qemu-xhci\""
 case "$arch" in
   aarch64|arm)
@@ -500,6 +508,10 @@ case "$arch" in
       q_rng=""
       q_intel_vga="std"
     fi
+    if [ "$family" = "x86" ]; then
+      q_machine=""
+      q_cpu="max"
+    fi
     q_usb_cmd="-usb"
     if [ "$iso_boot" = "true" ]; then
       qdrive "-cdrom \"$iso\""
@@ -508,10 +520,11 @@ case "$arch" in
     if [ "$iso_boot" = "true" ]; then
       qdrive "-boot d"
     fi
-    if [ "$kb" != "true" ]; then
-      q_graphics="true"
-      qdrive "-vga \"${q_intel_vga}\""
-      qdrive "-display \"default\""
+    if [ "$no_graphics" != "true" ]; then
+      if [ "$family" != "x86" ]; then
+        qdrive "-vga \"${q_intel_vga}\""
+        qdrive "-display \"default\""
+      fi
     fi
     ;;
   *)
@@ -519,6 +532,24 @@ case "$arch" in
     exit 1
     ;;
 esac
+
+#Enable KVM
+if qemu-system-$arch -accel help 2>&1 | grep -qw kvm; then
+      qarg "-enable-kvm"
+      q_cpu="host"
+fi
+
+if [ "$no_graphics" != "true" ]; then
+  qconsole="$qconsole_gui"
+
+  #Enable LWDE
+  if [ "$LWDE" = "true" ]; then
+      if qemu-system-$arch -device help 2>&1 | grep -qw "qxl-vga"; then
+        echo "qemu-system-$arch has LWDE"
+        qarg "-device qxl-vga,vram_size=134217728"
+      fi
+  fi
+fi
 
 qarg "-cpu \"${q_cpu}\""
 qarg "-machine \"${q_machine}${acpi}\""
@@ -553,7 +584,7 @@ fi
 args="${args}${qdrives}"
 
 #Disable Graphics
-if [ "$q_graphics" != "true" ]; then
+if [ "$no_graphics" = "true" ]; then
   qarg "-nographic"
   printf '\033]0;%s\007' "$title"
 else
@@ -564,7 +595,7 @@ fi
 qarg "$q_usb_cmd"
 qarg "-device \"usb-kbd\""
 qarg "-device \"${q_mouse}\""
-if [ "$q_graphics" = "true" ]; then
+if [ "$no_graphics" != "true" ]; then
     qarg "-device \"${q_audio}\""
 fi
 
