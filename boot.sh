@@ -542,7 +542,6 @@ fi
 
 if [ "$no_graphics" != "true" ]; then
   qconsole="$qconsole_gui"
-
   #Enable LWDE
   if [ "$LWDE" = "true" ]; then
       if qemu-system-$arch -device help 2>&1 | grep -qw "qxl-vga"; then
@@ -550,6 +549,9 @@ if [ "$no_graphics" != "true" ]; then
         qarg "-device qxl-vga,vram_size=134217728"
       fi
   fi
+  qarg "-name \"$title\""
+else
+  printf '\033]0;%s\007' "$title"
 fi
 
 qarg "-cpu \"${q_cpu}\""
@@ -586,20 +588,17 @@ fi
 #Merge arguments
 args="${args}${qdrives}"
 
-#Disable Graphics
-if [ "$no_graphics" = "true" ]; then
-  qarg "-nographic"
-  printf '\033]0;%s\007' "$title"
-else
-  qarg "-name \"$title\""
-fi
-
 #Devices
 qarg "$q_usb_cmd"
 qarg "-device \"usb-kbd\""
 qarg "-device \"${q_mouse}\""
 if [ "$no_graphics" != "true" ]; then
     qarg "-device \"${q_audio}\""
+fi
+
+#Disable Graphics
+if [ "$no_graphics" = "true" ]; then
+  qarg "-nographic"
 fi
 
 #Disable rebooting
