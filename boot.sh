@@ -416,7 +416,7 @@ if [ "$no_acpi" = "true" ]; then
 fi
 
 #Enable Graphics
-if [ -z "no_graphics" ]; then
+if [ -z "$no_graphics" ]; then
   if [ "$family" = "$family_target" ] || [ "$family_target" = "x86" ]; then
     no_graphics="false"
   else
