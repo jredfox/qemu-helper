@@ -508,7 +508,7 @@ case "$arch" in
       q_rng=""
       q_intel_vga="std"
     fi
-    #if the family and the host match x86 do not add the machine and set the defualt cpu to max
+    #if host family and family_target match do not add the machine and set cpu to max
     if [ "$family" = "x86" ]; then
       q_machine=""
       q_cpu="max"
