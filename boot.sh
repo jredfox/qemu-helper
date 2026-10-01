@@ -542,7 +542,7 @@ fi
 
 if [ "$no_graphics" != "true" ]; then
   qconsole="$qconsole_gui"
-
+  
   #Set the Display Window
   if [ -z "$gpu_display" ]; then
     #NVIDIA breaks with GTK we need to use sdl
@@ -561,7 +561,7 @@ if [ "$no_graphics" != "true" ]; then
   if [ -z "$window_size" ]; then
     window_size=",window-size=$window_size"
   fi
-
+  
   #3D GPU Acceleration
   if [ -z "$gpu_3d" ] || [ "$gpu_3d" = "true" ] || [ "$gpu_3d_soft" = "true" ]; then
       #Set the GPU device
@@ -575,7 +575,7 @@ if [ "$no_graphics" != "true" ]; then
       qdrive "-device \"${gpu_device}${xres}${yres}\""
       qdrive "-display \"${gpu_display}${gpu_display_options}${window_size},gl=on\""
   fi
-
+  
   #2D Acceleration with opengl support
   if [ "$gpu_2d" = "true" ]; then
     if qemu-system-$arch -device help 2>&1 | grep -qw "qxl-vga"; then
