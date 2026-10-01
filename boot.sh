@@ -583,14 +583,14 @@ if [ "$no_graphics" != "true" ]; then
       qdrive "-display \"${gpu_display}${gpu_display_options}${window_size},gl=on\""
   fi
 
-  #2D Acceleration with opengl support
+  #2D GPU Acceleration with a chance of 3D software rendering
   if [ "$gpu_2d" = "true" ]; then
     if qemu-system-$arch -device help 2>&1 | grep -qw "qxl-vga"; then
       if [ -z "$qxl_vram" ]; then
         qxl_vram="134217728"
       fi
       qdrive "-vga none"
-      qdrive "-device qxl-vga,vram_size=${qxl_vram}${xres}${yres}"
+      qdrive "-device \"qxl-vga,vram_size=${qxl_vram}${xres}${yres}\""
       qdrive "-display \"${gpu_display}${gpu_display_options}${window_size}\""
     else
       echo "ERROR: qxl-vga isn't found for qemu-system-$arch" >&2
