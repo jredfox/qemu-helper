@@ -542,6 +542,27 @@ fi
 
 if [ "$no_graphics" != "true" ]; then
   qconsole="$qconsole_gui"
+
+  #Set the Display Window
+  if [ -z "$gpu_display" ]; then
+    #NVIDIA breaks with GTK we need to use sdl
+    gpu_vendor_bad="$(glxinfo -B 2>/dev/null | grep -iE 'OpenGL vendor|OpenGL renderer' | grep -iv 'NVIDIA')"
+    if [ -z "$gpu_vendor_bad" ]; then
+      gpu_display="sdl"
+    else
+      gpu_display="gtk"
+      if [ -z "$gpu_display_options" ]; then
+        gpu_display_options=",zoom-to-fit=off"
+      fi
+    fi
+  fi
+  
+  #Set Window Size
+  if [ -z "$window_size" ]; then
+    window_size=",window-size=$window_size"
+  fi
+
+  #3D GPU Acceleration
   if [ -z "$gpu_3d" ] || [ "$gpu_3d" = "true" ] || [ "$gpu_3d_soft" = "true" ]; then
       #Set the GPU device
       if [ -z "$gpu_device" ]; then
@@ -550,35 +571,16 @@ if [ "$no_graphics" != "true" ]; then
           gpu_device="virtio-vga"
         fi
       fi
-
-      #Set the Display Window
-      if [ -z "$gpu_display" ]; then
-        #NVIDIA breaks with GTK we need to use sdl
-        gpu_vendor_bad="$(glxinfo -B 2>/dev/null | grep -iE 'OpenGL vendor|OpenGL renderer' | grep -iv 'NVIDIA')"
-        if [ -z "$gpu_vendor_bad" ]; then
-          gpu_display="sdl"
-        else
-          gpu_display="gtk"
-          if [ -z "$gpu_display_options" ]; then
-            gpu_display_options=",zoom-to-fit=off"
-          fi
-        fi
-      fi
-
-      #Set Window Size
-      if [ -z "$window_size" ]; then
-        window_size=",window-size=$window_size"
-      fi
-
       qdrive "-vga none"
       qdrive "-device \"${gpu_device}${xres}${yres}\""
       qdrive "-display \"${gpu_display}${gpu_display_options}${window_size},gl=on\""
   fi
+
   #2D Acceleration with opengl support
   if [ "$gpu_2d" = "true" ]; then
     if qemu-system-$arch -device help 2>&1 | grep -qw "qxl-vga"; then
-      echo "qemu-system-$arch has gpu_2d"
       qdrive "-device qxl-vga,vram_size=134217728${xres}${yres}"
+      qdrive "-display \"${gpu_display}${gpu_display_options}${window_size}\""
     fi
   fi
   qarg "-name \"$title\""
