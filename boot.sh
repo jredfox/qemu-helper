@@ -535,19 +535,29 @@ case "$arch" in
 esac
 
 #Enable KVM
-if qemu-system-$arch -accel help 2>&1 | grep -qw kvm; then
-      qarg "-enable-kvm"
+if qemu-system-$arch -accel help 2>/dev/null | grep -qw kvm; then
+      qdrive "-enable-kvm"
       q_cpu="host"
 fi
 
 if [ "$no_graphics" != "true" ]; then
   qconsole="$qconsole_gui"
-  #Enable LWDE
-  if [ "$LWDE" = "true" ]; then
-      if qemu-system-$arch -device help 2>&1 | grep -qw "qxl-vga"; then
-        echo "qemu-system-$arch has LWDE"
-        qarg "-device qxl-vga,vram_size=134217728"
+  if [ -z "$gpu_3d" ] || [ "$gpu_3d" = "true" ]; then
+      gpu_device="virtio-vga-gl"
+      gpu_vendor_bad="$(glxinfo -B 2>/dev/null | grep -iE 'OpenGL vendor|OpenGL renderer' | grep -iv 'NVIDIA')"
+      #NVIDIA isn't the primary renderer it's safe to use GPU 3D Acceleration
+      if [ -z "$gpu_vendor_bad" ]; then
+        qdrive "-vga none"
+        qdrive "-device \"virtio-vga-gl,xres=1280,yres=800\""
+        qdrive "-display \"sdl,gl=on\""
       fi
+  fi
+  #2D Acceleration with opengl support
+  if [ "$gpu_2d" = "true" ]; then
+    if qemu-system-$arch -device help 2>&1 | grep -qw "qxl-vga"; then
+      echo "qemu-system-$arch has LWDE"
+      qdrive "-device qxl-vga,vram_size=134217728"
+    fi
   fi
   qarg "-name \"$title\""
 else
