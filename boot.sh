@@ -554,7 +554,7 @@ if [ "$no_graphics" != "true" ]; then
   if [ -z "$gpu_display" ]; then
     #NVIDIA breaks with GTK we need to use sdl
     gpu_vendor_bad="$(glxinfo -B 2>/dev/null | grep -iE 'OpenGL vendor|OpenGL renderer' | grep -iv 'NVIDIA')"
-    if [ -z "$gpu_vendor_bad" ]; then
+    if [ -z "$gpu_vendor_bad" ] && [ "$gpu_2d" != "true" ]; then
       gpu_display="sdl"
     else
       gpu_display="gtk"
