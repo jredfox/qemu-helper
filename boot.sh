@@ -15,8 +15,8 @@ fi
 if [ -z "$qcore" ]; then
   qcore="4"
 fi
-if [ -z "$LWDE" ]; then
-  LWDE="false"
+if [ -z "$gpu_2d" ]; then
+  gpu_2d="false"
 fi
 if [ "$iso_boot" = "true" ]; then
   sname="_iso"
@@ -577,7 +577,7 @@ if [ "$no_graphics" != "true" ]; then
   #2D Acceleration with opengl support
   if [ "$gpu_2d" = "true" ]; then
     if qemu-system-$arch -device help 2>&1 | grep -qw "qxl-vga"; then
-      echo "qemu-system-$arch has LWDE"
+      echo "qemu-system-$arch has gpu_2d"
       qdrive "-device qxl-vga,vram_size=134217728${xres}${yres}"
     fi
   fi

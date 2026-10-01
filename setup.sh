@@ -160,7 +160,7 @@ for file in "iso"/*.iso; do
         bootisosh="boot/${name}_iso.sh"
         
         #Set Local Variables Initial State per iteration
-        LWDE="false"
+        gpu_2d="false"
         bits32="false"
         no_acpi="false"
         kb="false"
@@ -170,7 +170,7 @@ for file in "iso"/*.iso; do
         #Enable LightWeight Deskop Enviorment Flag
         case "$lname" in
             *xfce*|*[!a-z]mate*|mate*|*lxqt*|*lxde*|*budgie*|*lubuntu*|*xubuntu*)
-                LWDE="true"
+                gpu_2d="true"
                 ;;
         esac
 
@@ -269,9 +269,9 @@ for file in "iso"/*.iso; do
         fi
         echo "cd \"${install_dir}\"" >"$bootisosh"
         echo "cd \"${install_dir}\"" >"$bootsh"
-        if [ "$LWDE" = "true" ]; then
-            echo "export LWDE=\"true\"" >>"$bootisosh"
-            echo "export LWDE=\"true\"" >>"$bootsh"
+        if [ "$gpu_2d" = "true" ]; then
+            echo "export gpu_2d=\"true\"" >>"$bootisosh"
+            echo "export gpu_2d=\"true\"" >>"$bootsh"
         fi
         if [ "$kb" = "true" ]; then
             echo "export kb=\"true\"" >>"$bootisosh"
