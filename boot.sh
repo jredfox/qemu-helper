@@ -558,9 +558,12 @@ if [ "$no_graphics" != "true" ]; then
       gpu_display="sdl"
     else
       gpu_display="gtk"
-      if [ -z "$gpu_display_options" ]; then
-        gpu_display_options=",zoom-to-fit=off"
-      fi
+    fi
+  fi
+
+  if [ -z "$gpu_display_options" ]; then
+    if [ "$gpu_display" = "gtk" ]; then
+      gpu_display_options=",zoom-to-fit=off"
     fi
   fi
 
