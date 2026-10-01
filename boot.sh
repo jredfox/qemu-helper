@@ -564,11 +564,6 @@ if [ "$no_graphics" != "true" ]; then
     fi
   fi
 
-  #Set Window Size
-  if [ ! -z "$window_size" ]; then
-    window_size=",window-size=${window_size}"
-  fi
-
   #3D GPU Acceleration
   if { [ -z "$gpu_3d" ] && [ "$gpu_2d" != "true" ]; } || [ "$gpu_3d" = "true" ] || [ "$gpu_3d_soft" = "true" ]; then
       #Set the GPU device
@@ -580,7 +575,7 @@ if [ "$no_graphics" != "true" ]; then
       fi
       qdrive "-vga none"
       qdrive "-device \"${gpu_device}${xres}${yres}\""
-      qdrive "-display \"${gpu_display}${gpu_display_options}${window_size},gl=on\""
+      qdrive "-display \"${gpu_display}${gpu_display_options},gl=on\""
   fi
 
   #2D GPU Acceleration with a chance of 3D software rendering
@@ -591,7 +586,7 @@ if [ "$no_graphics" != "true" ]; then
       fi
       qdrive "-vga none"
       qdrive "-device \"qxl-vga,vram_size=${qxl_vram}${xres}${yres}\""
-      qdrive "-display \"${gpu_display}${gpu_display_options}${window_size}\""
+      qdrive "-display \"${gpu_display}${gpu_display_options}\""
     else
       echo "ERROR: qxl-vga isn't found for qemu-system-$arch" >&2
     fi
