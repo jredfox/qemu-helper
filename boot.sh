@@ -543,6 +543,13 @@ fi
 if [ "$no_graphics" != "true" ]; then
   qconsole="$qconsole_gui"
 
+  if [ "$gpu_3d" = "true" ] || [ "$gpu_3d_soft" = "true" ]; then
+    if [ "$gpu_2d" = "true" ]; then
+      echo "gpu_3d and gpu_2d cannot both be set to true at the same time" 2>&1
+      exit 1
+    fi
+  fi
+
   #Set the Display Window
   if [ -z "$gpu_display" ]; then
     #NVIDIA breaks with GTK we need to use sdl
