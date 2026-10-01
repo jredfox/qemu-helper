@@ -545,7 +545,7 @@ if [ "$no_graphics" != "true" ]; then
 
   if [ "$gpu_3d" = "true" ] || [ "$gpu_3d_soft" = "true" ]; then
     if [ "$gpu_2d" = "true" ]; then
-      echo "gpu_3d and gpu_2d cannot both be set to true at the same time" 2>&1
+      echo "gpu_3d and gpu_2d cannot both be set to true at the same time" >&2
       exit 1
     fi
   fi
