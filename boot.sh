@@ -567,6 +567,12 @@ if [ "$no_graphics" != "true" ]; then
     fi
   fi
 
+  #Set Resolution
+  if [ ! -z "$xres" ]; then
+    xres=",xres=${xres}"
+    yres=",yres=${yres}"
+  fi
+
   #3D GPU Acceleration
   if { [ -z "$gpu_3d" ] && [ "$gpu_2d" != "true" ]; } || [ "$gpu_3d" = "true" ] || [ "$gpu_3d_soft" = "true" ]; then
       #Set the GPU device
