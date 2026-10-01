@@ -570,7 +570,7 @@ if [ "$no_graphics" != "true" ]; then
   fi
 
   #3D GPU Acceleration
-  if [ -z "$gpu_3d" ] && [ "$gpu_2d" != "true" ] || [ "$gpu_3d" = "true" ] || [ "$gpu_3d_soft" = "true" ]; then
+  if { [ -z "$gpu_3d" ] && [ "$gpu_2d" != "true" ]; } || [ "$gpu_3d" = "true" ] || [ "$gpu_3d_soft" = "true" ]; then
       #Set the GPU device
       if [ -z "$gpu_device" ]; then
         gpu_device="virtio-vga-gl"
