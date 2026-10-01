@@ -543,7 +543,7 @@ fi
 if [ "$no_graphics" != "true" ]; then
   qconsole="$qconsole_gui"
 
-  if [ -z "$gpu_3d" ] || [ "$gpu_3d" = "true" ] || [ "$gpu_3d_soft" = "true" ]; then
+  if [ "$gpu_3d" = "true" ] || [ "$gpu_3d_soft" = "true" ]; then
     if [ "$gpu_2d" = "true" ]; then
       echo "gpu_3d and gpu_2d cannot both be set to true at the same time" >&2
       exit 1
@@ -570,7 +570,7 @@ if [ "$no_graphics" != "true" ]; then
   fi
 
   #3D GPU Acceleration
-  if [ -z "$gpu_3d" ] || [ "$gpu_3d" = "true" ] || [ "$gpu_3d_soft" = "true" ]; then
+  if [ -z "$gpu_3d" ] && [ "$gpu_2d" != "true" ] || [ "$gpu_3d" = "true" ] || [ "$gpu_3d_soft" = "true" ]; then
       #Set the GPU device
       if [ -z "$gpu_device" ]; then
         gpu_device="virtio-vga-gl"
