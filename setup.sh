@@ -160,19 +160,11 @@ for file in "iso"/*.iso; do
         bootisosh="boot/${name}_iso.sh"
         
         #Set Local Variables Initial State per iteration
-        gpu_2d="false"
         bits32="false"
         no_acpi="false"
         kb="false"
         checked="false"
         lname="$(printf '%s' "$name" | tr '[:upper:]' '[:lower:]')"
-
-        #Enable LightWeight Deskop Enviorment Flag
-        case "$lname" in
-            *xfce*|*[!a-z]mate*|mate*|*lxqt*|*lxde*|*budgie*|*lubuntu*|*xubuntu*)
-                gpu_2d="true"
-                ;;
-        esac
 
         #Extract the arch from from the ISO and translate the arch aliases to be standard
         case "$lname" in
@@ -269,10 +261,6 @@ for file in "iso"/*.iso; do
         fi
         echo "cd \"${install_dir}\"" >"$bootisosh"
         echo "cd \"${install_dir}\"" >"$bootsh"
-        if [ "$gpu_2d" = "true" ]; then
-            echo "export gpu_2d=\"true\"" >>"$bootisosh"
-            echo "export gpu_2d=\"true\"" >>"$bootsh"
-        fi
         if [ "$kb" = "true" ]; then
             echo "export kb=\"true\"" >>"$bootisosh"
             echo "export kb=\"true\"" >>"$bootsh"
