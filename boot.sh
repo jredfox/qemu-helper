@@ -589,7 +589,7 @@ if [ "$no_graphics" != "true" ]; then
       qdrive "-device qxl-vga,vram_size=134217728${xres}${yres}"
       qdrive "-display \"${gpu_display}${gpu_display_options}${window_size}\""
     else
-      echo "ERROR: qxl-vga isn't found for qemu-system-$arch"
+      echo "ERROR: qxl-vga isn't found for qemu-system-$arch" >&2
     fi
   fi
   qarg "-name \"$title\""
