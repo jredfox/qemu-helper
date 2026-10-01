@@ -15,8 +15,8 @@ fi
 if [ -z "$qcore" ]; then
   qcore="4"
 fi
-if [ -z "$gpu_qxl" ]; then
-  gpu_qxl="false"
+if [ -z "$gpu_2d" ]; then
+  gpu_2d="false"
 fi
 if [ "$iso_boot" = "true" ]; then
   sname="_iso"
@@ -544,8 +544,8 @@ if [ "$no_graphics" != "true" ]; then
   qconsole="$qconsole_gui"
 
   if [ "$gpu_3d" = "true" ] || [ "$gpu_3d_soft" = "true" ]; then
-    if [ "$gpu_qxl" = "true" ]; then
-      echo "gpu_3d and gpu_qxl cannot both be set to true at the same time" >&2
+    if [ "$gpu_2d" = "true" ]; then
+      echo "gpu_3d and gpu_2d cannot both be set to true at the same time" >&2
       exit 1
     fi
   fi
@@ -574,7 +574,7 @@ if [ "$no_graphics" != "true" ]; then
   fi
 
   #3D GPU Acceleration
-  if { [ -z "$gpu_3d" ] && [ "$gpu_qxl" != "true" ]; } || [ "$gpu_3d" = "true" ] || [ "$gpu_3d_soft" = "true" ]; then
+  if { [ -z "$gpu_3d" ] && [ "$gpu_2d" != "true" ]; } || [ "$gpu_3d" = "true" ] || [ "$gpu_3d_soft" = "true" ]; then
       #Set the GPU device
       if [ -z "$gpu_device" ]; then
         gpu_device="virtio-vga-gl"
@@ -588,7 +588,7 @@ if [ "$no_graphics" != "true" ]; then
   fi
 
   #2D GPU Acceleration with a chance of 3D software rendering
-  if [ "$gpu_qxl" = "true" ]; then
+  if [ "$gpu_2d" = "true" ]; then
     if qemu-system-$arch -device help 2>&1 | grep -qw "qxl-vga"; then
       if [ -z "$qxl_vram" ]; then
         qxl_vram="134217728"
