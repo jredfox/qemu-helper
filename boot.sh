@@ -590,9 +590,7 @@ if [ "$no_graphics" != "true" ]; then
   #2D GPU Acceleration with a chance of 3D software rendering
   if [ "$gpu_2d" = "true" ]; then
     if qemu-system-$arch -device help 2>&1 | grep -qw "qxl-vga"; then
-      if [ -z "$qxl_vram" ]; then
-        qxl_vram="134217728"
-      fi
+      qxl_vram="${qxl_vram:-134217728}"
       qdrive "-vga none"
       qdrive "-device \"qxl-vga,vram_size=${qxl_vram}${xres}${yres}\""
       qdrive "-display \"${gpu_display}${gpu_display_options}\""
