@@ -37,12 +37,16 @@ fi
 mkdir -p "tmp"
 run_tmp="tmp/${dname}${sname}.sh"
 
-#Sanity check to ensure both ISO boot and normal boot are not running at the same time or multiple instances of the same one
-if lsof "$cow" >/dev/null 2>&1; then
-  echo "${cow} is already running from QEMU or another program!"
+onExit() {
+  echo "$1" >&2
   printf "%s" "Press Enter to Continue..."
   read -r result
   exit 1
+}
+
+#Sanity check to ensure both ISO boot and normal boot are not running at the same time or multiple instances of the same one
+if lsof "$cow" >/dev/null 2>&1; then
+  onExit "${cow} is already running from QEMU or another program!"
 fi
 
 getArchy() {
@@ -259,8 +263,7 @@ family_target=$(getFamily "$arch")
 
 #Unsupported Arch that doesn't match the host
 if [ "$family_target" = "Unsupported" ]; then
-  echo "Unsupported Arch: $arch"
-  exit 1
+  onExit "Unsupported Arch: $arch"
 fi
 
 if [ "$kb" = "true" ]; then
@@ -327,8 +330,7 @@ if [ "$kb" = "true" ]; then
   echo "kernal: $vmlinuz_path initrd: $initrd_path"
   cd "$opwd"
   if [ -z "$vmlinuz_path" ]; then
-    echo "kernal not found!"
-    exit 1
+    onExit "kernal not found!"
   fi
   kbkernal="$(realpath "$kbdir")/$(basename "$vmlinuz_path")"
   kbinitrd="$(realpath "$kbdir")/$(basename "$initrd_path")"
@@ -529,8 +531,7 @@ case "$arch" in
     fi
     ;;
   *)
-    echo "NOT IMPLEMENTED YET! Arch: ${arch}"
-    exit 1
+    onExit "NOT IMPLEMENTED YET! Arch: ${arch}"
     ;;
 esac
 
@@ -545,8 +546,7 @@ if [ "$no_graphics" != "true" ]; then
 
   if [ "$gpu_3d" = "true" ] || [ "$gpu_3d_soft" = "true" ]; then
     if [ "$gpu_2d" = "true" ]; then
-      echo "gpu_3d and gpu_2d cannot both be set to true at the same time" >&2
-      exit 1
+      onExit "gpu_3d and gpu_2d cannot both be set to true at the same time"
     fi
   fi
 
