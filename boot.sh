@@ -564,15 +564,21 @@ if [ "$no_graphics" != "true" ]; then
           fi
         fi
       fi
+
+      #Set Window Size
+      if [ -z "$window_size" ]; then
+        window_size=",window-size=$window_size"
+      fi
+
       qdrive "-vga none"
-      qdrive "-device \"${gpu_device},xres=1280,yres=800\""
-      qdrive "-display \"${gpu_display}${gpu_display_options},gl=on\""
+      qdrive "-device \"${gpu_device}${xres}${yres}\""
+      qdrive "-display \"${gpu_display}${gpu_display_options}${window_size},gl=on\""
   fi
   #2D Acceleration with opengl support
   if [ "$gpu_2d" = "true" ]; then
     if qemu-system-$arch -device help 2>&1 | grep -qw "qxl-vga"; then
       echo "qemu-system-$arch has LWDE"
-      qdrive "-device qxl-vga,vram_size=134217728"
+      qdrive "-device qxl-vga,vram_size=134217728${xres}${yres}"
     fi
   fi
   qarg "-name \"$title\""
