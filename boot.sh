@@ -543,7 +543,7 @@ fi
 if [ "$no_graphics" != "true" ]; then
   qconsole="$qconsole_gui"
 
-  if [ "$gpu_3d" = "true" ] || [ "$gpu_3d_soft" = "true" ]; then
+  if [ -z "$gpu_3d" ] || [ "$gpu_3d" = "true" ] || [ "$gpu_3d_soft" = "true" ]; then
     if [ "$gpu_2d" = "true" ]; then
       echo "gpu_3d and gpu_2d cannot both be set to true at the same time" >&2
       exit 1
@@ -588,6 +588,8 @@ if [ "$no_graphics" != "true" ]; then
     if qemu-system-$arch -device help 2>&1 | grep -qw "qxl-vga"; then
       qdrive "-device qxl-vga,vram_size=134217728${xres}${yres}"
       qdrive "-display \"${gpu_display}${gpu_display_options}${window_size}\""
+    else
+      echo "ERROR: qxl-vga isn't found for qemu-system-$arch"
     fi
   fi
   qarg "-name \"$title\""
