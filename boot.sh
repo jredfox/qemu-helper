@@ -39,7 +39,7 @@ run_tmp="tmp/${dname}${sname}.sh"
 
 onExit() {
   echo "$1" >&2
-  printf "%s" "Press Enter to Continue..."
+  printf "%s\n" "Press Enter to Continue..."
   read -r result
   exit 1
 }
