@@ -259,7 +259,7 @@ for file in "iso"/*; do
                 ;;
 
             #Detect Microsoft Windows
-            *win*|*window*|*microsoft*)
+            *mswin*|*win*|*window*|*microsoft*)
                 windows="true"
                 ;;
         esac
