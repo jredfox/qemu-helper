@@ -7,29 +7,17 @@ cow="disks/${dname}.qcow2"
 fwrdir="disks/firmware"
 iso_boot="$2"
 arch="$3"
-qram="$4"
-qcore="$5"
-if [ -z "$qram" ]; then
-  qram="4096"
-fi
-if [ -z "$qcore" ]; then
-  qcore="4"
-fi
-if [ -z "$gpu_2d" ]; then
-  gpu_2d="false"
-fi
+qram="${4:-4096}"
+qcore="${5:-4}"
 if [ "$iso_boot" = "true" ]; then
   sname="_iso"
-  if [ -z "$no_reboot" ]; then
-    no_reboot="true"
-  fi
+  no_reboot="${no_reboot:-true}"
 else
   sname=""
 fi
 title="${title:-$dname}"
-if [ -z "$q_audio" ]; then
-  q_audio="usb-audio"
-fi
+gpu_2d="${gpu_2d:-false}"
+q_audio="${q_audio:-usb-audio}"
 if [ -z "$q_mouse" ]; then
   if [ "$grab_mouse" = "true" ] || [ -z "$grab_mouse" ]; then
     q_mouse="usb-mouse"
