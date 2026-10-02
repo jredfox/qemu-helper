@@ -572,7 +572,7 @@ if [ "$no_graphics" != "true" ]; then
   fi
 
   #Set the serial to none on SDL unless configured otherwise
-  if [ -z "$serial" ] && [ "$gpu_display" = "sdl" ]; then
+  if [ -z "$serial" ]; then
     serial="none"
   fi
 
