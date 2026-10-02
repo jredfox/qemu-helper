@@ -247,15 +247,14 @@ for file in "iso"/*; do
                 ;;
         esac
 
-        #Detect Alpine Linux
+        #Detect Alpine Linux and Windows
         case "$lname" in
+            #Detect Alpine Linux
             *alpine*|*alps*)
                 gpu_3d_fallback="true"
                 ;;
-        esac
-
-        #Detect Microsoft Windows
-        case "$lname" in
+            
+            #Detect Microsoft Windows
             *win*|*window*|*microsoft*)
                 windows="true"
                 ;;
