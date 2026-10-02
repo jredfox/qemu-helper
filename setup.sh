@@ -290,13 +290,13 @@ for file in "iso"/*.iso; do
             echo "export kb=\"true\"" >>"$bootisosh"
             echo "export kb=\"true\"" >>"$bootsh"
         fi
-        if [ "$gpu_3d_fallback" = "true" ]; then
-            echo "export gpu_3d_fallback=\"true\"" >>"$bootisosh"
-            echo "export gpu_3d_fallback=\"true\"" >>"$bootsh"
-        fi
         if [ "$no_acpi" = "true" ]; then
             echo "export no_acpi=\"true\"" >>"$bootisosh"
             echo "export no_acpi=\"true\"" >>"$bootsh"
+        fi
+        if [ "$gpu_3d_fallback" = "true" ]; then
+            echo "export gpu_3d_fallback=\"true\"" >>"$bootisosh"
+            echo "export gpu_3d_fallback=\"true\"" >>"$bootsh"
         fi
         if [ "$windows" = "true" ]; then
             echo "export windows=\"true\"" >>"$bootisosh"
