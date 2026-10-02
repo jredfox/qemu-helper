@@ -566,12 +566,14 @@ if [ "$no_graphics" != "true" ]; then
     gpu_vendor_bad="$(glxinfo -B 2>/dev/null | grep -iE 'OpenGL vendor|OpenGL renderer' | grep -iv 'NVIDIA')"
     if [ -z "$gpu_vendor_bad" ] && [ "$gpu_2d" != "true" ]; then
       gpu_display="sdl"
-      if [ -z "$serial" ]; then
-        serial="none"
-      fi
     else
       gpu_display="gtk"
     fi
+  fi
+
+  #Set the serial to none on SDL unless configured otherwise
+  if [ -z "$serial" ] && [ "$gpu_display" = "sdl" ]; then
+    serial="none"
   fi
 
   if [ -z "$gpu_display_options" ]; then
@@ -670,7 +672,7 @@ fi
 
 #Add Custom Serial
 if [ ! -z "$serial" ]; then
-  qdrive "-serial ${serial}"
+  qarg "-serial ${serial}"
 fi
 
 #Launch QEMU with arguments
