@@ -256,7 +256,7 @@ for file in "iso"/*; do
 
         #Detect Microsoft Windows
         case "$lname" in
-            *window*|*microsoft*)
+            *win*|*window*|*microsoft*)
                 windows="true"
                 ;;
         esac
