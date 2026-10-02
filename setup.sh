@@ -265,6 +265,7 @@ for file in "iso"/*; do
             *vista*|*xp*|*95*|*98*|*2000*)
                 if [ "$windows" = "true" ]; then
                     intel_old="true"
+                    no_reboot="false"
                 fi
                 ;;
         esac
@@ -304,6 +305,10 @@ for file in "iso"/*; do
         if [ "$intel_old" = "true" ]; then
             echo "export intel_old=\"true\"" >>"$bootisosh"
             echo "export intel_old=\"true\"" >>"$bootsh"
+        fi
+        if [ "$no_reboot" = "false" ]; then
+            echo "export no_reboot=\"false\"" >>"$bootisosh"
+            echo "export no_reboot=\"false\"" >>"$bootsh"
         fi
         echo "sh boot.sh \"${name}\" true ${arch} ${qram} ${qcore}" >>"$bootisosh"
         echo "sh boot.sh \"${name}\" false ${arch} ${qram} ${qcore}" >>"$bootsh"
