@@ -608,7 +608,7 @@ if [ "$no_graphics" != "true" ]; then
       #Set the GPU device
       if [ -z "$gpu_device" ]; then
         gpu_device="virtio-vga-gl"
-        if [ "$gpu_3d_soft" = "true" ]; then
+        if { [ -z "$gpu_vendor_bad" ] && [ "$gpu_3d_fallback" = "true" ]; } || [ "$gpu_3d_soft" = "true" ]; then
           gpu_device="virtio-vga"
         fi
       fi

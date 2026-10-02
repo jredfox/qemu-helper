@@ -247,6 +247,13 @@ for file in "iso"/*.iso; do
                 ;;
         esac
 
+        #Detect Alpine Linux
+        case "$lname" in
+            *alpine*|*alps*)
+                gpu_3d_fallback="true"
+                ;;
+        esac
+
         #Detect Microsoft Windows
         case "$lname" in
             *window*|*microsoft*)
@@ -282,6 +289,10 @@ for file in "iso"/*.iso; do
         if [ "$kb" = "true" ]; then
             echo "export kb=\"true\"" >>"$bootisosh"
             echo "export kb=\"true\"" >>"$bootsh"
+        fi
+        if [ "$gpu_3d_fallback" = "true" ]; then
+            echo "export gpu_3d_fallback=\"true\"" >>"$bootisosh"
+            echo "export gpu_3d_fallback=\"true\"" >>"$bootsh"
         fi
         if [ "$no_acpi" = "true" ]; then
             echo "export no_acpi=\"true\"" >>"$bootisosh"
