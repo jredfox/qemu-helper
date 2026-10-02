@@ -579,6 +579,15 @@ if [ "$no_graphics" != "true" ]; then
     fi
   fi
 
+  gpu_display="$(printf '%s' "$gpu_display" | tr '[:upper:]' '[:lower:]')"
+  case "$gpu_display" in
+    sdl*) 
+      sdl_display="true"
+      ;;
+    *)
+      ;;
+  esac
+
   #Set the serial to none on SDL unless configured otherwise
   if [ -z "$serial" ]; then
     serial="none"
@@ -684,6 +693,13 @@ if [ ! -z "$serial" ]; then
 fi
 
 #Launch QEMU with arguments
-printf "%s\n\n" "qemu-system-${arch}${args}" >"$run_tmp"
+echo "cd \"${PWD}\"" >"$run_tmp"
+if [ "$sdl_display" = "true" ]; then
+  echo "export SDL_MOUSE_RELATIVE_SYSTEM_SCALE=1" >>"$run_tmp"
+  echo "export SDL_MOUSE_RELATIVE_MODE_WARP=1" >>"$run_tmp"
+  echo "export SDL_HINT_MOUSE_RELATIVE_SYSTEM_SCALE=1" >>"$run_tmp"
+  echo "export SDL_HINT_MOUSE_RELATIVE_MODE_WARP=1" >>"$run_tmp"
+fi
+printf "%s\n\n" "qemu-system-${arch}${args}" >>"$run_tmp"
 exec sh "$run_tmp"
 exit $?

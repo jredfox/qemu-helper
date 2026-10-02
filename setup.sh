@@ -50,6 +50,8 @@ if ! output=$(qemu-img "--version" >/dev/null 2>&1); then
                 [Yy]*) 
                     sudo apt install -y python3-virt-firmware
                     ;;
+                *)
+                    ;;
             esac
         fi
     elif command -v dnf >/dev/null 2>&1; then
