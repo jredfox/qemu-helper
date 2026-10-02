@@ -104,11 +104,15 @@ if [ "$install_dir" != "$current_dir" ]; then
 fi
 
 #create powerpc32 symlinks
-for file in "iso"/*.iso; do
+for file in "iso"/*; do
     if [ ! -f "$file" ]; then
         continue
     fi
     name=$(basename "$file")
+    case $name in
+        *.[iI][sS][oO]) ;;
+        *)  continue ;;
+    esac
     name="${name%.*}"
     lname="$(printf '%s' "$name" | tr '[:upper:]' '[:lower:]')"
     lnk_name="iso/${name}-ppc32.iso"
@@ -146,11 +150,16 @@ for file in "iso"/*.iso; do
 done
 
 #install cows
-for file in "iso"/*.iso; do
+for file in "iso"/*; do
     if [ ! -f "$file" ]; then
         continue
     fi
     name=$(basename "$file")
+    case $name in
+        *.[iI][sS][oO]) ;;
+        *)  continue ;;
+    esac
+    echo "debug: $name"
     name="${name%.*}"
     if [ -f "disks/${name}.qcow2" ]; then
         echo "Skipping ISO $name"
