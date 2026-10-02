@@ -4,30 +4,20 @@
 if [ -z "$install_dir" ]; then
     install_dir="$HOME/vms"
 fi
+
 #default ram to give qemu
-if [ -z "$qram" ]; then
-    qram="4096"
-fi
+qram="${qram:-4096}"
 #default cores to give qemu
-if [ -z "$qcore" ]; then
-    qcore="4"
-fi
+qcore="${qcore:-4}"
 #default ram to give qemu for 32 bits
-if [ -z "$qram32" ]; then
-    qram32="2048"
-fi
+qram32="${qram32:-2048}"
 #default cores to give qemu for 32 bits
-if [ -z "$qcore32" ]; then
-    qcore32="2"
-fi
+qcore32="${qcore32:-2}"
 #default cores to give qemu for powerpc 32 bits
-if [ -z "$qcoreppc32" ]; then
-    qcoreppc32="1"
-fi
+qcoreppc32="${qcoreppc32:-1}"
 #default max disk space for the qcow2 image
-if [ -z "$qdisk" ]; then
-    qdisk="50G"
-fi
+qdisk="${qdisk:-50G}"
+
 org_qram="$qram"
 org_qcore="$qcore"
 org_qram32="$qram32"
