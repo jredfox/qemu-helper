@@ -164,6 +164,8 @@ for file in "iso"/*.iso; do
         no_acpi="false"
         kb="false"
         checked="false"
+        windows="false"
+        intel_old="false"
         lname="$(printf '%s' "$name" | tr '[:upper:]' '[:lower:]')"
 
         #Extract the arch from from the ISO and translate the arch aliases to be standard
