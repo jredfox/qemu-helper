@@ -518,12 +518,8 @@ case "$arch" in
     if [ "$remove_ps2_mouse" = "true" ]; then
       q_machine="${q_machine},i8042=off"
     else
+      #TODO: check if vmport is a feature on the host machine instead of just hard coded intel
       q_machine="${q_machine},vmport=off"
-    fi
-    #if host family and family_target match do not add the machine and set cpu to max
-    if [ "$family" = "x86" ]; then
-      q_machine=""
-      q_cpu="max"
     fi
     q_usb_cmd="-usb"
     if [ "$iso_boot" = "true" ]; then
