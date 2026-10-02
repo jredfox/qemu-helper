@@ -566,6 +566,9 @@ if [ "$no_graphics" != "true" ]; then
     gpu_vendor_bad="$(glxinfo -B 2>/dev/null | grep -iE 'OpenGL vendor|OpenGL renderer' | grep -iv 'NVIDIA')"
     if [ -z "$gpu_vendor_bad" ] && [ "$gpu_2d" != "true" ]; then
       gpu_display="sdl"
+      if [ -z "$serial" ]; then
+        serial="none"
+      fi
     else
       gpu_display="gtk"
     fi
@@ -663,6 +666,11 @@ fi
 #Disable rebooting
 if [ "$no_reboot" = "true" ]; then
   qarg "-no-reboot"
+fi
+
+#Add Custom Serial
+if [ ! -z "$serial" ]; then
+  qdrive "-serial ${serial}"
 fi
 
 #Launch QEMU with arguments
