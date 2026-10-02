@@ -441,6 +441,10 @@ case "$arch" in
       q_cpu="cortex-a15"
     fi
     q_machine="virt,gic-version=2"
+    #Fix Network Controller for Windows Linux Suffers Driver issues with e1000
+    if [ "$windows" = "true" ]; then
+      q_netdev_device="e1000"
+    fi
     #Drives
     if [ "$iso_boot" = "true" ]; then
       qdrive "-device \"virtio-scsi-device,id=scsi0\""
@@ -517,6 +521,10 @@ case "$arch" in
     #For Windows XP and Windows Vista 64 bit (Vista Unconfirmed)
     if [ "$intel_old" = "true" ]; then
       q_machine="pc"
+    fi
+    #Fix Network Controller for Windows Linux Suffers Driver issues with e1000
+    if [ "$windows" = "true" ]; then
+      q_netdev_device="e1000"
     fi
     #Fix Mouse Issues
     if [ "$remove_ps2_mouse" = "true" ]; then
