@@ -159,7 +159,6 @@ for file in "iso"/*; do
         *.[iI][sS][oO]) ;;
         *)  continue ;;
     esac
-    echo "debug: $name"
     name="${name%.*}"
     if [ -f "disks/${name}.qcow2" ]; then
         echo "Skipping ISO $name"
@@ -175,6 +174,7 @@ for file in "iso"/*; do
         checked="false"
         windows="false"
         intel_old="false"
+        gpu_3d_fallback="false"
         lname="$(printf '%s' "$name" | tr '[:upper:]' '[:lower:]')"
 
         #Extract the arch from from the ISO and translate the arch aliases to be standard
