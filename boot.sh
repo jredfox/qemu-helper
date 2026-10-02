@@ -30,8 +30,12 @@ title="${title:-$dname}"
 if [ -z "$q_audio" ]; then
   q_audio="usb-audio"
 fi
-if [ -z "${q_mouse}" ]; then
-  q_mouse="usb-tablet"
+if [ -z "$q_mouse" ]; then
+  if [ "$grab_mouse" = "true" ] || [ -z "$grab_mouse" ]; then
+    q_mouse="usb-mouse"
+  else
+    q_mouse="usb-tablet"
+  fi
 fi
 #create the temp dir
 mkdir -p "tmp"
