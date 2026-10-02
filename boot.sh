@@ -18,8 +18,9 @@ fi
 title="${title:-$dname}"
 gpu_2d="${gpu_2d:-false}"
 q_audio="${q_audio:-usb-audio}"
+grab_mouse="${grab_mouse:-true}"
 if [ -z "$q_mouse" ]; then
-  if [ "$grab_mouse" = "true" ] || [ -z "$grab_mouse" ]; then
+  if [ "$grab_mouse" = "true" ]; then
     q_mouse="usb-mouse"
   else
     q_mouse="usb-tablet"
