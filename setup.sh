@@ -254,6 +254,10 @@ for file in "iso"/*; do
                 gpu_3d_fallback="true"
                 ;;
             
+            #OSX Do Nothing
+            *darwin*)
+                ;;
+
             #Detect Microsoft Windows
             *win*|*window*|*microsoft*)
                 windows="true"
