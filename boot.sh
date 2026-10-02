@@ -500,15 +500,19 @@ case "$arch" in
   i386|x86_64)
     if [ "$arch" = "x86_64" ]; then
       q_cpu="qemu64"
-      q_machine="q35"
+      q_machine="q35,vmport=off"
       q_netdev_device="virtio-net-pci"
       q_intel_vga="virtio"
     else
       q_cpu="pentium3"
-      q_machine="pc"
+      q_machine="pc,vmport=off"
       q_netdev_device="rtl8139"
       q_rng=""
       q_intel_vga="std"
+    fi
+    #For Windows XP and Windows Vista 64 bit (Vista Unconfirmed)
+    if [ "$intel_old" = "true" ]; then
+      q_machine="pc"
     fi
     #if host family and family_target match do not add the machine and set cpu to max
     if [ "$family" = "x86" ]; then
