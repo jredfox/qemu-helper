@@ -165,7 +165,7 @@ for file in "iso"/*; do
         windows="false"
         intel_old="false"
         gpu_3d_fallback="false"
-        iso_reboot="true"
+        iso_reboot="false"
         lname="$(printf '%s' "$name" | tr '[:upper:]' '[:lower:]')"
 
         #Extract the arch from from the ISO and translate the arch aliases to be standard
@@ -266,7 +266,7 @@ for file in "iso"/*; do
             *vista*|*xp*|*95*|*98*|*2000*)
                 if [ "$windows" = "true" ]; then
                     intel_old="true"
-                    iso_reboot="false"
+                    iso_reboot="true"
                 fi
                 ;;
         esac
@@ -307,7 +307,7 @@ for file in "iso"/*; do
             echo "export intel_old=\"true\"" >>"$bootisosh"
             echo "export intel_old=\"true\"" >>"$bootsh"
         fi
-        if [ "$iso_reboot" = "false" ]; then
+        if [ "$iso_reboot" = "true" ]; then
             echo "export no_reboot=\"false\"" >>"$bootisosh"
         fi
         echo "sh boot.sh \"${name}\" true ${arch} ${qram} ${qcore}" >>"$bootisosh"
