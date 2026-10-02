@@ -584,8 +584,6 @@ if [ "$no_graphics" != "true" ]; then
     sdl*) 
       sdl_display="true"
       ;;
-    *)
-      ;;
   esac
 
   #Set the serial to none on SDL unless configured otherwise

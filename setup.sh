@@ -50,8 +50,6 @@ if ! output=$(qemu-img "--version" >/dev/null 2>&1); then
                 [Yy]*) 
                     sudo apt install -y python3-virt-firmware
                     ;;
-                *)
-                    ;;
             esac
         fi
     elif command -v dnf >/dev/null 2>&1; then
@@ -247,6 +245,22 @@ for file in "iso"/*.iso; do
                 ;;
         esac
 
+        #Detect Microsoft Windows
+        case "$lname" in
+            *windows*|*microsoft*)
+                windows="true"
+                ;;
+        esac
+
+        #Windows Vista and lower compatability
+        case "$lname" in
+            *vista*|*xp*|*95*|*98*|*2000*)
+                if [ "$windows" = "true" ]; then
+                    intel_old="true"
+                fi
+                ;;
+        esac
+
         #Dynamically Determine if kernal boot needs to be enabled for arm32 images
         if [ "$arch" = "arm" ]; then
             if [ "$checked" != "true" ]; then
@@ -270,6 +284,14 @@ for file in "iso"/*.iso; do
         if [ "$no_acpi" = "true" ]; then
             echo "export no_acpi=\"true\"" >>"$bootisosh"
             echo "export no_acpi=\"true\"" >>"$bootsh"
+        fi
+        if [ "$windows" = "true" ]; then
+            echo "export windows=\"true\"" >>"$bootisosh"
+            echo "export windows=\"true\"" >>"$bootsh"
+        fi
+        if [ "$intel_old" = "true" ]; then
+            echo "export intel_old=\"true\"" >>"$bootisosh"
+            echo "export intel_old=\"true\"" >>"$bootsh"
         fi
         echo "sh boot.sh \"${name}\" true ${arch} ${qram} ${qcore}" >>"$bootisosh"
         echo "sh boot.sh \"${name}\" false ${arch} ${qram} ${qcore}" >>"$bootsh"
