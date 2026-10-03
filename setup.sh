@@ -253,13 +253,9 @@ for file in "iso"/*; do
             *alpine*|*alps*)
                 gpu_3d_fallback="true"
                 ;;
-            
-            #OSX Do Nothing
-            *darwin*)
-                ;;
 
             #Detect Microsoft Windows
-            *mswin*|*win*|*window*|*microsoft*)
+            *mswin*|*window*|*microsoft*)
                 windows="true"
                 ;;
         esac
