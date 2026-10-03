@@ -349,9 +349,9 @@ for file in "iso"/*; do
             echo "export windows_old=\"true\"" >>"$bootisosh"
             echo "export windows_old=\"true\"" >>"$bootsh"
             echo "export no_reboot=\"false\"" >>"$bootisosh"
-            if [ "$windows_95" = "true" ]; then
-                echo "export windows_95=\"true\"" >>"$bootisosh"
-            fi
+        fi
+        if [ "$windows_95" = "true" ]; then
+            echo "export windows_95=\"true\"" >>"$bootisosh"
         fi
         echo "sh boot.sh \"${name}\" true ${arch} ${qram} ${qcore}" >>"$bootisosh"
         echo "sh boot.sh \"${name}\" false ${arch} ${qram} ${qcore}" >>"$bootsh"
