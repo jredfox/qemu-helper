@@ -164,6 +164,7 @@ for file in "iso"/*; do
         checked="false"
         windows="false"
         windows_old="false"
+        windows_95="false"
         gpu_3d_fallback="false"
         chk_iso="false"
         mac="false"
