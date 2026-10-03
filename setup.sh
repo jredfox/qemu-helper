@@ -265,8 +265,8 @@ for file in "iso"/*; do
                 mac="true"
                 ;;
 
-            #Detect Possible Windows
-            *server*|*win*|*ms*|*dos*)
+            #Detect Possible Windows MS-DOS FreeDOS
+            *server*|*win*|*ms*|*dos*|fd*)
                 chk_iso="true"
                 ;;
 
