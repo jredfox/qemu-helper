@@ -667,6 +667,15 @@ if [ "$no_usb" != "true" ]; then
   qarg "$q_usb_cmd"
   qarg "-device \"usb-kbd\""
   qarg "-device \"${q_mouse}\""
+else
+  case "$q_mouse" in
+    [uU][sS][bB]*) 
+      echo "USB-Mouse Ignoring ${q_mouse}"
+      ;;
+    *) 
+      qarg "-device \"${q_mouse}\"" 
+      ;;
+  esac
 fi
 if [ "$no_graphics" != "true" ]; then
     qarg "-device \"${q_audio}\""
