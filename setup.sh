@@ -256,11 +256,6 @@ for file in "iso"/*; do
                 gpu_3d_fallback="true"
                 ;;
 
-            #Detect mac
-            *darwin*|*osx*|*mac*)
-                mac="true"
-                ;;
-
             #Detect Microsoft Windows
             *mswin*|*window*|*microsoft*)
                 windows="true"
@@ -270,17 +265,31 @@ for file in "iso"/*; do
             *server*|*win*|*ms*|*dos*)
                 chk_iso="true"
                 ;;
+
+            #Detect mac
+            *darwin*|*osx*|*macos*)
+                mac="true"
+                ;;
+
+            #Contain "mac" but are not mac
+            *machine*|*emacs*)
+                ;;
+
+            #Detect mac
+            *mac*)
+                mac="true"
+                ;;
         esac
 
         #Dynamic Detection of windows and kb for linux
         if { [ "$arch" = "arm" ] && [ "$checked" != "true" ]; } || [ "$chk_iso" = "true" ]; then
             oefi="$(7z l -ba "iso/${name}.iso" | awk 'toupper(substr($1,1,1)) == "D" || toupper(substr($3,1,1)) == "D" { max = (toupper(substr($1,1,1)) != "D" ? 3 : 1); for (i=1; i<=max && i<NF; i++) $i=""; sub(/^[[:space:]]+/, ""); print }' | sed 's|^[^/]|/&|')"
-            if [ ! -z "$(grep -Ei '^/(boot/bcd|efi/microsoft)(/)?$')" ]; then
+            if [ ! -z "$(printf '%s' "$oefi" | grep -Ei '^/(boot/bcd|efi/microsoft|uefi/microsoft)(/)?$')" ]; then
                 windows="true"
                 echo "debug windows found ${name}"
             else
                 #Dynamically Determine if kernal boot needs to be enabled for arm32 images
-                if [ ! -z "$(grep -Ei '^/(EFI|BOOT)(/)?$')" ]; then
+                if [ -z "$(printf '%s' "$oefi" | grep -Ei '^/(EFI|BOOT)(/)?$')" ]; then
                     kb="true"
                     echo "debug arm32 EFI found ${name}"
                 fi
