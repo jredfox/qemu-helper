@@ -165,7 +165,6 @@ for file in "iso"/*; do
         windows="false"
         windows_old="false"
         gpu_3d_fallback="false"
-        iso_reboot="false"
         chk_iso="false"
         mac="false"
         lname="$(printf '%s' "$name" | tr '[:upper:]' '[:lower:]')"
@@ -295,7 +294,6 @@ for file in "iso"/*; do
                 if { [ "$arch" = "x86" ] || [ "$arch" = "x86_64" ]; } && [ ! -z "$(printf '%s' "$oefi" | grep -Ei '^/([^/]+/[^/]+\.cab|CONFIG\.SYS|freedos|FDOS[^/]*)$')" ]; then
                     windows="true"
                     windows_old="true"
-                    iso_reboot="true"
                     checked="true"
                     echo "debug old windows found ${name}"
                 fi
@@ -312,7 +310,6 @@ for file in "iso"/*; do
             *vista*|*xp*|*95*|*98*|*2000*|*dos*)
                 if [ "$windows" = "true" ]; then
                     windows_old="true"
-                    iso_reboot="true"
                 fi
                 ;;
         esac
@@ -342,8 +339,6 @@ for file in "iso"/*; do
         if [ "$windows_old" = "true" ]; then
             echo "export windows_old=\"true\"" >>"$bootisosh"
             echo "export windows_old=\"true\"" >>"$bootsh"
-        fi
-        if [ "$iso_reboot" = "true" ]; then
             echo "export no_reboot=\"false\"" >>"$bootisosh"
         fi
         echo "sh boot.sh \"${name}\" true ${arch} ${qram} ${qcore}" >>"$bootisosh"
