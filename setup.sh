@@ -291,7 +291,7 @@ for file in "iso"/*; do
                 echo "debug windows found ${name}"
             fi
             #Dynamically Determine if kernal boot needs to be enabled for arm32 images
-            if [ "$checked" != "true" ] && [ -z "$(printf '%s' "$oefi" | grep -Ei '^/(EFI|BOOT)(/)?$')" ]; then
+            if [ "$checked" != "true" ] && [ "$arch" = "arm" ] && [ -z "$(printf '%s' "$oefi" | grep -Ei '^/(EFI|BOOT)(/)?$')" ]; then
                 kb="true"
                 echo "debug arm32 EFI found ${name}"
             fi
