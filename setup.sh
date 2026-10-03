@@ -286,13 +286,13 @@ for file in "iso"/*; do
             oefi="$(7z l -ba "iso/${name}.iso" | awk 'toupper(substr($1,1,1)) == "D" || toupper(substr($3,1,1)) == "D" { max = (toupper(substr($1,1,1)) != "D" ? 3 : 1); for (i=1; i<=max && i<NF; i++) $i=""; sub(/^[[:space:]]+/, ""); print }' | sed 's|^[^/]|/&|')"
             if [ ! -z "$(printf '%s' "$oefi" | grep -Ei '^/(boot/bcd|bootmgr.efi|efi/microsoft|uefi/microsoft)(/)?$')" ]; then
                 windows="true"
+                checked="true"
                 echo "debug windows found ${name}"
-            else
-                #Dynamically Determine if kernal boot needs to be enabled for arm32 images
-                if [ "$arch" = "arm" ] && [ -z "$(printf '%s' "$oefi" | grep -Ei '^/(EFI|BOOT)(/)?$')" ]; then
-                    kb="true"
-                    echo "debug arm32 EFI found ${name}"
-                fi
+            fi
+            #Dynamically Determine if kernal boot needs to be enabled for arm32 images
+            if [ "$checked" != "true" ] && [ -z "$(printf '%s' "$oefi" | grep -Ei '^/(EFI|BOOT)(/)?$')" ]; then
+                kb="true"
+                echo "debug arm32 EFI found ${name}"
             fi
         fi
 
