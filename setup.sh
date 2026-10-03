@@ -285,7 +285,7 @@ for file in "iso"/*; do
             chked_iso="false"
             oefi="$(7z l -ba "iso/${name}.iso" | awk '{ c1 = toupper(substr($1,1,1)); if (c1 == "D" || toupper(substr($3,1,1)) == "D") max = (c1 != "D" ? 3 : 1); else max = (c1 != "." ? 5 : 3); for (i=1; i<=max && i<NF; i++) $i=""; sub(/^[[:space:]]+/, ""); print }' | sed 's|^[^/]|/&|')"
             #Dynamically Detect Windows
-            if [ ! -z "$(printf '%s' "$oefi" | grep -Ei '^/(boot/bcd|bootmgr\.efi|efi/microsoft|uefi/microsoft)(/)?$')" ]; then
+            if [ ! -z "$(printf '%s' "$oefi" | grep -Ei '^/(boot/bcd|bootmgr|bootmgr\.efi|efi/microsoft|uefi/microsoft)(/)?$')" ]; then
                 windows="true"
                 chked_iso="true"
                 echo "debug windows found ${name}"
