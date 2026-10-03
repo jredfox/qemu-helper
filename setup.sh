@@ -310,10 +310,10 @@ for file in "iso"/*; do
         #Windows Vista and lower compatibility
         if [ "$windows" = "true" ]; then
             case "$lname" in
-                *vista*|*xp*)
+                *vista*|*xp*|2000[!0-9]*|*[!0-9]2000|*[!0-9]2000[!0-9]*)
                     windows_old="true"
                     ;;
-                95[!0-9]*|*[!0-9]95|*[!0-9]95[!0-9]*|98[!0-9]*|*[!0-9]98|*[!0-9]98[!0-9]*|2000[!0-9]*|*[!0-9]2000|*[!0-9]2000[!0-9]*|*dos*)
+                95[!0-9]*|*[!0-9]95|*[!0-9]95[!0-9]*|98[!0-9]*|*[!0-9]98|*[!0-9]98[!0-9]*|*dos*)
                     arch="i386"
                     bits32="true"
                     windows_old="true"
