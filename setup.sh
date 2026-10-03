@@ -163,7 +163,7 @@ for file in "iso"/*; do
         kb="false"
         checked="false"
         windows="false"
-        intel_old="false"
+        windows_old="false"
         gpu_3d_fallback="false"
         iso_reboot="false"
         chk_iso="false"
@@ -294,7 +294,7 @@ for file in "iso"/*; do
                 #Dynamically Detect Old Windows
                 if { [ "$arch" = "x86" ] || [ "$arch" = "x86_64" ]; } && [ ! -z "$(printf '%s' "$oefi" | grep -Ei '^/[^/]+/[^/]+\.cab$')" ]; then
                     windows="true"
-                    intel_old="true"
+                    windows_old="true"
                     iso_reboot="true"
                     checked="true"
                     echo "debug old windows found ${name}"
@@ -311,7 +311,7 @@ for file in "iso"/*; do
         case "$lname" in
             *vista*|*xp*|*95*|*98*|*2000*|*dos*)
                 if [ "$windows" = "true" ]; then
-                    intel_old="true"
+                    windows_old="true"
                     iso_reboot="true"
                 fi
                 ;;
@@ -339,9 +339,9 @@ for file in "iso"/*; do
             echo "export windows=\"true\"" >>"$bootisosh"
             echo "export windows=\"true\"" >>"$bootsh"
         fi
-        if [ "$intel_old" = "true" ]; then
-            echo "export intel_old=\"true\"" >>"$bootisosh"
-            echo "export intel_old=\"true\"" >>"$bootsh"
+        if [ "$windows_old" = "true" ]; then
+            echo "export windows_old=\"true\"" >>"$bootisosh"
+            echo "export windows_old=\"true\"" >>"$bootsh"
         fi
         if [ "$iso_reboot" = "true" ]; then
             echo "export no_reboot=\"false\"" >>"$bootisosh"

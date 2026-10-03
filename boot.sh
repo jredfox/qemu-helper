@@ -508,7 +508,7 @@ case "$arch" in
       q_intel_vga="std"
     fi
     #For Windows XP and Windows Vista 64 bit (Vista Unconfirmed)
-    if [ "$intel_old" = "true" ]; then
+    if [ "$intel_old" = "true" ] || [ "$windows_old" = "true" ]; then
       q_machine="pc"
     fi
     #Fix Network Controller for Windows Linux Suffers Driver issues with e1000
