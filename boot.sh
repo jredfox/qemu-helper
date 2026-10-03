@@ -513,11 +513,7 @@ case "$arch" in
     fi
     #Fix Network Controller for Windows Linux Suffers Driver issues with e1000
     if [ "$windows" = "true" ]; then
-      if [ "$windows_old" = "true" ]; then
-        q_netdev_device="rtl8139"
-      else
-        q_netdev_device="e1000"
-      fi
+      q_netdev_device="e1000"
     fi
     #Fix Mouse Issues
     if [ "$remove_ps2_mouse" = "true" ]; then
