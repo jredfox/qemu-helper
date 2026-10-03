@@ -314,8 +314,11 @@ for file in "iso"/*; do
                     ;;
                 95[!0-9]*|*[!0-9]95|*[!0-9]95[!0-9]*|98[!0-9]*|*[!0-9]98|*[!0-9]98[!0-9]*|2000[!0-9]*|*[!0-9]2000|*[!0-9]2000[!0-9]*|*dos*)
                     arch="i386"
+                    bits32="true"
                     windows_old="true"
                     windows_95="true"
+                    qram32="512"
+                    qcore32="cpus=1,sockets=1,cores=1,threads=1"
                     ;;
             esac
         fi
@@ -346,6 +349,9 @@ for file in "iso"/*; do
             echo "export windows_old=\"true\"" >>"$bootisosh"
             echo "export windows_old=\"true\"" >>"$bootsh"
             echo "export no_reboot=\"false\"" >>"$bootisosh"
+            if [ "$windows_95" = "true" ]; then
+                echo "export windows_95=\"true\"" >>"$bootisosh"
+            fi
         fi
         echo "sh boot.sh \"${name}\" true ${arch} ${qram} ${qcore}" >>"$bootisosh"
         echo "sh boot.sh \"${name}\" false ${arch} ${qram} ${qcore}" >>"$bootsh"
