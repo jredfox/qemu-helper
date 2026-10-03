@@ -272,19 +272,10 @@ for file in "iso"/*; do
                 ;;
         esac
 
-        #Windows Vista and lower compatability
-        case "$lname" in
-            *vista*|*xp*|*95*|*98*|*2000*)
-                if [ "$windows" = "true" ]; then
-                    intel_old="true"
-                    iso_reboot="true"
-                fi
-                ;;
-        esac
-
+        #Dynamic Detection of windows and kb for linux
         if { [ "$arch" = "arm" ] && [ "$checked" != "true" ]; } || [ "$chk_iso" = "true" ]; then
             oefi="$(7z l -ba "iso/${name}.iso" | awk 'toupper(substr($1,1,1)) == "D" || toupper(substr($3,1,1)) == "D" { max = (toupper(substr($1,1,1)) != "D" ? 3 : 1); for (i=1; i<=max && i<NF; i++) $i=""; sub(/^[[:space:]]+/, ""); print }' | sed 's|^[^/]|/&|')"
-            if [ ! -z "$(grep -Ei '/boot/bcd|/efi/microsoft|/bootmgr.efi')" ]; then
+            if [ ! -z "$(grep -Ei '^/(boot/bcd|efi/microsoft)(/)?$')" ]; then
                 windows="true"
                 echo "debug windows found ${name}"
             else
@@ -295,6 +286,16 @@ for file in "iso"/*; do
                 fi
             fi
         fi
+
+        #Windows Vista and lower compatability
+        case "$lname" in
+            *vista*|*xp*|*95*|*98*|*2000*)
+                if [ "$windows" = "true" ]; then
+                    intel_old="true"
+                    iso_reboot="true"
+                fi
+                ;;
+        esac
         
         if [ "$bits32" = "true" ]; then
             qram="$qram32"
