@@ -290,6 +290,14 @@ for file in "iso"/*; do
                 checked="true"
                 echo "debug windows found ${name}"
             fi
+            #Dynamically Detect Old Windows
+            if [ ! -z "$(printf '%s' "$oefi" | grep -Ei '^/[^/]+/[^/]+\.cab$')" ]; then
+                windows="true"
+                intel_old="true"
+                iso_reboot="true"
+                checked="true"
+                echo "debug windows found ${name}"
+            fi
             #Dynamically Determine if kernal boot needs to be enabled for arm32 images
             if [ "$checked" != "true" ] && [ "$arch" = "arm" ] && [ -z "$(printf '%s' "$oefi" | grep -Ei '^/(EFI|BOOT)(/)?$')" ]; then
                 kb="true"
@@ -299,7 +307,7 @@ for file in "iso"/*; do
 
         #Windows Vista and lower compatability
         case "$lname" in
-            *vista*|*xp*|*95*|*98*|*2000*)
+            *vista*|*xp*|*95*|*98*|*2000*|*dos*)
                 if [ "$windows" = "true" ]; then
                     intel_old="true"
                     iso_reboot="true"
