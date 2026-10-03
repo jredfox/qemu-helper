@@ -256,6 +256,11 @@ for file in "iso"/*; do
                 gpu_3d_fallback="true"
                 ;;
 
+            #Detect mac
+            *darwin*|*osx*|*mac*)
+                mac="true"
+                ;;
+
             #Detect Microsoft Windows
             *mswin*|*window*|*microsoft*)
                 windows="true"
@@ -264,11 +269,6 @@ for file in "iso"/*; do
             #Detect Possible Windows
             *server*|*win*|*ms*|*dos*)
                 chk_iso="true"
-                ;;
-
-            #Detect mac
-            *darwin*|*osx*|*mac*)
-                mac="true"
                 ;;
         esac
 
