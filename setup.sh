@@ -289,7 +289,7 @@ for file in "iso"/*; do
                 checked="true"
                 echo "debug windows found ${name}"
             fi
-            if [ "$checked" != "true" ]
+            if [ "$checked" != "true" ]; then
                 #Dynamically Detect Old Windows
                 if { [ "$arch" = "x86" ] || [ "$arch" = "x86_64" ]; } && [ ! -z "$(printf '%s' "$oefi" | grep -Ei '^/([^/]+/[^/]+\.cab|CONFIG\.SYS|freedos|FDOS[^/]*)$')" ]; then
                     windows="true"
