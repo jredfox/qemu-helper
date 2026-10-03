@@ -21,6 +21,7 @@ q_audio="${q_audio:-usb-audio}"
 grab_mouse="${grab_mouse:-true}"
 windows_95="${windows_95:-false}"
 windows_old="${windows_old:-$windows_95}"
+windows="${windows:-$windows_old}"
 if [ -z "$q_mouse" ]; then
   if [ "$grab_mouse" = "true" ]; then
     q_mouse="usb-mouse"
