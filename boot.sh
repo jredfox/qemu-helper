@@ -669,10 +669,10 @@ if [ "$no_usb" != "true" ]; then
   qarg "-device \"${q_mouse}\""
 else
   case "$q_mouse" in
-    [uU][sS][bB]*) 
+    [uU][sS][bB]*)
       echo "USB-Mouse Ignoring ${q_mouse}"
       ;;
-    *) 
+    *)
       qarg "-device \"${q_mouse}\""
       ;;
   esac
