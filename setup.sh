@@ -291,7 +291,7 @@ for file in "iso"/*; do
             fi
             if [ "$checked" != "true" ]; then
                 #Dynamically Detect Old Windows
-                if { [ "$arch" = "x86" ] || [ "$arch" = "x86_64" ]; } && [ ! -z "$(printf '%s' "$oefi" | grep -Ei '^/([^/]+/[^/]+\.cab|CONFIG\.SYS|freedos|FDOS[^/]*)$')" ]; then
+                if { [ "$arch" = "i386" ] || [ "$arch" = "x86_64" ]; } && [ ! -z "$(printf '%s' "$oefi" | grep -Ei '^/([^/]+/[^/]+\.cab|CONFIG\.SYS|freedos|FDOS[^/]*)$')" ]; then
                     windows="true"
                     windows_old="true"
                     checked="true"
