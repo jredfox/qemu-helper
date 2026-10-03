@@ -297,7 +297,7 @@ for file in "iso"/*; do
                     intel_old="true"
                     iso_reboot="true"
                     checked="true"
-                    echo "debug windows found ${name}"
+                    echo "debug old windows found ${name}"
                 fi
                 #Dynamically Determine if kernal boot needs to be enabled for arm32 images
                 if [ "$arch" = "arm" ] && [ -z "$(printf '%s' "$oefi" | grep -Ei '^/(EFI|BOOT)(/)?$')" ]; then
