@@ -673,7 +673,7 @@ else
       echo "USB-Mouse Ignoring ${q_mouse}"
       ;;
     *) 
-      qarg "-device \"${q_mouse}\"" 
+      qarg "-device \"${q_mouse}\""
       ;;
   esac
 fi
