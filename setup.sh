@@ -307,13 +307,13 @@ for file in "iso"/*; do
         fi
 
         #Windows Vista and lower compatability
-        case "$lname" in
-            *vista*|*xp*|*[!0-9]95|*[!0-9]95[!0-9]*|*[!0-9]98[!0-9]*|*[!0-9]98|*[!0-9]2000[!0-9]*|*[!0-9]2000|*dos*)
-                if [ "$windows" = "true" ]; then
+        if [ "$windows" = "true" ]; then
+            case "$lname" in
+                *vista*|*xp*|95[!0-9]*|*[!0-9]95[!0-9]*|[!0-9]95|98[!0-9]*|*[!0-9]98[!0-9]*|[!0-9]98|2000[!0-9]*|*[!0-9]2000[!0-9]*|[!0-9]2000|*dos*)
                     windows_old="true"
-                fi
-                ;;
-        esac
+                    ;;
+            esac
+        fi
         
         if [ "$bits32" = "true" ]; then
             qram="$qram32"
