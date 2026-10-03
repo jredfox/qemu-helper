@@ -166,6 +166,8 @@ for file in "iso"/*; do
         intel_old="false"
         gpu_3d_fallback="false"
         iso_reboot="false"
+        chk_iso="false"
+        mac="false"
         lname="$(printf '%s' "$name" | tr '[:upper:]' '[:lower:]')"
 
         #Extract the arch from from the ISO and translate the arch aliases to be standard
@@ -258,6 +260,16 @@ for file in "iso"/*; do
             *mswin*|*window*|*microsoft*)
                 windows="true"
                 ;;
+
+            #Detect Possible Windows
+            *server*|*win*|*ms*|*dos*)
+                chk_iso="true"
+                ;;
+
+            #Detect mac
+            *darwin*|*osx*|*mac*)
+                mac="true"
+                ;;
         esac
 
         #Windows Vista and lower compatability
@@ -270,12 +282,16 @@ for file in "iso"/*; do
                 ;;
         esac
 
-        #Dynamically Determine if kernal boot needs to be enabled for arm32 images
-        if [ "$arch" = "arm" ]; then
-            if [ "$checked" != "true" ]; then
-                oefi="$(7z l -ba "iso/${name}.iso" | awk 'toupper(substr($1,1,1)) == "D" || toupper(substr($3,1,1)) == "D" { max = (toupper(substr($1,1,1)) != "D" ? 3 : 1); for (i=1; i<=max && i<NF; i++) $i=""; sub(/^[[:space:]]+/, ""); print }' | sed 's|^[^/]|/&|' | grep -Ei '^/(EFI|BOOT)(/)?$')"
-                if [ -z "$oefi" ]; then
+        if { [ "$arch" = "arm" ] && [ "$checked" != "true" ]; } || [ "$chk_iso" = "true" ]; then
+            oefi="$(7z l -ba "iso/${name}.iso" | awk 'toupper(substr($1,1,1)) == "D" || toupper(substr($3,1,1)) == "D" { max = (toupper(substr($1,1,1)) != "D" ? 3 : 1); for (i=1; i<=max && i<NF; i++) $i=""; sub(/^[[:space:]]+/, ""); print }' | sed 's|^[^/]|/&|')"
+            if [ ! -z "$(grep -Ei '/boot/bcd|/efi/microsoft|/bootmgr.efi')" ]; then
+                windows="true"
+                echo "debug windows found ${name}"
+            else
+                #Dynamically Determine if kernal boot needs to be enabled for arm32 images
+                if [ ! -z "$(grep -Ei '^/(EFI|BOOT)(/)?$')" ]; then
                     kb="true"
+                    echo "debug arm32 EFI found ${name}"
                 fi
             fi
         fi
