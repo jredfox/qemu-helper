@@ -249,7 +249,7 @@ for file in "iso"/*; do
                 ;;
         esac
 
-        #Detect Alpine Linux and Windows
+        #Enable Automatic Support for specified OS
         case "$lname" in
             #Detect Alpine Linux
             *alpine*|*alps*)
