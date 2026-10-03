@@ -306,7 +306,7 @@ for file in "iso"/*; do
             fi
         fi
 
-        #Windows Vista and lower compatability
+        #Windows Vista and lower compatibility
         if [ "$windows" = "true" ]; then
             case "$lname" in
                 *vista*|*xp*|95[!0-9]*|*[!0-9]95|*[!0-9]95[!0-9]*|98[!0-9]*|*[!0-9]98|*[!0-9]98[!0-9]*|2000[!0-9]*|*[!0-9]2000|*[!0-9]2000[!0-9]*|*dos*)
