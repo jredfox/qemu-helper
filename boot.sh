@@ -663,9 +663,11 @@ fi
 args="${args}${qdrives}"
 
 #Devices
-qarg "$q_usb_cmd"
-qarg "-device \"usb-kbd\""
-qarg "-device \"${q_mouse}\""
+if [ "$no_usb" != "true" ]; then
+  qarg "$q_usb_cmd"
+  qarg "-device \"usb-kbd\""
+  qarg "-device \"${q_mouse}\""
+fi
 if [ "$no_graphics" != "true" ]; then
     qarg "-device \"${q_audio}\""
 fi
