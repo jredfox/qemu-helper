@@ -27,8 +27,12 @@ if [ -z "$q_mouse" ]; then
   fi
 fi
 windows_95="${windows_95:-false}"
-windows_old="${windows_old:-$windows_95}"
-windows="${windows:-$windows_old}"
+if [ "$windows_95" = "true" ]; then
+  windows_old="true"
+fi
+if [ "$windows_old" = "true" ]; then
+  windows="true"
+fi
 #create the temp dir
 mkdir -p "tmp"
 run_tmp="tmp/${dname}${sname}.sh"
