@@ -261,14 +261,14 @@ for file in "iso"/*; do
                 windows="true"
                 ;;
 
-            #Detect Possible Windows
-            *server*|*win*|*ms*|*dos*)
-                chk_iso="true"
-                ;;
-
             #Detect mac
             *darwin*|*osx*|*macos*)
                 mac="true"
+                ;;
+
+            #Detect Possible Windows
+            *server*|*win*|*ms*|*dos*)
+                chk_iso="true"
                 ;;
 
             #Contain "mac" but are not mac
