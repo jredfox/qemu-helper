@@ -292,7 +292,7 @@ for file in "iso"/*; do
             fi
             if [ "$checked" != "true" ]
                 #Dynamically Detect Old Windows
-                if { [ "$arch" = "x86" ] || [ "$arch" = "x86_64" ]; } && [ ! -z "$(printf '%s' "$oefi" | grep -Ei '^/[^/]+/[^/]+\.cab$')" ]; then
+                if { [ "$arch" = "x86" ] || [ "$arch" = "x86_64" ]; } && [ ! -z "$(printf '%s' "$oefi" | grep -Ei '^/([^/]+/[^/]+\.cab|CONFIG.SYS)$')" ]; then
                     windows="true"
                     windows_old="true"
                     iso_reboot="true"
