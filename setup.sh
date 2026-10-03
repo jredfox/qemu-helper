@@ -282,32 +282,33 @@ for file in "iso"/*; do
 
         #Dynamic Detection of windows and kb for linux
         if { [ "$arch" = "arm" ] && [ "$checked" != "true" ]; } || [ "$chk_iso" = "true" ]; then
+            chked_iso="false"
             oefi="$(7z l -ba "iso/${name}.iso" | awk '{ c1 = toupper(substr($1,1,1)); if (c1 == "D" || toupper(substr($3,1,1)) == "D") max = (c1 != "D" ? 3 : 1); else max = (c1 != "." ? 5 : 3); for (i=1; i<=max && i<NF; i++) $i=""; sub(/^[[:space:]]+/, ""); print }' | sed 's|^[^/]|/&|')"
             #Dynamically Detect Windows
             if [ ! -z "$(printf '%s' "$oefi" | grep -Ei '^/(boot/bcd|bootmgr\.efi|efi/microsoft|uefi/microsoft)(/)?$')" ]; then
                 windows="true"
-                checked="true"
+                chked_iso="true"
                 echo "debug windows found ${name}"
             fi
-            if [ "$checked" != "true" ]; then
+            if [ "$chked_iso" != "true" ]; then
                 #Dynamically Detect Old Windows
                 if { [ "$arch" = "i386" ] || [ "$arch" = "x86_64" ]; } && [ ! -z "$(printf '%s' "$oefi" | grep -Ei '^/([^/]+/[^/]+\.cab|CONFIG\.SYS|freedos|FDOS[^/]*)$')" ]; then
                     windows="true"
                     windows_old="true"
-                    checked="true"
+                    chked_iso="true"
                     echo "debug old windows found ${name}"
                 fi
                 #Dynamically Determine if kernal boot needs to be enabled for arm32 images
                 if [ "$arch" = "arm" ] && [ -z "$(printf '%s' "$oefi" | grep -Ei '^/(EFI|BOOT)(/)?$')" ]; then
                     kb="true"
-                    echo "debug arm32 EFI found ${name}"
+                    echo "debug arm32 EFI not found ${name}"
                 fi
             fi
         fi
 
         #Windows Vista and lower compatability
         case "$lname" in
-            *vista*|*xp*|*95*|*98*|*2000*|*dos*)
+            *vista*|*xp*|*[!0-9]95[!0-9]*|*[!0-9]98[!0-9]*|*[!0-9]2000[!0-9]*|*dos*)
                 if [ "$windows" = "true" ]; then
                     windows_old="true"
                 fi
