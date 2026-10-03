@@ -285,14 +285,14 @@ for file in "iso"/*; do
         if { [ "$arch" = "arm" ] && [ "$checked" != "true" ]; } || [ "$chk_iso" = "true" ]; then
             oefi="$(7z l -ba "iso/${name}.iso" | awk 'toupper(substr($1,1,1)) == "D" || toupper(substr($3,1,1)) == "D" { max = (toupper(substr($1,1,1)) != "D" ? 3 : 1); for (i=1; i<=max && i<NF; i++) $i=""; sub(/^[[:space:]]+/, ""); print }' | sed 's|^[^/]|/&|')"
             #Dynamically Detect Windows
-            if [ ! -z "$(printf '%s' "$oefi" | grep -Ei '^/(boot/bcd|bootmgr.efi|efi/microsoft|uefi/microsoft)(/)?$')" ]; then
+            if [ ! -z "$(printf '%s' "$oefi" | grep -Ei '^/(boot/bcd|bootmgr\.efi|efi/microsoft|uefi/microsoft)(/)?$')" ]; then
                 windows="true"
                 checked="true"
                 echo "debug windows found ${name}"
             fi
             if [ "$checked" != "true" ]
                 #Dynamically Detect Old Windows
-                if { [ "$arch" = "x86" ] || [ "$arch" = "x86_64" ]; } && [ ! -z "$(printf '%s' "$oefi" | grep -Ei '^/([^/]+/[^/]+\.cab|CONFIG.SYS)$')" ]; then
+                if { [ "$arch" = "x86" ] || [ "$arch" = "x86_64" ]; } && [ ! -z "$(printf '%s' "$oefi" | grep -Ei '^/([^/]+/[^/]+\.cab|CONFIG\.SYS|freedos|FDOS[^/]*)$')" ]; then
                     windows="true"
                     windows_old="true"
                     iso_reboot="true"
