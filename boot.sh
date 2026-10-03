@@ -19,9 +19,6 @@ title="${title:-$dname}"
 gpu_2d="${gpu_2d:-false}"
 q_audio="${q_audio:-usb-audio}"
 grab_mouse="${grab_mouse:-true}"
-windows_95="${windows_95:-false}"
-windows_old="${windows_old:-$windows_95}"
-windows="${windows:-$windows_old}"
 if [ -z "$q_mouse" ]; then
   if [ "$grab_mouse" = "true" ]; then
     q_mouse="usb-mouse"
@@ -29,6 +26,9 @@ if [ -z "$q_mouse" ]; then
     q_mouse="usb-tablet"
   fi
 fi
+windows_95="${windows_95:-false}"
+windows_old="${windows_old:-$windows_95}"
+windows="${windows:-$windows_old}"
 #create the temp dir
 mkdir -p "tmp"
 run_tmp="tmp/${dname}${sname}.sh"
