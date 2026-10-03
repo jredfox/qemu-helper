@@ -348,10 +348,16 @@ for file in "iso"/*; do
         if [ "$windows_old" = "true" ]; then
             echo "export windows_old=\"true\"" >>"$bootisosh"
             echo "export windows_old=\"true\"" >>"$bootsh"
+            if [ "$windows_95" = "true" ]; then
+                echo "export windows_95=\"true\"" >>"$bootisosh"
+                echo "export windows_95=\"true\"" >>"$bootsh"
+                echo "#Set no_usb=\"false\" to allow usb on windows 95/98/2000 After you have installed the drivers"
+                echo "export no_usb=\"true\"" >>"$bootisosh"
+                echo "export no_usb=\"true\"" >>"$bootsh"
+                echo "export q_audio=\"AC97\"" >>"$bootisosh"
+                echo "export q_audio=\"AC97\"" >>"$bootsh"
+            fi
             echo "export no_reboot=\"false\"" >>"$bootisosh"
-        fi
-        if [ "$windows_95" = "true" ]; then
-            echo "export windows_95=\"true\"" >>"$bootisosh"
         fi
         echo "sh boot.sh \"${name}\" true ${arch} ${qram} ${qcore}" >>"$bootisosh"
         echo "sh boot.sh \"${name}\" false ${arch} ${qram} ${qcore}" >>"$bootsh"
