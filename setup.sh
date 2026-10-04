@@ -337,7 +337,7 @@ for file in "iso"/*; do
         if [ "$windows_95" = "true" ]; then
             arch="i386"
             bits32="true"
-            qram32="512"
+            qram32="500"
             qcore32="cpus=1,sockets=1,cores=1,threads=1"
         fi
         
