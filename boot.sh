@@ -569,11 +569,9 @@ case "$arch" in
 esac
 
 #Enable KVM
-if qemu-system-$arch -accel help 2>/dev/null | grep -qw kvm; then
-  if [ "$windows_95" != "true" ]; then
-    qdrive "-enable-kvm"
-    q_cpu="host"
-  fi
+if [ "$windows_95" != "true" ] && qemu-system-$arch -accel help 2>/dev/null | grep -qw kvm; then
+  qdrive "-enable-kvm"
+  q_cpu="host"
 fi
 
 #Override the network device
