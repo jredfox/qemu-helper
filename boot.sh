@@ -7,7 +7,9 @@ for ext in iso ISO Iso isO iSo iSO IsO ISo; do
     break
   fi
 done
-iso="$(realpath "$iso")"
+if [ ! -z "$iso" ]; then
+  iso="$(realpath "$iso")"
+fi
 cow="disks/${dname}.qcow2"
 fwrdir="disks/firmware"
 iso_boot="$2"
