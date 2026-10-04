@@ -104,6 +104,7 @@ for file in "iso"/*; do
         *)  continue ;;
     esac
     ext="${name##*.}"
+    ext=".${ext}"
     name="${name%.*}"
     lname="$(printf '%s' "$name" | tr '[:upper:]' '[:lower:]')"
     lnk_name="iso/${name}-ppc32${ext}"
@@ -151,6 +152,7 @@ for file in "iso"/*; do
         *)  continue ;;
     esac
     ext="${name##*.}"
+    ext=".${ext}"
     name="${name%.*}"
     if [ -f "disks/${name}.qcow2" ]; then
         echo "Skipping ISO $name"
