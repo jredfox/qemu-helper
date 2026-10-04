@@ -568,6 +568,11 @@ if qemu-system-$arch -accel help 2>/dev/null | grep -qw kvm; then
       q_cpu="host"
 fi
 
+#Override the network device
+if [ ! -z "$net_device" ]; then
+  q_netdev_device="$net_device"
+fi
+
 if [ "$no_graphics" != "true" ]; then
   qconsole="$qconsole_gui"
 
