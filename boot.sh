@@ -7,10 +7,6 @@ for ext in iso ISO Iso isO iSo iSO IsO ISo; do
     break
   fi
 done
-if [ -z "$iso" ]; then
-  echo "iso not found: iso/${dname}.iso"
-  exit 1
-fi
 iso="$(realpath "$iso")"
 cow="disks/${dname}.qcow2"
 fwrdir="disks/firmware"
@@ -19,6 +15,10 @@ arch="$3"
 qram="${4:-4096}"
 qcore="${5:-4}"
 if [ "$iso_boot" = "true" ]; then
+  if [ -z "$iso" ]; then
+    echo "iso not found: iso/${dname}.iso"
+    exit 1
+  fi
   sname="_iso"
   no_reboot="${no_reboot:-true}"
 else
