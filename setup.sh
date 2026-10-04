@@ -308,7 +308,7 @@ for file in "iso"/*; do
             #Dynamically Detect Old Windows MS-DOS FreeDOS
             if { [ "$arch" = "i386" ] || [ "$arch" = "x86_64" ]; } && [ "$chked_iso" != "true" ]; then
                 #Detect Windows 95/98/me MS-DOS FreeDOS
-                if [ ! -z "$(printf '%s' "$oefi" | grep -Ei '^/(win9[^/]*|winme[^/]*|FDOS[^/]*|freedos|CONFIG\.SYS)$')" ]; then
+                if [ ! -z "$(printf '%s' "$oefi" | grep -Ei '^/(win9|winme|FDOS)[^/]*$|^/(freedos|config\.SYS)$')" ]; then
                     windows_95="true"
                     chked_iso="true"
                 fi
