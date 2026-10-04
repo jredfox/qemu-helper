@@ -316,6 +316,7 @@ for file in "iso"/*; do
                 #Dynamically Detect Windows 2000 and Higher
                 if [ "$chked_iso" != "true" ] && [ ! -z "$(printf '%s' "$oefi" | grep -Ei '^/([^/]+/[^/]+\.cab)$')" ]; then
                     windows_old="true"
+                    chked_iso="true"
                     echo "debug old windows found ${name}"
                 fi
             fi
@@ -364,7 +365,8 @@ for file in "iso"/*; do
         if [ "$windows_95" = "true" ]; then
             echo "export windows_95=\"true\"" >>"$bootisosh"
             echo "export windows_95=\"true\"" >>"$bootsh"
-            echo "#Set no_usb=\"false\" to allow usb on windows 95/98/2000 After you have installed the drivers"
+            echo "#Set no_usb=\"false\" to allow usb on windows 95/98/2000 After you have installed the drivers" >>"$bootisosh"
+            echo "#Set no_usb=\"false\" to allow usb on windows 95/98/2000 After you have installed the drivers" >>"$bootisosh"
             echo "export no_usb=\"true\"" >>"$bootisosh"
             echo "export no_usb=\"true\"" >>"$bootsh"
             echo "export q_audio=\"sb16\"" >>"$bootisosh"
