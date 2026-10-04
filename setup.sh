@@ -281,6 +281,20 @@ for file in "iso"/*; do
                 ;;
         esac
 
+        #Windows Vista and lower compatibility
+        if [ "$windows" = "true" ]; then
+            case "$lname" in
+                *vista*|*xp*|2000[!0-9]*|*[!0-9]2000|*[!0-9]2000[!0-9]*)
+                    windows_old="true"
+                    windows="false"
+                    ;;
+                95[!0-9]*|*[!0-9]95|*[!0-9]95[!0-9]*|98[!0-9]*|*[!0-9]98|*[!0-9]98[!0-9]*|*dos*)
+                    windows_95="true"
+                    windows="false"
+                    ;;
+            esac
+        fi
+
         #Dynamic Detection of windows and kb for linux
         if { [ "$arch" = "arm" ] && [ "$checked" != "true" ]; } || [ "$chk_iso" = "true" ]; then
             chked_iso="false"
@@ -294,7 +308,6 @@ for file in "iso"/*; do
             if [ "$chked_iso" != "true" ]; then
                 #Dynamically Detect Old Windows
                 if { [ "$arch" = "i386" ] || [ "$arch" = "x86_64" ]; } && [ ! -z "$(printf '%s' "$oefi" | grep -Ei '^/([^/]+/[^/]+\.cab|CONFIG\.SYS|freedos|FDOS[^/]*)$')" ]; then
-                    windows="true"
                     windows_old="true"
                     chked_iso="true"
                     echo "debug old windows found ${name}"
@@ -307,21 +320,12 @@ for file in "iso"/*; do
             fi
         fi
 
-        #Windows Vista and lower compatibility
-        if [ "$windows" = "true" ]; then
-            case "$lname" in
-                *vista*|*xp*|2000[!0-9]*|*[!0-9]2000|*[!0-9]2000[!0-9]*)
-                    windows_old="true"
-                    ;;
-                95[!0-9]*|*[!0-9]95|*[!0-9]95[!0-9]*|98[!0-9]*|*[!0-9]98|*[!0-9]98[!0-9]*|*dos*)
-                    arch="i386"
-                    bits32="true"
-                    windows_old="true"
-                    windows_95="true"
-                    qram32="512"
-                    qcore32="cpus=1,sockets=1,cores=1,threads=1"
-                    ;;
-            esac
+        #If windows 95/98/me was detected by name or automatically set requirements
+        if [ "$windows_95" = "true" ]; then
+            arch="i386"
+            bits32="true"
+            qram32="512"
+            qcore32="cpus=1,sockets=1,cores=1,threads=1"
         fi
         
         if [ "$bits32" = "true" ]; then
@@ -342,11 +346,11 @@ for file in "iso"/*; do
             echo "export gpu_3d_fallback=\"true\"" >>"$bootisosh"
             echo "export gpu_3d_fallback=\"true\"" >>"$bootsh"
         fi
-        if [ "$windows" = "true" ] && [ "$windows_old" != "true" ] && [ "$windows_95" != "true" ]; then
+        if [ "$windows" = "true" ]; then
             echo "export windows=\"true\"" >>"$bootisosh"
             echo "export windows=\"true\"" >>"$bootsh"
         fi
-        if [ "$windows_old" = "true" ] && [ "$windows_95" != "true" ]; then
+        if [ "$windows_old" = "true" ]; then
             echo "export windows_old=\"true\"" >>"$bootisosh"
             echo "export windows_old=\"true\"" >>"$bootsh"
             echo "export no_reboot=\"false\"" >>"$bootisosh"
