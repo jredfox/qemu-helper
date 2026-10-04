@@ -566,13 +566,15 @@ esac
 
 #Enable KVM
 if qemu-system-$arch -accel help 2>/dev/null | grep -qw kvm; then
-      qdrive "-enable-kvm"
-      q_cpu="host"
+  if [ "$windows_95" != "true" ]; then
+    qdrive "-enable-kvm"
+    q_cpu="host"
+  fi
 fi
 
 #Override the network device
-if [ ! -z "$net_device" ]; then
-  q_netdev_device="$net_device"
+if [ ! -z "$network_device" ]; then
+  q_netdev_device="$network_device"
 fi
 
 if [ "$no_graphics" != "true" ]; then
