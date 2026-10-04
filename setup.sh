@@ -311,6 +311,7 @@ for file in "iso"/*; do
                 if [ ! -z "$(printf '%s' "$oefi" | grep -Ei '^/(win9|winme|FDOS)[^/]*$|^/(freedos|config\.SYS)$')" ]; then
                     windows_95="true"
                     chked_iso="true"
+                    echo "debug legacy windows found ${name}"
                 fi
                 #Dynamically Detect Windows 2000 and Higher
                 if [ "$chked_iso" != "true" ] && [ ! -z "$(printf '%s' "$oefi" | grep -Ei '^/([^/]+/[^/]+\.cab)$')" ]; then
