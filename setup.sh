@@ -284,7 +284,8 @@ for file in "iso"/*; do
         #Windows Vista and lower compatibility
         if [ "$windows" = "true" ]; then
             case "$lname" in
-                *vista*|*xp*|2000[!0-9]*|*[!0-9]2000|*[!0-9]2000[!0-9]*)
+                #vista already supported
+                *xp*|2000[!0-9]*|*[!0-9]2000|*[!0-9]2000[!0-9]*)
                     windows_old="true"
                     windows="false"
                     ;;
