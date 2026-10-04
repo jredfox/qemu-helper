@@ -294,7 +294,7 @@ for file in "iso"/*; do
                     windows="false"
                     ;;
                 #Check ISO for windows me edition. Covers WinMe,WindowME, WindowsME, Windows-me,Windows-me-pro
-                *nme*|*wme*|*sme*|*[!a-z]me[!a-z]*|me[!a-z]*|*[!a-z]me)
+                *nme*|*wme*|*sme*|*[!a-z]me[!a-z]*|me[!a-z]*|*[!a-z]me|*millen*|*milen*)
                     chk_iso="true"
                     windows="false"
                     ;;
