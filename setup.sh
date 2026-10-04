@@ -367,7 +367,7 @@ for file in "iso"/*; do
             echo "export windows_95=\"true\"" >>"$bootisosh"
             echo "export windows_95=\"true\"" >>"$bootsh"
             echo "#Set no_usb=\"false\" to allow usb on windows 95/98/2000 After you have installed the drivers" >>"$bootisosh"
-            echo "#Set no_usb=\"false\" to allow usb on windows 95/98/2000 After you have installed the drivers" >>"$bootisosh"
+            echo "#Set no_usb=\"false\" to allow usb on windows 95/98/2000 After you have installed the drivers" >>"$bootsh"
             echo "export no_usb=\"true\"" >>"$bootisosh"
             echo "export no_usb=\"true\"" >>"$bootsh"
             echo "export q_audio=\"sb16\"" >>"$bootisosh"
