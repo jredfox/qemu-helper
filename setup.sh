@@ -257,7 +257,7 @@ for file in "iso"/*; do
                 ;;
 
             #Detect Microsoft Windows
-            *winms*|*mswin*|*window*|*microsoft*)
+            *mswin*|*winms*|*window*|*microsoft*)
                 windows="true"
                 ;;
 
