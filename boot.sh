@@ -532,7 +532,11 @@ case "$arch" in
     #Fix Network Controller for Windows Linux Suffers Driver issues with e1000
     if [ "$windows" = "true" ]; then
       if [ "$windows_old" = "true" ]; then
-        q_netdev_device="rtl8139"
+        if [ "$windows_95" = "true" ]; then
+          q_netdev_device="ne2k_pci"
+        else
+          q_netdev_device="rtl8139"
+        fi
       else
         q_netdev_device="e1000"
       fi
