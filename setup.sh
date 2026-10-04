@@ -313,7 +313,6 @@ for file in "iso"/*; do
             if [ ! -z "$(printf '%s' "$oefi" | grep -Ei '^/(boot/bcd|bootmgr|bootmgr\.efi|efi/microsoft|uefi/microsoft)(/)?$')" ]; then
                 windows="true"
                 chked_iso="true"
-                echo "debug windows found ${name}"
             fi
             #Dynamically Detect Old Windows MS-DOS FreeDOS
             if { [ "$arch" = "i386" ] || [ "$arch" = "x86_64" ]; } && [ "$chked_iso" != "true" ]; then
@@ -321,19 +320,16 @@ for file in "iso"/*; do
                 if [ ! -z "$(printf '%s' "$oefi" | grep -Ei '^/(win9|winme|FDOS)[^/]*$|^/(freedos|config\.SYS)$')" ]; then
                     windows_95="true"
                     chked_iso="true"
-                    echo "debug legacy windows found ${name}"
                 fi
                 #Dynamically Detect Windows 2000 and Higher
                 if [ "$chked_iso" != "true" ] && [ ! -z "$(printf '%s' "$oefi" | grep -Ei '^/([^/]+/[^/]+\.cab)$')" ]; then
                     windows_old="true"
                     chked_iso="true"
-                    echo "debug old windows found ${name}"
                 fi
             fi
             #Dynamically Determine if kernal boot needs to be enabled for arm32 images
             if [ "$chked_iso" != "true" ] && [ "$arch" = "arm" ] && [ -z "$(printf '%s' "$oefi" | grep -Ei '^/(EFI|BOOT)(/)?$')" ]; then
                 kb="true"
-                echo "debug arm32 EFI not found ${name}"
             fi
         fi
 
