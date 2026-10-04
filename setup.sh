@@ -267,7 +267,7 @@ for file in "iso"/*; do
                 ;;
 
             #Detect Possible Windows MS-DOS FreeDOS
-            *server*|*win*|*ms*|*dos*|fd*)
+            *server*|*win*|*ms*|*vista*|*dos*|fd*)
                 chk_iso="true"
                 ;;
 
