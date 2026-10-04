@@ -103,9 +103,10 @@ for file in "iso"/*; do
         *.[iI][sS][oO]) ;;
         *)  continue ;;
     esac
+    ext="${name##*.}"
     name="${name%.*}"
     lname="$(printf '%s' "$name" | tr '[:upper:]' '[:lower:]')"
-    lnk_name="iso/${name}-ppc32.iso"
+    lnk_name="iso/${name}-ppc32${ext}"
     case "$lname" in
         # powerpc64 little edian
         *ppc64el*|*ppc64le*|*powerpc64le*|*powerpc64el*)
@@ -130,10 +131,10 @@ for file in "iso"/*; do
     if [ "$arch" = "ppc64" ]; then
         #prevent accidental overwrite of similar ISO files
         if [ ! -f "$lnk_name" ]; then
-            oefi="$(7z l -ba "iso/${name}.iso" | awk 'toupper(substr($1,1,1)) == "D" || toupper(substr($3,1,1)) == "D" { max = (toupper(substr($1,1,1)) != "D" ? 3 : 1); for (i=1; i<=max && i<NF; i++) $i=""; sub(/^[[:space:]]+/, ""); print }' | sed 's|^[^/]|/&|' | grep -vEi '^/(install|boot|efi)[^/]*/e500mc(/|$)' | grep -vEi '^/(install|boot|efi)[^/]*/(powerpc64|ppc64)(-[a-z0-9]+)?(/|$)' | grep -Ei '^/(install|boot|efi)[^/]*/(powerpc|ppc|pmac|chrp)(32)?(-[a-z0-9]+)?(/|$)')"
+            oefi="$(7z l -ba "iso/${name}${ext}" | awk 'toupper(substr($1,1,1)) == "D" || toupper(substr($3,1,1)) == "D" { max = (toupper(substr($1,1,1)) != "D" ? 3 : 1); for (i=1; i<=max && i<NF; i++) $i=""; sub(/^[[:space:]]+/, ""); print }' | sed 's|^[^/]|/&|' | grep -vEi '^/(install|boot|efi)[^/]*/e500mc(/|$)' | grep -vEi '^/(install|boot|efi)[^/]*/(powerpc64|ppc64)(-[a-z0-9]+)?(/|$)' | grep -Ei '^/(install|boot|efi)[^/]*/(powerpc|ppc|pmac|chrp)(32)?(-[a-z0-9]+)?(/|$)')"
             if [ ! -z "$oefi" ]; then
                 echo "creating symlink: $lnk_name"
-                ln -sfn "${name}.iso" "$lnk_name"
+                ln -sfn "${name}${ext}" "$lnk_name"
             fi
         fi
     fi
@@ -149,6 +150,7 @@ for file in "iso"/*; do
         *.[iI][sS][oO]) ;;
         *)  continue ;;
     esac
+    ext="${name##*.}"
     name="${name%.*}"
     if [ -f "disks/${name}.qcow2" ]; then
         echo "Skipping ISO $name"
@@ -304,7 +306,7 @@ for file in "iso"/*; do
         #Dynamic Detection of windows and kb for linux
         if { [ "$arch" = "arm" ] && [ "$checked" != "true" ]; } || [ "$chk_iso" = "true" ]; then
             chked_iso="false"
-            oefi="$(7z l -ba "iso/${name}.iso" | awk '{ c1 = toupper(substr($1,1,1)); if (c1 == "D" || toupper(substr($3,1,1)) == "D") max = (c1 != "D" ? 3 : 1); else max = (c1 != "." ? 5 : 3); for (i=1; i<=max && i<NF; i++) $i=""; sub(/^[[:space:]]+/, ""); print }' | sed 's|^[^/]|/&|')"
+            oefi="$(7z l -ba "iso/${name}${ext}" | awk '{ c1 = toupper(substr($1,1,1)); if (c1 == "D" || toupper(substr($3,1,1)) == "D") max = (c1 != "D" ? 3 : 1); else max = (c1 != "." ? 5 : 3); for (i=1; i<=max && i<NF; i++) $i=""; sub(/^[[:space:]]+/, ""); print }' | sed 's|^[^/]|/&|')"
             #Dynamically Detect Windows
             if [ ! -z "$(printf '%s' "$oefi" | grep -Ei '^/(boot/bcd|bootmgr|bootmgr\.efi|efi/microsoft|uefi/microsoft)(/)?$')" ]; then
                 windows="true"

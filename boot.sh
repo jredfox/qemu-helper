@@ -1,7 +1,16 @@
 #!/bin/sh
 
 dname="${1}"
-iso="iso/${dname}.iso"
+for ext in iso ISO Iso isO iSo iSO IsO ISo; do
+  if [ -f "iso/${dname}.${ext}" ]; then
+    iso="iso/${dname}.${ext}"
+    break
+  fi
+done
+if [ -z "$iso" ]; then
+  echo "iso not found: iso/${dname}.iso"
+  exit 1
+fi
 iso="$(realpath "$iso")"
 cow="disks/${dname}.qcow2"
 fwrdir="disks/firmware"
