@@ -3,6 +3,3 @@ Windows Registry Editor Version 5.00
 [HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\OOBE]
 "BypassNRO"=dword:00000001
 "HideOnlineAccountScreens"=dword:00000001
-"DisableVoice"=dword:00000001
-"PrivacyConsentStatus"=dword:00000001
-"ProtectYourPC"=dword:00000003

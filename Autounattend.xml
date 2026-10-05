@@ -12,7 +12,55 @@
               <RunSynchronous>
                 <RunSynchronousCommand wcm:action="add">
                   <Order>1</Order>
-                  <Path>cmd /c for %d in (C D E F G H I J K L M N O P Q R S T U V W X Y Z A B) do if exist "%d:\QHAutounattend.cmd" cmd /c call "%d:\QHAutounattend.cmd" "%d" "F"</Path>
+                  <Path>cmd /k for %d in (C D E F G H I J K L M N O P Q R S T U V W X Y Z A B) do if exist "%d:\QHAutounattend.cmd" cmd /c call "%d:\QHAutounattend.cmd" "%d" "F"</Path>
+                </RunSynchronousCommand>
+              </RunSynchronous>
+        </component>
+    </settings>
+
+    <!-- Runs inside of Windows Media Creation Tool WinPE -->
+    <settings pass="windowsPE">
+        <component name="Microsoft-Windows-Setup"
+                   processorArchitecture="x86"
+                   publicKeyToken="31bf3856ad364e35"
+                   language="neutral"
+                   versionScope="nonSxS">
+              <RunSynchronous>
+                <RunSynchronousCommand wcm:action="add">
+                  <Order>1</Order>
+                  <Path>cmd /k for %d in (C D E F G H I J K L M N O P Q R S T U V W X Y Z A B) do if exist "%d:\QHAutounattend.cmd" cmd /c call "%d:\QHAutounattend.cmd" "%d" "F"</Path>
+                </RunSynchronousCommand>
+              </RunSynchronous>
+        </component>
+    </settings>
+
+    <!-- Runs inside of Windows Media Creation Tool WinPE -->
+    <settings pass="windowsPE">
+        <component name="Microsoft-Windows-Setup"
+                   processorArchitecture="arm"
+                   publicKeyToken="31bf3856ad364e35"
+                   language="neutral"
+                   versionScope="nonSxS">
+              <RunSynchronous>
+                <RunSynchronousCommand wcm:action="add">
+                  <Order>1</Order>
+                  <Path>cmd /k for %d in (C D E F G H I J K L M N O P Q R S T U V W X Y Z A B) do if exist "%d:\QHAutounattend.cmd" cmd /c call "%d:\QHAutounattend.cmd" "%d" "F"</Path>
+                </RunSynchronousCommand>
+              </RunSynchronous>
+        </component>
+    </settings>
+
+    <!-- Runs inside of Windows Media Creation Tool WinPE -->
+    <settings pass="windowsPE">
+        <component name="Microsoft-Windows-Setup"
+                   processorArchitecture="arm64"
+                   publicKeyToken="31bf3856ad364e35"
+                   language="neutral"
+                   versionScope="nonSxS">
+              <RunSynchronous>
+                <RunSynchronousCommand wcm:action="add">
+                  <Order>1</Order>
+                  <Path>cmd /k for %d in (C D E F G H I J K L M N O P Q R S T U V W X Y Z A B) do if exist "%d:\QHAutounattend.cmd" cmd /c call "%d:\QHAutounattend.cmd" "%d" "F"</Path>
                 </RunSynchronousCommand>
               </RunSynchronous>
         </component>
@@ -28,7 +76,55 @@
         <RunSynchronous>
           <RunSynchronousCommand wcm:action="add">
             <Order>1</Order>
-            <Path>cmd /c for %d in (C D E F G H I J K L M N O P Q R S T U V W X Y Z A B) do if exist "%d:\QHAutounattend.cmd" cmd /c call "%d:\QHAutounattend.cmd" "%d" "T"</Path>
+            <Path>cmd /k for %d in (C D E F G H I J K L M N O P Q R S T U V W X Y Z A B) do if exist "%d:\QHAutounattend.cmd" cmd /c call "%d:\QHAutounattend.cmd" "%d" "T"</Path>
+          </RunSynchronousCommand>
+        </RunSynchronous>
+      </component>
+    </settings>
+
+    <!-- Runs inside of Installed Windows but before OOBE -->
+    <settings pass="specialize">
+      <component name="Microsoft-Windows-Deployment"
+                 processorArchitecture="x86"
+                 publicKeyToken="31bf3856ad364e35" 
+                 language="neutral" 
+                 versionScope="nonSxS">
+        <RunSynchronous>
+          <RunSynchronousCommand wcm:action="add">
+            <Order>1</Order>
+            <Path>cmd /k for %d in (C D E F G H I J K L M N O P Q R S T U V W X Y Z A B) do if exist "%d:\QHAutounattend.cmd" cmd /c call "%d:\QHAutounattend.cmd" "%d" "T"</Path>
+          </RunSynchronousCommand>
+        </RunSynchronous>
+      </component>
+    </settings>
+
+    <!-- Runs inside of Installed Windows but before OOBE -->
+    <settings pass="specialize">
+      <component name="Microsoft-Windows-Deployment"
+                 processorArchitecture="arm"
+                 publicKeyToken="31bf3856ad364e35" 
+                 language="neutral" 
+                 versionScope="nonSxS">
+        <RunSynchronous>
+          <RunSynchronousCommand wcm:action="add">
+            <Order>1</Order>
+            <Path>cmd /k for %d in (C D E F G H I J K L M N O P Q R S T U V W X Y Z A B) do if exist "%d:\QHAutounattend.cmd" cmd /c call "%d:\QHAutounattend.cmd" "%d" "T"</Path>
+          </RunSynchronousCommand>
+        </RunSynchronous>
+      </component>
+    </settings>
+
+    <!-- Runs inside of Installed Windows but before OOBE -->
+    <settings pass="specialize">
+      <component name="Microsoft-Windows-Deployment"
+                 processorArchitecture="arm64"
+                 publicKeyToken="31bf3856ad364e35" 
+                 language="neutral" 
+                 versionScope="nonSxS">
+        <RunSynchronous>
+          <RunSynchronousCommand wcm:action="add">
+            <Order>1</Order>
+            <Path>cmd /k for %d in (C D E F G H I J K L M N O P Q R S T U V W X Y Z A B) do if exist "%d:\QHAutounattend.cmd" cmd /c call "%d:\QHAutounattend.cmd" "%d" "T"</Path>
           </RunSynchronousCommand>
         </RunSynchronous>
       </component>
