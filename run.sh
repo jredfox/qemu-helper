@@ -1,4 +1,4 @@
-extract_setup_exe() {
+unzipSetupEXE() {
 	7z e "${1}" -o"$2" "setup.exe" -mtc -mta -mtm -aoa -y >/dev/null
 	echo "${2}/setup.exe"
 }
@@ -17,4 +17,9 @@ getWinBuild() {
 	echo "$build"
 }
 
-getWinBuild "$(extract_setup_exe "$1" "$(dirname "$1")")"
+#Create a Temp Directory for setup.exe and version.txt
+setup_exe_dir="$(mktemp -d /tmp/getWinBuild-XXXXXX)"
+trap "rm -rf $setup_exe_dir" 0
+
+win_build="$(getWinBuild "$(unzipSetupEXE "$1" "$setup_exe_dir")")"
+echo "$win_build"
