@@ -104,7 +104,7 @@ unzipSetupEXE() {
     if [ -f "${2}/setup.exe" ]; then
         echo "${2}/setup.exe"
     else
-        echo "$(find "${2}" -maxdepth 1 -type f -print | grep -Ei 'setup.exe')"
+        echo "$(find "${2}" -maxdepth 1 -type f -print | grep -Ei 'setup\.exe')"
     fi
 }
 
@@ -128,7 +128,7 @@ getWinBuild() {
 
 #Create a Temp Directory for setup.exe and version.txt
 setup_exe_dir="$(mktemp -d tmp/qemu-helper-XXXXXX)"
-trap "rm -rf $setup_exe_dir" 0
+trap "rm -rf \"$setup_exe_dir\"" 0
 
 #create powerpc32 symlinks
 for file in "iso"/*; do
