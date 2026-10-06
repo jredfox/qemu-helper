@@ -328,8 +328,12 @@ for file in "iso"/*; do
         if [ "$windows" = "true" ]; then
             case "$lname" in
                 #vista already supported
-                *xp*|2000[!0-9]*|*[!0-9]2000|*[!0-9]2000[!0-9]*)
+                *nxp*|*wxp*|*sxp*|*[!a-z]xp[!a-z]*|xp[!a-z]*|*[!a-z]xp|2000[!0-9]*|*[!0-9]2000|*[!0-9]2000[!0-9]*)
                     windows_old="true"
+                    windows="false"
+                    ;;
+                *xp*)
+                    chk_iso="true"
                     windows="false"
                     ;;
                 95[!0-9]*|*[!0-9]95|*[!0-9]95[!0-9]*|98[!0-9]*|*[!0-9]98|*[!0-9]98[!0-9]*|*dos*)
