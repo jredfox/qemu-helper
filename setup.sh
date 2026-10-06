@@ -390,9 +390,13 @@ for file in "iso"/*; do
             if [ ! -z "$win_build" ]; then
                 echo "win build found $win_build ${name}"
                 if [ "$win_build" -ge 10240 ] && [ "$win_build" -le 21999 ]; then
+                    windows_old="false"
+                    windows="true"
                     echo "windows 10 found $name"
                 fi
                 if [ "$win_build" -ge 22000 ]; then
+                    windows_old="false"
+                    windows="true"
                     echo "windows 11+ found $name"
                 fi
             fi
