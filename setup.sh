@@ -106,6 +106,7 @@ unzipSetupEXE() {
 getWinBuild() {
     if [ ! -f "$1" ]; then
         echo ""
+        return 0
     fi
     setup_exe="$1"
     s_dir="$(dirname "$setup_exe")"
