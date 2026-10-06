@@ -44,6 +44,7 @@ fi
 if [ "$windows_old" = "true" ] || [ "$windows_10" = "true" ] || [ "$windows_11" = "true" ]; then
   windows="true"
 fi
+oobe_bypassnro="${oobe_bypassnro:-true}"
 #create the temp dir
 mkdir -p "tmp"
 run_tmp="tmp/${dname}${sname}.sh"
@@ -558,14 +559,14 @@ case "$arch" in
     fi
     #Fix Windows 10 and Windows 11 Local Accounts Using win10-unattend.iso
     if [ "$windows_10" = "true" ] && [ "$oobe_bypassnro" = "true" ]; then
-      qdrive "-drive file=win/win10-unattend.iso,media=cdrom,readonly=on"
+      qdrive "-drive \"file=win/win10-unattend.iso,media=cdrom,readonly=on\""
     fi
     #Fix Windows 10 and Windows 11 Local Accounts Using win11-unattend.iso
     if [ "$windows_11" = "true" ]; then
       if [ "$oobe_bypassnro" = "true" ]; then
-        qdrive "-drive file=win/win11-unattend.iso,media=cdrom,readonly=on"
+        qdrive "-drive \"file=win/win11-unattend.iso,media=cdrom,readonly=on\""
       else
-        qdrive "-drive file=win/win11-unattend-nro.iso,media=cdrom,readonly=on"
+        qdrive "-drive \"file=win/win11-unattend-nro.iso,media=cdrom,readonly=on\""
       fi
     fi
     if [ "$no_graphics" != "true" ]; then

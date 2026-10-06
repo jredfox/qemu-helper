@@ -87,6 +87,7 @@ mkdir -p "disks"
 mkdir -p "iso"
 mkdir -p "share"
 mkdir -p "tmp"
+mkdir -p "win"
 #copy the installation files if not already extracted to the install dir
 if [ "$install_dir" != "$current_dir" ]; then
     echo "copying install files"
