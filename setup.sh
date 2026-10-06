@@ -98,7 +98,8 @@ unzipSetupEXE() {
     if [ -z "${2}" ]; then
         return 0
     fi
-    rm -rf "${2}"/* >/dev/null 2>&1
+    rm -rf "${2}" >/dev/null 2>&1
+    mkdir -p "${2}"
     7z e "${1}" -o"$2" "setup.exe" -mtc -mta -mtm -aoa -y -ssc- >/dev/null
     if [ -f "${2}/setup.exe" ]; then
         echo "${2}/setup.exe"
