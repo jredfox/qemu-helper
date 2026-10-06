@@ -1,5 +1,6 @@
 extract_setup_exe() {
-	7z e "${1}" -o"$s_dir" "setup.exe" -mtc -mta -mtm -aoa -y >/dev/null
+	7z e "${1}" -o"$2" "setup.exe" -mtc -mta -mtm -aoa -y >/dev/null
+	echo "${2}/setup.exe"
 }
 
 getWinBuild() {
@@ -16,4 +17,4 @@ getWinBuild() {
 	echo "$build"
 }
 
-getWinBuild "$(extract_setup_exe "$1")"
+getWinBuild "$(extract_setup_exe "$1" "$(dirname "$1")")"
