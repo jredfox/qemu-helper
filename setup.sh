@@ -333,6 +333,7 @@ for file in "iso"/*; do
                     windows="false"
                     ;;
                 *xp*)
+                    echo "WARNING: XP in file name using slow method to determine if ${name} is Windows XP"
                     chk_iso="true"
                     windows="false"
                     ;;
