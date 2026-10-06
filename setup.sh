@@ -324,7 +324,7 @@ for file in "iso"/*; do
                 ;;
         esac
 
-        #Windows Vista and lower compatibility
+        #Windows XP and lower compatibility
         if [ "$windows" = "true" ]; then
             case "$lname" in
                 #vista already supported
