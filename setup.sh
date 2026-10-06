@@ -95,14 +95,17 @@ if [ "$install_dir" != "$current_dir" ]; then
 fi
 
 unzipSetupEXE() {
-    7z e "${1}" -o"$2" "setup.exe" -mtc -mta -mtm -aoa -y >/dev/null
-    echo "${2}/setup.exe"
+    7z e "${1}" -o"$2" "setup.exe" -mtc -mta -mtm -aoa -y -ssc- >/dev/null
+    if [ -f "${2}/setup.exe" ]; then
+        echo "${2}/setup.exe"
+    else
+        echo "$(find "${2}" -maxdepth 1 -type f -print | grep -Ei 'setup.exe')"
+    fi
 }
 
 getWinBuild() {
     if [ ! -f "$1" ]; then
-        echo "$1 not found" >&2
-        return 1
+        echo ""
     fi
     setup_exe="$1"
     s_dir="$(dirname "$setup_exe")"
@@ -371,14 +374,15 @@ for file in "iso"/*; do
 
         #Windows 10+ Support
         if [ "$windows" = "true" ] || [ "$windows_old" = "true" ]; then
-            echo "iso/${name}${ext}"
             win_build="$(getWinBuild "$(unzipSetupEXE "iso/${name}${ext}" "$setup_exe_dir")")"
-            echo "win build found $win_build ${name}"
-            if [ "$win_build" -ge 10240 ] && [ "$win_build" -le 21999 ]; then
-                echo "windows 10 found $name"
-            fi
-            if [ "$win_build" -ge 22000 ]; then
-                echo "windows 11+ found $name"
+            if [ ! -z "$win_build" ]; then
+                echo "win build found $win_build ${name}"
+                if [ "$win_build" -ge 10240 ] && [ "$win_build" -le 21999 ]; then
+                    echo "windows 10 found $name"
+                fi
+                if [ "$win_build" -ge 22000 ]; then
+                    echo "windows 11+ found $name"
+                fi
             fi
         fi
         
