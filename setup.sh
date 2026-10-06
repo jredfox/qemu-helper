@@ -86,6 +86,7 @@ mkdir -p "boot"
 mkdir -p "disks"
 mkdir -p "iso"
 mkdir -p "share"
+mkdir -p "tmp"
 #copy the installation files if not already extracted to the install dir
 if [ "$install_dir" != "$current_dir" ]; then
     echo "copying install files"
@@ -99,6 +100,10 @@ unzipSetupEXE() {
 }
 
 getWinBuild() {
+    if [ ! -f "$1" ]; then
+        echo "$1 not found" >&2
+        return 1
+    fi
     setup_exe="$1"
     s_dir="$(dirname "$setup_exe")"
     7z e "${setup_exe}" -o"$s_dir" ".rsrc/version.txt" -mtc -mta -mtm -aoa -y >/dev/null
@@ -113,7 +118,7 @@ getWinBuild() {
 }
 
 #Create a Temp Directory for setup.exe and version.txt
-setup_exe_dir="$(mktemp -d /tmp/qemu-helper-XXXXXX)"
+setup_exe_dir="$(mktemp -d tmp/qemu-helper-XXXXXX)"
 trap "rm -rf $setup_exe_dir" 0
 
 #create powerpc32 symlinks
@@ -366,6 +371,7 @@ for file in "iso"/*; do
 
         #Windows 10+ Support
         if [ "$windows" = "true" ] || [ "$windows_old" = "true" ]; then
+            echo "iso/${name}${ext}"
             win_build="$(getWinBuild "$(unzipSetupEXE "iso/${name}${ext}" "$setup_exe_dir")")"
             echo "win build found $win_build ${name}"
             if [ "$win_build" -ge 10240 ] && [ "$win_build" -le 21999 ]; then
