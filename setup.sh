@@ -389,7 +389,7 @@ for file in "iso"/*; do
         if [ "$windows" = "true" ]; then
             win_build="$(getWinBuild "$(unzipSetupEXE "iso/${name}${ext}" "$setup_exe_dir")")"
             case "$win_build" in
-                *[!0-9]*)
+                ''|*[!0-9]*)
                     echo "ERROR win_build is not a number ${win_build} for iso ${name}"
                     win_build=""
                 ;;
