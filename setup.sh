@@ -206,6 +206,8 @@ for file in "iso"/*; do
         windows="false"
         windows_old="false"
         windows_95="false"
+        windows_10="false"
+        windows_11="false"
         gpu_3d_fallback="false"
         chk_iso="false"
         mac="false"
@@ -379,7 +381,7 @@ for file in "iso"/*; do
         fi
 
         #Windows 10+ Support
-        if [ "$windows" = "true" ] || [ "$windows_old" = "true" ]; then
+        if [ "$windows" = "true" ]; then
             win_build="$(getWinBuild "$(unzipSetupEXE "iso/${name}${ext}" "$setup_exe_dir")")"
             case "$win_build" in
                 *[!0-9]*)
@@ -390,13 +392,13 @@ for file in "iso"/*; do
             if [ ! -z "$win_build" ]; then
                 echo "win build found $win_build ${name}"
                 if [ "$win_build" -ge 10240 ] && [ "$win_build" -le 21999 ]; then
-                    windows_old="false"
-                    windows="true"
+                    windows="false"
+                    windows_10="true"
                     echo "windows 10 found $name"
                 fi
                 if [ "$win_build" -ge 22000 ]; then
-                    windows_old="false"
-                    windows="true"
+                    windows="false"
+                    windows_11="true"
                     echo "windows 11+ found $name"
                 fi
             fi
@@ -419,6 +421,14 @@ for file in "iso"/*; do
         if [ "$gpu_3d_fallback" = "true" ]; then
             echo "export gpu_3d_fallback=\"true\"" >>"$bootisosh"
             echo "export gpu_3d_fallback=\"true\"" >>"$bootsh"
+        fi
+        if [ "$windows_11" = "true" ]; then
+            echo "export windows_11=\"true\"" >>"$bootisosh"
+            echo "export windows_11=\"true\"" >>"$bootsh"
+        fi
+        if [ "$windows_10" = "true" ]; then
+            echo "export windows_10=\"true\"" >>"$bootisosh"
+            echo "export windows_10=\"true\"" >>"$bootsh"
         fi
         if [ "$windows" = "true" ]; then
             echo "export windows=\"true\"" >>"$bootisosh"

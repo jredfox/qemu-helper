@@ -41,7 +41,7 @@ windows_95="${windows_95:-false}"
 if [ "$windows_95" = "true" ]; then
   windows_old="true"
 fi
-if [ "$windows_old" = "true" ]; then
+if [ "$windows_old" = "true" ] || [ "$windows_10" = "true" ] || [ "$windows_11" = "true" ]; then
   windows="true"
 fi
 #create the temp dir
