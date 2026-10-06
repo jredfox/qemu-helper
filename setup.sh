@@ -98,8 +98,7 @@ unzipSetupEXE() {
     if [ -z "${2}" ]; then
         return 0
     fi
-    rm -rf "${2}" >/dev/null 2>&1
-    mkdir -p "${2}"
+    rm -rf "${2}"/* >/dev/null 2>&1
     7z e "${1}" -o"$2" "setup.exe" -mtc -mta -mtm -aoa -y -ssc- >/dev/null
     if [ -f "${2}/setup.exe" ]; then
         echo "${2}/setup.exe"
@@ -381,6 +380,12 @@ for file in "iso"/*; do
         #Windows 10+ Support
         if [ "$windows" = "true" ] || [ "$windows_old" = "true" ]; then
             win_build="$(getWinBuild "$(unzipSetupEXE "iso/${name}${ext}" "$setup_exe_dir")")"
+            case "$win_build" in
+                *[!0-9]*)
+                    echo "ERROR win_build is not a number ${win_build} for iso ${name}"
+                    win_build=""
+                ;;
+            esac
             if [ ! -z "$win_build" ]; then
                 echo "win build found $win_build ${name}"
                 if [ "$win_build" -ge 10240 ] && [ "$win_build" -le 21999 ]; then
