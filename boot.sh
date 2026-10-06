@@ -556,6 +556,18 @@ case "$arch" in
     if [ "$iso_boot" = "true" ]; then
       qdrive "-boot d"
     fi
+    #Fix Windows 10 and Windows 11 Local Accounts Using win10-unattend.iso
+    if [ "$windows_10" = "true" ] && [ "$oobe_bypassnro" = "true" ]; then
+      qdrive "-drive file=win/win10-unattend.iso,media=cdrom,readonly=on"
+    fi
+    #Fix Windows 10 and Windows 11 Local Accounts Using win11-unattend.iso
+    if [ "$windows_11" = "true" ]; then
+      if [ "$oobe_bypassnro" = "true" ]; then
+        qdrive "-drive file=win/win11-unattend.iso,media=cdrom,readonly=on"
+      else
+        qdrive "-drive file=win/win11-unattend-nro.iso,media=cdrom,readonly=on"
+      fi
+    fi
     if [ "$no_graphics" != "true" ]; then
       if [ "$family" != "x86" ]; then
         qdrive "-vga \"${q_intel_vga}\""

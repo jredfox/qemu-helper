@@ -92,6 +92,7 @@ if [ "$install_dir" != "$current_dir" ]; then
     echo "copying install files"
     mv "$current_dir/iso"/* "$install_dir/iso/" >/dev/null 2>&1
     cp -rf "$current_dir"/*.sh "$install_dir/"
+    cp -f "$current_dir/win"/*.iso "$install_dir/win"
 fi
 
 unzipSetupEXE() {
