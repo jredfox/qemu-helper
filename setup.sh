@@ -438,6 +438,7 @@ for file in "iso"/*; do
         if [ "$windows" = "true" ]; then
             echo "export windows=\"true\"" >>"$bootisosh"
             echo "export windows=\"true\"" >>"$bootsh"
+            echo "export no_reboot=\"false\"" >>"$bootisosh"
         fi
         if [ "$windows_old" = "true" ]; then
             echo "export windows_old=\"true\"" >>"$bootisosh"
