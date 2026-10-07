@@ -43,7 +43,6 @@ fi
 if [ "$windows_old" = "true" ] || [ "$windows_10" = "true" ] || [ "$windows_11" = "true" ]; then
   windows="true"
 fi
-oobe_bypassnro="${oobe_bypassnro:-true}"
 #create the temp dir
 mkdir -p "tmp"
 run_tmp="tmp/${dname}${sname}.sh"
