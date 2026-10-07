@@ -22,7 +22,6 @@ if [ "$iso_boot" = "true" ]; then
     exit 1
   fi
   sname="_iso"
-  no_reboot="${no_reboot:-true}"
 else
   sname=""
 fi
@@ -556,10 +555,6 @@ case "$arch" in
     qdrive "-hda \"$cow\""
     if [ "$iso_boot" = "true" ]; then
       qdrive "-boot d"
-    fi
-    #Fix Windows 10 and Windows 11 Local Accounts Using win10-unattend.iso
-    if [ "$windows_10" = "true" ] && [ "$oobe_bypassnro" = "true" ]; then
-      qdrive "-drive \"file=win/win10-unattend.iso,media=cdrom,readonly=on\""
     fi
     #Fix Windows 10 and Windows 11 Local Accounts Using win11-unattend.iso
     if [ "$windows_11" = "true" ]; then

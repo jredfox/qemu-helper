@@ -433,23 +433,19 @@ for file in "iso"/*; do
             echo "export windows_11=\"true\"" >>"$bootisosh"
             echo "export windows_11=\"true\"" >>"$bootsh"
             echo "export no_wifi=\"true\"" >>"$bootisosh"
-            echo "export no_reboot=\"false\"" >>"$bootisosh"
         fi
         if [ "$windows_10" = "true" ]; then
             echo "export windows_10=\"true\"" >>"$bootisosh"
             echo "export windows_10=\"true\"" >>"$bootsh"
             echo "export no_wifi=\"true\"" >>"$bootisosh"
-            echo "export no_reboot=\"false\"" >>"$bootisosh"
         fi
         if [ "$windows" = "true" ]; then
             echo "export windows=\"true\"" >>"$bootisosh"
             echo "export windows=\"true\"" >>"$bootsh"
-            echo "export no_reboot=\"false\"" >>"$bootisosh"
         fi
         if [ "$windows_old" = "true" ]; then
             echo "export windows_old=\"true\"" >>"$bootisosh"
             echo "export windows_old=\"true\"" >>"$bootsh"
-            echo "export no_reboot=\"false\"" >>"$bootisosh"
         fi
         if [ "$windows_95" = "true" ]; then
             echo "export windows_95=\"true\"" >>"$bootisosh"
@@ -460,7 +456,6 @@ for file in "iso"/*; do
             echo "export no_usb=\"true\"" >>"$bootsh"
             echo "export q_audio=\"sb16\"" >>"$bootisosh"
             echo "export q_audio=\"sb16\"" >>"$bootsh"
-            echo "export no_reboot=\"false\"" >>"$bootisosh"
         fi
         echo "sh boot.sh \"${name}\" true ${arch} ${qram} ${qcore}" >>"$bootisosh"
         echo "sh boot.sh \"${name}\" false ${arch} ${qram} ${qcore}" >>"$bootsh"
