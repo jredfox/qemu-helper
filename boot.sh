@@ -558,11 +558,7 @@ case "$arch" in
     fi
     #Fix Windows 10 and Windows 11 Local Accounts Using win11-unattend.iso
     if [ "$windows_11" = "true" ]; then
-      if [ "$oobe_bypassnro" = "true" ]; then
-        qdrive "-drive \"file=win/win11-unattend.iso,media=cdrom,readonly=on\""
-      else
-        qdrive "-drive \"file=win/win11-unattend-nro.iso,media=cdrom,readonly=on\""
-      fi
+      qdrive "-drive \"file=win/win11-unattend.iso,media=cdrom,readonly=on\""
     fi
     if [ "$no_graphics" != "true" ]; then
       if [ "$family" != "x86" ]; then
