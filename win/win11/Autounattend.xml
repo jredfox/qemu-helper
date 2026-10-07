@@ -12,6 +12,7 @@
               <UserData>
                 <ProductKey>
                   <Key />
+                  <WillShowUI>Always</WillShowUI>
                 </ProductKey>
               </UserData>
               <RunSynchronous>
@@ -33,6 +34,7 @@
               <UserData>
                 <ProductKey>
                   <Key />
+                  <WillShowUI>Always</WillShowUI>
                 </ProductKey>
               </UserData>
               <RunSynchronous>
@@ -54,6 +56,7 @@
               <UserData>
                 <ProductKey>
                   <Key />
+                  <WillShowUI>Always</WillShowUI>
                 </ProductKey>
               </UserData>
               <RunSynchronous>
@@ -75,6 +78,7 @@
               <UserData>
                 <ProductKey>
                   <Key />
+                  <WillShowUI>Always</WillShowUI>
                 </ProductKey>
               </UserData>
               <RunSynchronous>
