@@ -690,11 +690,15 @@ else
   fi
 fi
 
-if [ "$no_wifi" = "true" ]; then
+if [ "$network_restrict" = "true" ]; then
   net_append=",restrict=on"
 fi
-qarg "-netdev \"${q_netdev}${net_append}\""
-qarg "-device \"${q_netdev_device},netdev=net0\""
+if [ "$no_wifi" != "true" ] && [ "$no_network" != "true" ]; then
+  qarg "-netdev \"${q_netdev}${net_append}\""
+  qarg "-device \"${q_netdev_device},netdev=net0\""
+else
+  qarg "-net none"
+fi
 if [ ! -z "$q_rng" ]; then
   qarg "-device \"${q_rng}\""
 fi

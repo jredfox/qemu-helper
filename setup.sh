@@ -432,11 +432,13 @@ for file in "iso"/*; do
         if [ "$windows_11" = "true" ]; then
             echo "export windows_11=\"true\"" >>"$bootisosh"
             echo "export windows_11=\"true\"" >>"$bootsh"
+            echo "export no_wifi=\"true\"" >>"$bootisosh"
             echo "export no_reboot=\"false\"" >>"$bootisosh"
         fi
         if [ "$windows_10" = "true" ]; then
             echo "export windows_10=\"true\"" >>"$bootisosh"
             echo "export windows_10=\"true\"" >>"$bootsh"
+            echo "export no_wifi=\"true\"" >>"$bootisosh"
             echo "export no_reboot=\"false\"" >>"$bootisosh"
         fi
         if [ "$windows" = "true" ]; then
