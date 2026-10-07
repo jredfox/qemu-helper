@@ -489,7 +489,7 @@ case "$arch" in
     fi
     qdrive "-hda \"$cow\""
     if [ "$iso_boot" = "true" ]; then
-      qdrive "-boot d"
+      qdrive "-boot c"
     fi
     qdrive "-prom-env 'auto-boot?=true'"
     qdrive "-prom-env 'vga-ndrv?=true'"
@@ -553,7 +553,7 @@ case "$arch" in
     fi
     qdrive "-hda \"$cow\""
     if [ "$iso_boot" = "true" ]; then
-      qdrive "-boot d"
+      qdrive "-boot c"
     fi
     #Fix Windows 10 and Windows 11 Local Accounts Using win11-unattend.iso
     if [ "$windows_11" = "true" ]; then
