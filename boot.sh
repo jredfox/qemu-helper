@@ -490,7 +490,7 @@ case "$arch" in
     fi
     qdrive "-hda \"$cow\""
     if [ "$iso_boot" = "true" ]; then
-      qdrive "-boot d"
+      qdrive "-boot c"
     fi
     qdrive "-prom-env 'auto-boot?=true'"
     qdrive "-prom-env 'vga-ndrv?=true'"
