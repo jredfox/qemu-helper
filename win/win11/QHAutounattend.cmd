@@ -1,7 +1,6 @@
 @echo off
 setlocal enableDelayedExpansion
 set d=%~1
-set oobe=%~2
 set "dirOEM=%SYSTEMDRIVE%\sources\$OEM$\$$"
 reg import "%d%:\win11.reg" >NUL 2>&1
 mkdir "%dirOEM%\Panther"

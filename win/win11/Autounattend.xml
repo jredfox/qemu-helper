@@ -17,7 +17,7 @@
               <RunSynchronous>
                 <RunSynchronousCommand wcm:action="add">
                   <Order>1</Order>
-                  <Path>cmd /q /c for %d in (C D E F G H I J K L M N O P Q R S T U V W X Y Z A B) do if exist "%d:\QHAutounattend.cmd" call "%d:\QHAutounattend.cmd" "%d" "F"</Path>
+                  <Path>cmd /q /c for %d in (C D E F G H I J K L M N O P Q R S T U V W X Y Z A B) do if exist "%d:\QHAutounattend.cmd" call "%d:\QHAutounattend.cmd" "%d"</Path>
                 </RunSynchronousCommand>
               </RunSynchronous>
         </component>
@@ -38,7 +38,7 @@
               <RunSynchronous>
                 <RunSynchronousCommand wcm:action="add">
                   <Order>1</Order>
-                  <Path>cmd /q /c for %d in (C D E F G H I J K L M N O P Q R S T U V W X Y Z A B) do if exist "%d:\QHAutounattend.cmd" call "%d:\QHAutounattend.cmd" "%d" "F"</Path>
+                  <Path>cmd /q /c for %d in (C D E F G H I J K L M N O P Q R S T U V W X Y Z A B) do if exist "%d:\QHAutounattend.cmd" call "%d:\QHAutounattend.cmd" "%d"</Path>
                 </RunSynchronousCommand>
               </RunSynchronous>
         </component>
@@ -59,7 +59,7 @@
               <RunSynchronous>
                 <RunSynchronousCommand wcm:action="add">
                   <Order>1</Order>
-                  <Path>cmd /q /c for %d in (C D E F G H I J K L M N O P Q R S T U V W X Y Z A B) do if exist "%d:\QHAutounattend.cmd" call "%d:\QHAutounattend.cmd" "%d" "F"</Path>
+                  <Path>cmd /q /c for %d in (C D E F G H I J K L M N O P Q R S T U V W X Y Z A B) do if exist "%d:\QHAutounattend.cmd" call "%d:\QHAutounattend.cmd" "%d"</Path>
                 </RunSynchronousCommand>
               </RunSynchronous>
         </component>
@@ -80,7 +80,7 @@
               <RunSynchronous>
                 <RunSynchronousCommand wcm:action="add">
                   <Order>1</Order>
-                  <Path>cmd /q /c for %d in (C D E F G H I J K L M N O P Q R S T U V W X Y Z A B) do if exist "%d:\QHAutounattend.cmd" call "%d:\QHAutounattend.cmd" "%d" "F"</Path>
+                  <Path>cmd /q /c for %d in (C D E F G H I J K L M N O P Q R S T U V W X Y Z A B) do if exist "%d:\QHAutounattend.cmd" call "%d:\QHAutounattend.cmd" "%d"</Path>
                 </RunSynchronousCommand>
               </RunSynchronous>
         </component>
