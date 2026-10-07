@@ -2,5 +2,6 @@
 * text=auto
 
 *.cmd text eol=crlf
+*.xml text eol=crlf
 *.reg text eol=crlf
 *.sh text eol=lf
