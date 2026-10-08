@@ -50,6 +50,7 @@ if command -v md5sum >/dev/null 2>&1; then
 else
     md5_cmd="md5"
 fi
+#Flag if we are on mac or linux
 isMac="false"
 isLinux="false"
 if [ "$(printf '%s' "$(uname)" | tr '[:upper:]' '[:lower:]')" = "darwin" ]; then
