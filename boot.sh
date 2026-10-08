@@ -62,6 +62,23 @@ fi
 mkdir -p "tmp"
 run_tmp="tmp/${dname}${sname}.sh"
 
+refreshDesktop() {
+  touch "$DESKTOP_DIR" 2>/dev/null
+
+  if command -v xdg-desktop-menu >/dev/null 2>&1; then
+    echo "xdg-desktop-menu forceupdate"
+    xdg-desktop-menu forceupdate >/dev/null 2>&1
+  else
+    for kde_pkg in kbuildsycoca6 kbuildsycoca5; do
+      if command -v "$kde_pkg" >/dev/null 2>&1; then
+        "$kde_pkg" >/dev/null 2>&1
+        break
+      fi
+    done
+  fi
+  return 0
+}
+
 createDesktop() {
 
   DESKTOP_GEN="${DESKTOP_GEN:-true}"
@@ -98,6 +115,7 @@ createDesktop() {
   if command -v gio >/dev/null 2>&1; then
     gio set "$DESKTOP_FILE" "metadata::trusted" "true"
   fi
+  refreshDesktop ""
   return 0
 
 }
