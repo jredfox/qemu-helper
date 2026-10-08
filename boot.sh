@@ -118,6 +118,7 @@ createDesktop() {
   install_dir="$(realpath "$PWD")"
   DESKTOP_CMD="$(printf '%s' "$install_dir/boot/${dname}${sname}.sh" | sed -e 's/["`$]/\\\\&/g' -e 's/%/%%/g')"
   DSK_BEFORE="$(cat "$DESKTOP_FILE" 2>/dev/null)"
+  DSK_UPDATE="false"
   printf '%s\n' '[Desktop Entry]' >"$DESKTOP_FILE"
   printf '%s\n' "Name=$DESKTOP_TITLE" >>"$DESKTOP_FILE"
   printf '%s\n' "Path=$install_dir" >>"$DESKTOP_FILE"
@@ -131,13 +132,18 @@ createDesktop() {
   #Make the DESKTOP File Executable
   chmodDesktop "$DESKTOP_FILE"
   #DESKTOP SYNC
+  DSK_AFTER="$(cat "$DESKTOP_FILE" 2>/dev/null)"
   DESKTOP_DESKTOP="$HOME/Desktop/${dname}${sname}.desktop"
   if [ "$DESKTOP_SYNC" = "true" ] && [ -f "$DESKTOP_DESKTOP" ]; then
-    cp -a "$DESKTOP_FILE" "$DESKTOP_DESKTOP"
-    chmodDesktop "$DESKTOP_DESKTOP"
+    DSK_DSK="$(cat "$DESKTOP_DESKTOP" 2>/dev/null)"
+    if [ "$DSK_DSK" != "$DSK_AFTER" ]; then
+      DSK_UPDATE="true"
+      cp -a "$DESKTOP_FILE" "$DESKTOP_DESKTOP"
+      chmodDesktop "$DESKTOP_DESKTOP"
+    fi
   fi
-  DSK_AFTER="$(cat "$DESKTOP_FILE" 2>/dev/null)"
-  if [ "$DSK_BEFORE" != "$DSK_AFTER" ]; then
+  #Refresh Desktop
+  if [ "$DSK_BEFORE" != "$DSK_AFTER" ] || [ "$DSK_UPDATE" = "true" ]; then
     echo "refreshing desktop..."
     refreshDesktop ""
   fi
