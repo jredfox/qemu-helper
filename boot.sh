@@ -58,9 +58,9 @@ createDesktop() {
 
   DESKTOP_DIR="$HOME/.local/share/applications"
   DESKTOP_FILE="${DESKTOP_DIR}/${dname}${sname}.desktop"
-  DESKTOP_HASH="${cdname}_$(printf "%s" "${dname}${sname}" | "$md5_cmd" | cut -d' ' -f1)"
+  DESKTOP_HASH="$(printf "%s" "${dname}${sname}" | "$md5_cmd" | cut -d' ' -f1)"
   DESKTOP_CLASS="${cdname}_${DESKTOP_HASH}"
-  icon=${icon:-qemu}
+  icon="${icon:-qemu}"
   case "$icon" in
     '/'*) ;;
     *'/'*) icon="$(realpath "$icon")" ;;
@@ -70,7 +70,7 @@ createDesktop() {
   printf '%s\n' '[Desktop Entry]' >"$DESKTOP_FILE"
   printf '%s\n' "Name=$DESKTOP_TITLE" >>"$DESKTOP_FILE"
   printf '%s\n' "Path=$install_dir" >>"$DESKTOP_FILE"
-  printf '%s\n' "Exec=sh $install_dir/boot/${dname}${sname}.sh" >>"$DESKTOP_FILE"
+  printf '%s\n' "Exec=sh \"$install_dir/boot/${dname}${sname}.sh\"" >>"$DESKTOP_FILE"
   printf '%s\n' "Icon=${icon}" >>"$DESKTOP_FILE"
   printf '%s\n' "Terminal=false" >>"$DESKTOP_FILE"
   printf '%s\n' "Type=Application" >>"$DESKTOP_FILE"
