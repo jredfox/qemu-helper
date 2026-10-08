@@ -117,6 +117,7 @@ createDesktop() {
   fi
   install_dir="$(realpath "$PWD")"
   DESKTOP_CMD="$(printf '%s' "$install_dir/boot/${dname}${sname}.sh" | sed -e 's/["`$]/\\\\&/g' -e 's/%/%%/g')"
+  DSK_BEFORE="$(cat "$DESKTOP_FILE" 2>/dev/null)"
   printf '%s\n' '[Desktop Entry]' >"$DESKTOP_FILE"
   printf '%s\n' "Name=$DESKTOP_TITLE" >>"$DESKTOP_FILE"
   printf '%s\n' "Path=$install_dir" >>"$DESKTOP_FILE"
@@ -135,7 +136,11 @@ createDesktop() {
     cp -a "$DESKTOP_FILE" "$DESKTOP_DESKTOP"
     chmodDesktop "$DESKTOP_DESKTOP"
   fi
-  refreshDesktop ""
+  DSK_AFTER="$(cat "$DESKTOP_FILE" 2>/dev/null)"
+  if [ "$DSK_BEFORE" != "$DSK_AFTER" ]; then
+    echo "refreshing desktop..."
+    refreshDesktop ""
+  fi
   return 0
 
 }
