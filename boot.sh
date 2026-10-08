@@ -56,7 +56,10 @@ run_tmp="tmp/${dname}${sname}.sh"
 
 createDesktop() {
 
-  DESKTOP_DIR="$HOME/.local/share/applications"
+  DESKTOP_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/applications"
+  if [ ! -e "$DESKTOP_DIR" ]; then
+    mkdir -p "$DESKTOP_DIR" || return 1
+  fi
   DESKTOP_FILE="${DESKTOP_DIR}/${dname}${sname}.desktop"
   DESKTOP_HASH="$(printf "%s" "${dname}${sname}" | "$md5_cmd" | cut -d' ' -f1)"
   DESKTOP_CLASS="${cdname}_${DESKTOP_HASH}"
