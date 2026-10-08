@@ -136,7 +136,11 @@ createDesktop() {
   chmodDesktop "$DESKTOP_FILE"
   #DESKTOP SYNC
   DSK_AFTER="$(cat "$DESKTOP_FILE" 2>/dev/null)"
-  DESKTOP_DESKTOP="$HOME/Desktop/${dname}${sname}.desktop"
+  if command -v xdg-user-dir >/dev/null 2>&1; then
+    DESKTOP_DESKTOP="$(xdg-user-dir DESKTOP 2>/dev/null)/${dname}${sname}.desktop"
+  else
+    DESKTOP_DESKTOP="$HOME/Desktop/${dname}${sname}.desktop"
+  fi
   if [ "$DESKTOP_SYNC" = "true" ] && [ -f "$DESKTOP_DESKTOP" ]; then
     DSK_DSK="$(cat "$DESKTOP_DESKTOP" 2>/dev/null)"
     if [ "$DSK_DSK" != "$DSK_AFTER" ]; then
