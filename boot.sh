@@ -23,9 +23,11 @@ if [ "$iso_boot" = "true" ]; then
   fi
   sname="_iso"
   cdname="INSTALL_QH"
+  ddname="Install "
 else
   sname=""
   cdname="QH"
+  ddname=""
 fi
 title="${title:-$dname}"
 gpu_2d="${gpu_2d:-false}"
@@ -109,7 +111,10 @@ createDesktop() {
     '/'*) ;;
     *'/'*) icon="$(realpath "$icon")" ;;
   esac
-  DESKTOP_TITLE="${DESKTOP_TITLE:-$title}"
+  #Set the DESKTOP Title
+  if [ -z "$DESKTOP_TITLE" ]; then
+    DESKTOP_TITLE="${ddname}${title}"
+  fi
   install_dir="$(realpath "$PWD")"
   DESKTOP_CMD="$(printf '%s' "$install_dir/boot/${dname}${sname}.sh" | sed -e 's/["`$]/\\\\&/g' -e 's/%/%%/g')"
   printf '%s\n' '[Desktop Entry]' >"$DESKTOP_FILE"
