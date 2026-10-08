@@ -66,7 +66,6 @@ refreshDesktop() {
   touch "$DESKTOP_DIR" 2>/dev/null
 
   if command -v xdg-desktop-menu >/dev/null 2>&1; then
-    echo "xdg-desktop-menu forceupdate"
     xdg-desktop-menu forceupdate >/dev/null 2>&1
   else
     for kde_pkg in kbuildsycoca6 kbuildsycoca5; do
