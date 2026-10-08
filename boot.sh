@@ -141,7 +141,7 @@ createDesktop() {
     USER_DESKTOP="$(xdg-user-dir DESKTOP 2>/dev/null)"
   fi
   #USER_DESKTOP Fallback
-  if [ -z "$USER_DESKTOP" ]; then
+  if [ -z "$USER_DESKTOP" ] || [ "$USER_DESKTOP" = "$HOME" ]; then
     USER_DESKTOP="$HOME/Desktop"
   fi
   DESKTOP_DESKTOP="$USER_DESKTOP/${dname}${sname}.desktop"
