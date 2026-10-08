@@ -57,6 +57,7 @@ run_tmp="tmp/${dname}${sname}.sh"
 createDesktop() {
 
   DESKTOP_HASH="${cdname}_$(printf "%s" "${dname}${sname}" | "$md5_cmd" | cut -d' ' -f1)"
+  DESKTOP_CLASS="${cdname}_${DESKTOP_HASH}"
   icon=${icon:-qemu}
   case "$icon" in
     '/'*) ;;
@@ -73,7 +74,7 @@ createDesktop() {
   printf '%s\n' "Icon=${icon}" >>"$DESKTOP_FILE"
   printf '%s\n' "Terminal=false" >>"$DESKTOP_FILE"
   printf '%s\n' "Type=Application" >>"$DESKTOP_FILE"
-  printf '%s\n' "StartupWMClass=${cdname}_${DESKTOP_HASH}" >>"$DESKTOP_FILE"
+  printf '%s\n' "StartupWMClass=$DESKTOP_CLASS" >>"$DESKTOP_FILE"
   chmod +x "$DESKTOP_FILE"
 
 }
