@@ -56,6 +56,11 @@ run_tmp="tmp/${dname}${sname}.sh"
 
 createDesktop() {
 
+  DESKTOP_GEN="${DESKTOP_GEN:-true}"
+  if [ "$DESKTOP_GEN" != "true" ]; then
+    return 1
+  fi
+
   DESKTOP_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/applications"
   if [ ! -e "$DESKTOP_DIR" ]; then
     mkdir -p "$DESKTOP_DIR" || return 1
