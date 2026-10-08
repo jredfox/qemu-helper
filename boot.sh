@@ -63,6 +63,7 @@ mkdir -p "tmp"
 run_tmp="tmp/${dname}${sname}.sh"
 
 refreshDesktop() {
+
   touch "$DESKTOP_DIR" 2>/dev/null
 
   if command -v xdg-desktop-menu >/dev/null 2>&1; then
@@ -75,7 +76,9 @@ refreshDesktop() {
       fi
     done
   fi
+  
   return 0
+
 }
 
 createDesktop() {
