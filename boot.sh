@@ -63,6 +63,12 @@ if [ "$(printf '%s' "$(uname)" | tr '[:upper:]' '[:lower:]')" = "darwin" ]; then
 else
     isLinux="true"
 fi
+#See if we are on alpine or normal linux
+if ldd --version 2>&1 | grep -qi musl; then
+    alpine_exe="-alpine"
+else
+    alpine_exe=""
+fi
 #create the temp dir
 mkdir -p "tmp"
 run_tmp="tmp/${dname}${sname}.sh"
@@ -860,7 +866,7 @@ if [ "$sdl_display" = "true" ]; then
     echo "export SDL_VIDEO_WAYLAND_WMCLASS=\"${DESKTOP_CLASS}\"" >>"$run_tmp"
   fi
 fi
-exec_exe="resources/exec_a-$uarch"
+exec_exe="resources/exec_a-$uarch${alpine_exe}"
 if [ "$isMac" = "false" ] && [ ! -z "$DESKTOP_CLASS" ] && [ -f "$exec_exe" ]; then
   exec_cmd="${exec_exe} \"${DESKTOP_CLASS}\" "
 else
