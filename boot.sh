@@ -81,6 +81,13 @@ refreshDesktop() {
 
 }
 
+chmodDesktop() {
+  chmod +x "$1"
+  if command -v gio >/dev/null 2>&1; then
+    gio set "$1" "metadata::trusted" "true" >/dev/null 2>&1
+  fi
+}
+
 createDesktop() {
 
   DESKTOP_GEN="${DESKTOP_GEN:-true}"
@@ -114,9 +121,13 @@ createDesktop() {
   printf '%s\n' "Type=Application" >>"$DESKTOP_FILE"
   printf '%s\n' "StartupWMClass=$DESKTOP_CLASS" >>"$DESKTOP_FILE"
   #Make the DESKTOP File Executable
-  chmod +x "$DESKTOP_FILE"
-  if command -v gio >/dev/null 2>&1; then
-    gio set "$DESKTOP_FILE" "metadata::trusted" "true" >/dev/null 2>&1
+  chmodDesktop "$DESKTOP_FILE"
+  #DESKTOP SYNC
+  DESKTOP_DESKTOP="$HOME/Desktop/${dname}${sname}.desktop"
+  if [ "$DESKTOP_SYNC" = "true" ] && [ -f "$DESKTOP_DESKTOP" ]; then
+    echo "syncing desktop ${dname}${sname}"
+    cp -a "$DESKTOP_FILE" "$DESKTOP_DESKTOP"
+    chmodDesktop "$DESKTOP_DESKTOP"
   fi
   refreshDesktop ""
   return 0
