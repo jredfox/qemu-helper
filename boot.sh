@@ -22,10 +22,10 @@ if [ "$iso_boot" = "true" ]; then
     exit 1
   fi
   sname="_iso"
-  sdname="INSTALL_QH"
+  cdname="INSTALL_QH"
 else
   sname=""
-  sdname="QH"
+  cdname="QH"
 fi
 title="${title:-$dname}"
 gpu_2d="${gpu_2d:-false}"
@@ -56,7 +56,7 @@ run_tmp="tmp/${dname}${sname}.sh"
 
 createDesktop() {
 
-  DESKTOP_HASH="${sdname}_$(printf "%s" "${dname}${sname}" | "$md5_cmd" | cut -d' ' -f1)"
+  DESKTOP_HASH="${cdname}_$(printf "%s" "${dname}${sname}" | "$md5_cmd" | cut -d' ' -f1)"
   icon=${icon:-qemu}
   case "$icon" in
     '/'*) ;;
@@ -65,18 +65,15 @@ createDesktop() {
   DESKTOP_DIR="$HOME/.local/share/applications"
   DESKTOP_FILE="${DESKTOP_DIR}/${dname}${sname}.desktop"
   DESKTOP_TITLE="${DESKTOP_TITLE:-$title}"
-  if [ -z "$DESKTOP_TITLE" ]; then
-    DESKTOP_TITLE="${dname}${sname}"
-  fi
   install_dir="$(realpath "$PWD")"
   printf '%s\n' '[Desktop Entry]' >"$DESKTOP_FILE"
   printf '%s\n' "Name=$DESKTOP_TITLE" >>"$DESKTOP_FILE"
-  printf '%s\n' "Path=$install_dir" >>"$DESKTOP_FILE" #TODO: Fix hard coded path
+  printf '%s\n' "Path=$install_dir" >>"$DESKTOP_FILE"
   printf '%s\n' "Exec=sh $install_dir/boot/${dname}${sname}.sh" >>"$DESKTOP_FILE"
   printf '%s\n' "Icon=${icon}" >>"$DESKTOP_FILE"
   printf '%s\n' "Terminal=false" >>"$DESKTOP_FILE"
   printf '%s\n' "Type=Application" >>"$DESKTOP_FILE"
-  printf '%s\n' "StartupWMClass=${sdname}_${DESKTOP_HASH}" >>"$DESKTOP_FILE"
+  printf '%s\n' "StartupWMClass=${cdname}_${DESKTOP_HASH}" >>"$DESKTOP_FILE"
   chmod +x "$DESKTOP_FILE"
 
 }
