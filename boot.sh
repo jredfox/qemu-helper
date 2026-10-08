@@ -850,7 +850,7 @@ if [ "$sdl_display" = "true" ]; then
   fi
 fi
 exec_exe="resources/exec_a-$uarch"
-if [ "$isMac" = "false" ] && [ -f "$exec_exe" ] && [ ! -z "$DESKTOP_CLASS" ]; then
+if [ "$isMac" = "false" ] && [ ! -z "$DESKTOP_CLASS" ] && [ -f "$exec_exe" ]; then
   exec_cmd="${exec_exe} \"${DESKTOP_CLASS}\" "
 else
   echo "Icons are disabled arch: ${uarch} isLinux: ${isLinux}"
