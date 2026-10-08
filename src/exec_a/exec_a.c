@@ -4,7 +4,7 @@
 
 int main(int argc, char *argv[]) {
     if (argc < 3) {
-        fprintf(stderr, "usage: %s <fake-name> <command> [args...]\n", argv[0]);
+        fprintf(stderr, "usage: %s <WM_CLASS> <command> [args...]\n", argv[0]);
         return 1;
     }
     char *command = argv[2];
