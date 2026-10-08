@@ -29,7 +29,10 @@ else
   cdname="QH"
   ddname=""
 fi
-title="${title:-${ddname}${dname}}"
+#Set title
+if [ -z "$title" ]; then
+  title="${ddname}${dname}"
+fi
 gpu_2d="${gpu_2d:-false}"
 q_audio="${q_audio:-usb-audio}"
 grab_mouse="${grab_mouse:-true}"
