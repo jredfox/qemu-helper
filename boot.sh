@@ -269,6 +269,7 @@ unzipKernal() {
 
 arch=$(getArchy "$arch")
 uarch=$(uname -m)
+uarch=$(getArchy "$uarch")
 family=$(getFamily "$uarch")
 family_target=$(getFamily "$arch")
 
@@ -745,7 +746,7 @@ else
   if [ -f "$exec_exe" ] && [ "$disable_gtk_icons" != "true" ]; then
     exec_cmd="\"${exec_exe}\" \"${DESKTOP_CLASS}\" "
   else
-    echo "Unsupported exec_a host ${uarch} Custom Icons will not work"
+    echo "Icons are disabled arch: ${uarch} disable_gtk_icons: ${disable_gtk_icons}"
   fi
 fi
 printf "%s\n\n" "${exec_cmd}qemu-system-${arch}${args}" >>"$run_tmp"
