@@ -108,7 +108,7 @@ createDesktop() {
   printf '%s\n' "Path=$install_dir" >>"$DESKTOP_FILE"
   printf '%s\n' "Exec=sh \"${DESKTOP_CMD}\"" >>"$DESKTOP_FILE"
   printf '%s\n' "Icon=${icon}" >>"$DESKTOP_FILE"
-  printf '%s\n' "Categories=${DESKTOP_CATEGORIES:-System;Emulator;Development;}" >>"$DESKTOP_FILE"
+  printf '%s\n' "Categories=${DESKTOP_CATEGORIES:-Development;Emulator;}" >>"$DESKTOP_FILE"
   printf '%s\n' "Keywords=${DESKTOP_KEYWORDS:-Qemu;Emulator;Qemu-Helper;QemuHelper;Qemu Helper;QH;Windows;Linux;Alpine;Ubuntu;mac;macOS;osx;}" >>"$DESKTOP_FILE"
   printf '%s\n' "Terminal=false" >>"$DESKTOP_FILE"
   printf '%s\n' "Type=Application" >>"$DESKTOP_FILE"
