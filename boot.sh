@@ -93,7 +93,11 @@ createDesktop() {
   printf '%s\n' "Terminal=false" >>"$DESKTOP_FILE"
   printf '%s\n' "Type=Application" >>"$DESKTOP_FILE"
   printf '%s\n' "StartupWMClass=$DESKTOP_CLASS" >>"$DESKTOP_FILE"
+  #Make the DESKTOP File Executable
   chmod +x "$DESKTOP_FILE"
+  if command -v gio >/dev/null 2>&1; then
+    gio set "$DESKTOP_FILE" "metadata::trusted" "true"
+  fi
 
 }
 
