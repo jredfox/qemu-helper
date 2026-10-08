@@ -140,6 +140,7 @@ createDesktop() {
   if command -v xdg-user-dir >/dev/null 2>&1; then
     USER_DESKTOP="$(xdg-user-dir DESKTOP 2>/dev/null)"
   fi
+  #USER_DESKTOP Fallback
   if [ -z "$USER_DESKTOP" ]; then
     USER_DESKTOP="$HOME/Desktop"
   fi
