@@ -82,10 +82,12 @@ refreshDesktop() {
 }
 
 chmodDesktop() {
+
   chmod +x "$1"
   if command -v gio >/dev/null 2>&1; then
     gio set "$1" "metadata::trusted" "true" >/dev/null 2>&1
   fi
+
 }
 
 createDesktop() {
@@ -125,7 +127,6 @@ createDesktop() {
   #DESKTOP SYNC
   DESKTOP_DESKTOP="$HOME/Desktop/${dname}${sname}.desktop"
   if [ "$DESKTOP_SYNC" = "true" ] && [ -f "$DESKTOP_DESKTOP" ]; then
-    echo "syncing desktop ${dname}${sname}"
     cp -a "$DESKTOP_FILE" "$DESKTOP_DESKTOP"
     chmodDesktop "$DESKTOP_DESKTOP"
   fi
