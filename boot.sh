@@ -56,6 +56,8 @@ run_tmp="tmp/${dname}${sname}.sh"
 
 createDesktop() {
 
+  DESKTOP_DIR="$HOME/.local/share/applications"
+  DESKTOP_FILE="${DESKTOP_DIR}/${dname}${sname}.desktop"
   DESKTOP_HASH="${cdname}_$(printf "%s" "${dname}${sname}" | "$md5_cmd" | cut -d' ' -f1)"
   DESKTOP_CLASS="${cdname}_${DESKTOP_HASH}"
   icon=${icon:-qemu}
@@ -63,8 +65,6 @@ createDesktop() {
     '/'*) ;;
     *'/'*) icon="$(realpath "$icon")" ;;
   esac
-  DESKTOP_DIR="$HOME/.local/share/applications"
-  DESKTOP_FILE="${DESKTOP_DIR}/${dname}${sname}.desktop"
   DESKTOP_TITLE="${DESKTOP_TITLE:-$title}"
   install_dir="$(realpath "$PWD")"
   printf '%s\n' '[Desktop Entry]' >"$DESKTOP_FILE"
