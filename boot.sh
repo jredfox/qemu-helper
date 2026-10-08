@@ -22,8 +22,10 @@ if [ "$iso_boot" = "true" ]; then
     exit 1
   fi
   sname="_iso"
+  sdname="INSTALL_QH"
 else
   sname=""
+  sdname="QH"
 fi
 title="${title:-$dname}"
 gpu_2d="${gpu_2d:-false}"
@@ -43,10 +45,43 @@ fi
 if [ "$windows_old" = "true" ] || [ "$windows_10" = "true" ] || [ "$windows_11" = "true" ]; then
   windows="true"
 fi
-DESKTOP_CLASS="${DESKTOP_CLASS:-$dname}"
+if command -v md5sum >/dev/null 2>&1; then
+    md5_cmd="md5sum"
+else
+    md5_cmd="md5"
+fi
 #create the temp dir
 mkdir -p "tmp"
 run_tmp="tmp/${dname}${sname}.sh"
+
+createDesktop() {
+
+  DESKTOP_HASH="${sdname}_$(printf "%s" "${dname}${sname}" | "$md5_cmd" | cut -d' ' -f1)"
+  icon=${icon:-qemu}
+  case "$icon" in
+    '/'*) ;;
+    *'/'*) icon="$(realpath "$icon")" ;;
+  esac
+  DESKTOP_DIR="$HOME/.local/share/applications"
+  DESKTOP_FILE="${DESKTOP_DIR}/${dname}${sname}.desktop"
+  DESKTOP_TITLE="${DESKTOP_TITLE:-$title}"
+  if [ -z "$DESKTOP_TITLE" ]; then
+    DESKTOP_TITLE="${dname}${sname}"
+  fi
+  install_dir="$(realpath "$PWD")"
+  printf '%s\n' '[Desktop Entry]' >"$DESKTOP_FILE"
+  printf '%s\n' "Name=$DESKTOP_TITLE" >>"$DESKTOP_FILE"
+  printf '%s\n' "Path=$install_dir" >>"$DESKTOP_FILE" #TODO: Fix hard coded path
+  printf '%s\n' "Exec=sh $install_dir/boot/${dname}${sname}.sh" >>"$DESKTOP_FILE"
+  printf '%s\n' "Icon=${icon}" >>"$DESKTOP_FILE"
+  printf '%s\n' "Terminal=false" >>"$DESKTOP_FILE"
+  printf '%s\n' "Type=Application" >>"$DESKTOP_FILE"
+  printf '%s\n' "StartupWMClass=${sdname}_${DESKTOP_HASH}" >>"$DESKTOP_FILE"
+  chmod +x "$DESKTOP_FILE"
+
+}
+
+createDesktop ""
 
 onExit() {
   echo "$1" >&2

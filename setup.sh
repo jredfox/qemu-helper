@@ -42,6 +42,11 @@ if ! output=$(qemu-img "--version" >/dev/null 2>&1); then
                     ;;
             esac
         fi
+        #md5sum is required for icons to work
+        if ! command -v md5sum >/dev/null 2>&1 && ! command -v md5 >/dev/null 2>&1; then
+            echo "Installing md5sum"
+            sudo apt install coreutils
+        fi
     elif command -v dnf >/dev/null 2>&1; then
         #Fedora Support
         qemu_sys=qemu-system-x86
