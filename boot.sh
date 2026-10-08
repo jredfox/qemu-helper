@@ -844,11 +844,13 @@ if [ "$sdl_display" = "true" ]; then
   echo "export SDL_MOUSE_RELATIVE_MODE_WARP=1" >>"$run_tmp"
   echo "export SDL_HINT_MOUSE_RELATIVE_SYSTEM_SCALE=1" >>"$run_tmp"
   echo "export SDL_HINT_MOUSE_RELATIVE_MODE_WARP=1" >>"$run_tmp"
-  echo "export SDL_VIDEO_X11_WMCLASS=\"${DESKTOP_CLASS}\"" >>"$run_tmp"
-  echo "export SDL_VIDEO_WAYLAND_WMCLASS=\"${DESKTOP_CLASS}\"" >>"$run_tmp"
+  if [ ! -z "$DESKTOP_CLASS" ]; then
+    echo "export SDL_VIDEO_X11_WMCLASS=\"${DESKTOP_CLASS}\"" >>"$run_tmp"
+    echo "export SDL_VIDEO_WAYLAND_WMCLASS=\"${DESKTOP_CLASS}\"" >>"$run_tmp"
+  fi
 fi
 exec_exe="resources/exec_a-$uarch"
-if [ "$isMac" = "false" ] && [ -f "$exec_exe" ]; then
+if [ "$isMac" = "false" ] && [ -f "$exec_exe" ] && [ ! -z "$DESKTOP_CLASS" ]; then
   exec_cmd="${exec_exe} \"${DESKTOP_CLASS}\" "
 else
   echo "Icons are disabled arch: ${uarch} isLinux: ${isLinux}"
