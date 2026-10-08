@@ -93,6 +93,7 @@ mkdir -p "iso"
 mkdir -p "share"
 mkdir -p "tmp"
 mkdir -p "resources"
+#Disables or enables DESKTOP_GEN for all generated boot scripts
 DESKTOP_GEN="${DESKTOP_GEN:-true}"
 #copy the installation files if not already extracted to the install dir
 if [ "$install_dir" != "$current_dir" ]; then
