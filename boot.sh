@@ -840,7 +840,7 @@ exec_exe="resources/exec_a-$uarch"
 if [ "$isMac" = "false" ] && [ -f "$exec_exe" ]; then
   exec_cmd="${exec_exe} \"${DESKTOP_CLASS}\" "
 else
-  echo "Icons are disabled arch: ${uarch}"
+  echo "Icons are disabled arch: ${uarch} isLinux: ${isLinux}"
 fi
 printf "%s\n\n" "${exec_cmd}qemu-system-${arch}${args}" >>"$run_tmp"
 exec sh "$run_tmp"
