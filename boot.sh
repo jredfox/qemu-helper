@@ -61,7 +61,7 @@ createDesktop() {
     mkdir -p "$DESKTOP_DIR" || return 1
   fi
   DESKTOP_FILE="${DESKTOP_DIR}/${dname}${sname}.desktop"
-  DESKTOP_HASH="$(printf "%s" "${dname}${sname}" | "$md5_cmd" | cut -d' ' -f1)"
+  DESKTOP_HASH="$(printf '%s' "${dname}${sname}" | "$md5_cmd" | cut -d' ' -f1)"
   DESKTOP_CLASS="${cdname}_${DESKTOP_HASH}"
   icon="${icon:-qemu}"
   case "$icon" in
