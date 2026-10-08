@@ -98,6 +98,7 @@ createDesktop() {
   if command -v gio >/dev/null 2>&1; then
     gio set "$DESKTOP_FILE" "metadata::trusted" "true"
   fi
+  return 0
 
 }
 
