@@ -29,7 +29,7 @@ else
   cdname="QH"
   ddname=""
 fi
-title="${title:-$dname}"
+title="${title:-${ddname}${dname}}"
 gpu_2d="${gpu_2d:-false}"
 q_audio="${q_audio:-usb-audio}"
 grab_mouse="${grab_mouse:-true}"
@@ -113,7 +113,7 @@ createDesktop() {
   esac
   #Set the DESKTOP Title
   if [ -z "$DESKTOP_TITLE" ]; then
-    DESKTOP_TITLE="${ddname}${title}"
+    DESKTOP_TITLE="${title}"
   fi
   install_dir="$(realpath "$PWD")"
   DESKTOP_CMD="$(printf '%s' "$install_dir/boot/${dname}${sname}.sh" | sed -e 's/["`$]/\\\\&/g' -e 's/%/%%/g')"
