@@ -435,6 +435,10 @@ for file in "iso"/*; do
             echo "export gpu_3d_fallback=\"true\"" >>"$bootisosh"
             echo "export gpu_3d_fallback=\"true\"" >>"$bootsh"
         fi
+        if [ "$DESKTOP_GEN" != "true" ]; then
+            echo "export DESKTOP_GEN=\"false\"" >>"$bootisosh"
+            echo "export DESKTOP_GEN=\"false\"" >>"$bootsh"
+        fi
         if [ "$windows_11" = "true" ]; then
             echo "export windows_11=\"true\"" >>"$bootisosh"
             echo "export windows_11=\"true\"" >>"$bootsh"
@@ -462,10 +466,6 @@ for file in "iso"/*; do
             echo "export no_usb=\"true\"" >>"$bootsh"
             echo "export q_audio=\"sb16\"" >>"$bootisosh"
             echo "export q_audio=\"sb16\"" >>"$bootsh"
-        fi
-        if [ "$DESKTOP_GEN" != "true" ]; then
-            echo "export DESKTOP_GEN=\"false\"" >>"$bootisosh"
-            echo "export DESKTOP_GEN=\"false\"" >>"$bootsh"
         fi
         echo "sh boot.sh \"${name}\" true ${arch} ${qram} ${qcore}" >>"$bootisosh"
         echo "sh boot.sh \"${name}\" false ${arch} ${qram} ${qcore}" >>"$bootsh"
