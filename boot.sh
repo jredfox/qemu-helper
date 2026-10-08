@@ -653,7 +653,7 @@ case "$arch" in
     fi
     #Fix Windows 10 and Windows 11 Local Accounts Using win11-unattend.iso
     if [ "$windows_11" = "true" ]; then
-      qdrive "-drive \"file=win/win11-unattend.iso,media=cdrom,readonly=on\""
+      qdrive "-drive \"file=resources/win11-unattend.iso,media=cdrom,readonly=on\""
     fi
     if [ "$no_graphics" != "true" ]; then
       if [ "$family" != "x86" ]; then
@@ -836,7 +836,7 @@ if [ "$sdl_display" = "true" ]; then
   echo "export SDL_VIDEO_X11_WMCLASS=\"${DESKTOP_CLASS}\"" >>"$run_tmp"
   echo "export SDL_VIDEO_WAYLAND_WMCLASS=\"${DESKTOP_CLASS}\"" >>"$run_tmp"
 fi
-exec_exe="bin/exec_a-$uarch"
+exec_exe="resources/exec_a-$uarch"
 if [ "$isMac" = "false" ] && [ -f "$exec_exe" ]; then
   exec_cmd="${exec_exe} \"${DESKTOP_CLASS}\" "
 else
