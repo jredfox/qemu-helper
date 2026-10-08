@@ -835,13 +835,12 @@ if [ "$sdl_display" = "true" ]; then
   echo "export SDL_HINT_MOUSE_RELATIVE_MODE_WARP=1" >>"$run_tmp"
   echo "export SDL_VIDEO_X11_WMCLASS=\"${DESKTOP_CLASS}\"" >>"$run_tmp"
   echo "export SDL_VIDEO_WAYLAND_WMCLASS=\"${DESKTOP_CLASS}\"" >>"$run_tmp"
+fi
+exec_exe="bin/exec_a-$uarch"
+if [ "$isMac" = "false" ] && [ -f "$exec_exe" ]; then
+  exec_cmd="${exec_exe} \"${DESKTOP_CLASS}\" "
 else
-  exec_exe="bin/exec_a-$uarch"
-  if [ -f "$exec_exe" ] && [ "$disable_gtk_icons" != "true" ]; then
-    exec_cmd="\"${exec_exe}\" \"${DESKTOP_CLASS}\" "
-  else
-    echo "Icons are disabled arch: ${uarch} disable_gtk_icons: ${disable_gtk_icons}"
-  fi
+  echo "Icons are disabled arch: ${uarch}"
 fi
 printf "%s\n\n" "${exec_cmd}qemu-system-${arch}${args}" >>"$run_tmp"
 exec sh "$run_tmp"
