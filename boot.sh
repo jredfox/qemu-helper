@@ -43,6 +43,7 @@ fi
 if [ "$windows_old" = "true" ] || [ "$windows_10" = "true" ] || [ "$windows_11" = "true" ]; then
   windows="true"
 fi
+DESKTOP_CLASS="${DESKTOP_CLASS:-$dname}"
 #create the temp dir
 mkdir -p "tmp"
 run_tmp="tmp/${dname}${sname}.sh"
@@ -737,6 +738,8 @@ if [ "$sdl_display" = "true" ]; then
   echo "export SDL_MOUSE_RELATIVE_MODE_WARP=1" >>"$run_tmp"
   echo "export SDL_HINT_MOUSE_RELATIVE_SYSTEM_SCALE=1" >>"$run_tmp"
   echo "export SDL_HINT_MOUSE_RELATIVE_MODE_WARP=1" >>"$run_tmp"
+  echo "export SDL_VIDEO_X11_WMCLASS=\"${DESKTOP_CLASS}\"" >>"$run_tmp"
+  echo "export SDL_VIDEO_WAYLAND_WMCLASS=\"${DESKTOP_CLASS}\"" >>"$run_tmp"
 fi
 printf "%s\n\n" "qemu-system-${arch}${args}" >>"$run_tmp"
 exec sh "$run_tmp"
