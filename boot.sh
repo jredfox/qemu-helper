@@ -50,6 +50,13 @@ if command -v md5sum >/dev/null 2>&1; then
 else
     md5_cmd="md5"
 fi
+isMac="false"
+isLinux="false"
+if [ "$(printf '%s' "$(uname)" | tr '[:upper:]' '[:lower:]')" = "darwin" ]; then
+    isMac="true"
+else
+    isLinux="true"
+fi
 #create the temp dir
 mkdir -p "tmp"
 run_tmp="tmp/${dname}${sname}.sh"
@@ -57,7 +64,7 @@ run_tmp="tmp/${dname}${sname}.sh"
 createDesktop() {
 
   DESKTOP_GEN="${DESKTOP_GEN:-true}"
-  if [ "$DESKTOP_GEN" != "true" ]; then
+  if [ "$DESKTOP_GEN" != "true" ] || [ "$isLinux" != "true" ]; then
     return 1
   fi
 
