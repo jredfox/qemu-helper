@@ -93,6 +93,7 @@ mkdir -p "iso"
 mkdir -p "share"
 mkdir -p "tmp"
 mkdir -p "resources"
+DESKTOP_GEN="${DESKTOP_GEN:-true}"
 #copy the installation files if not already extracted to the install dir
 if [ "$install_dir" != "$current_dir" ]; then
     echo "copying install files"
@@ -461,6 +462,10 @@ for file in "iso"/*; do
             echo "export no_usb=\"true\"" >>"$bootsh"
             echo "export q_audio=\"sb16\"" >>"$bootisosh"
             echo "export q_audio=\"sb16\"" >>"$bootsh"
+        fi
+        if [ "$DESKTOP_GEN" != "true" ]; then
+            echo "export DESKTOP_GEN=\"false\"" >>"$bootisosh"
+            echo "export DESKTOP_GEN=\"false\"" >>"$bootsh"
         fi
         echo "sh boot.sh \"${name}\" true ${arch} ${qram} ${qcore}" >>"$bootisosh"
         echo "sh boot.sh \"${name}\" false ${arch} ${qram} ${qcore}" >>"$bootsh"
