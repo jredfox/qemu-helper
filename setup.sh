@@ -88,12 +88,14 @@ mkdir -p "iso"
 mkdir -p "share"
 mkdir -p "tmp"
 mkdir -p "win"
+mkdir -p "bin"
 #copy the installation files if not already extracted to the install dir
 if [ "$install_dir" != "$current_dir" ]; then
     echo "copying install files"
     mv "$current_dir/iso"/* "$install_dir/iso/" >/dev/null 2>&1
     cp -rf "$current_dir"/*.sh "$install_dir/"
     cp -f "$current_dir/win"/*.iso "$install_dir/win"
+    cp -f "$current_dir/bin"/* "$install_dir/bin/"
 fi
 
 unzipSetupEXE() {
