@@ -25,7 +25,7 @@ if [ "$iso_boot" = "true" ]; then
   cdname="INSTALL_QH"
 else
   sname=""
-  cdname="QH"
+  sdname="QH"
 fi
 title="${title:-$dname}"
 gpu_2d="${gpu_2d:-false}"
@@ -56,7 +56,7 @@ run_tmp="tmp/${dname}${sname}.sh"
 
 createDesktop() {
 
-  DESKTOP_HASH="${cdname}_$(printf "%s" "${dname}${sname}" | "$md5_cmd" | cut -d' ' -f1)"
+  DESKTOP_HASH="${sdname}_$(printf "%s" "${dname}${sname}" | "$md5_cmd" | cut -d' ' -f1)"
   icon=${icon:-qemu}
   case "$icon" in
     '/'*) ;;
@@ -73,7 +73,7 @@ createDesktop() {
   printf '%s\n' "Icon=${icon}" >>"$DESKTOP_FILE"
   printf '%s\n' "Terminal=false" >>"$DESKTOP_FILE"
   printf '%s\n' "Type=Application" >>"$DESKTOP_FILE"
-  printf '%s\n' "StartupWMClass=${cdname}_${DESKTOP_HASH}" >>"$DESKTOP_FILE"
+  printf '%s\n' "StartupWMClass=${sdname}_${DESKTOP_HASH}" >>"$DESKTOP_FILE"
   chmod +x "$DESKTOP_FILE"
 
 }
