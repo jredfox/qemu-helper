@@ -116,7 +116,7 @@ createDesktop() {
   #Make the DESKTOP File Executable
   chmod +x "$DESKTOP_FILE"
   if command -v gio >/dev/null 2>&1; then
-    gio set "$DESKTOP_FILE" "metadata::trusted" "true"
+    gio set "$DESKTOP_FILE" "metadata::trusted" "true" >/dev/null 2>&1
   fi
   refreshDesktop ""
   return 0
