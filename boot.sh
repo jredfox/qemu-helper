@@ -870,7 +870,7 @@ exec_exe="resources/exec_a-${uarch}${alpine_exe}"
 if [ "$isMac" = "false" ] && [ ! -z "$DESKTOP_CLASS" ] && [ -f "$exec_exe" ]; then
   exec_cmd="exec ${exec_exe} \"${DESKTOP_CLASS}\" "
 else
-  exec_cmd="exec"
+  exec_cmd="exec "
   echo "Icons are disabled arch: ${uarch} isLinux: ${isLinux} DESKTOP_CLASS: \"${DESKTOP_CLASS}\""
 fi
 printf "%s\n\n" "${exec_cmd}qemu-system-${arch}${args}" >>"$run_tmp"
