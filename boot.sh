@@ -151,6 +151,14 @@ createDesktop() {
     USER_DESKTOP="$HOME/Desktop"
   fi
   DESKTOP_DESKTOP="$USER_DESKTOP/${dname}${sname}.desktop"
+  #sometimes the DE renames the file search for it
+  if [ ! -f "$DESKTOP_DESKTOP" ]; then
+    DESKTOP_DESKTOP="$USER_DESKTOP/${ddname}${dname}.desktop"
+  fi
+  if [ ! -f "$DESKTOP_DESKTOP" ]; then
+    DESKTOP_DESKTOP="$USER_DESKTOP/${ddname}${dname}${sname}.desktop"
+  fi
+  echo "file $DESKTOP_DESKTOP"
   if [ "$DESKTOP_SYNC" = "true" ] && [ -f "$DESKTOP_DESKTOP" ]; then
     DSK_DSK="$(cat "$DESKTOP_DESKTOP" 2>/dev/null)"
     if [ "$DSK_DSK" != "$DSK_AFTER" ]; then
