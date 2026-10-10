@@ -866,7 +866,7 @@ if [ "$sdl_display" = "true" ]; then
     echo "export SDL_VIDEO_WAYLAND_WMCLASS=\"${DESKTOP_CLASS}\"" >>"$run_tmp"
   fi
 fi
-exec_exe="resources/exec_a-$uarch${alpine_exe}"
+exec_exe="resources/exec_a-${uarch}${alpine_exe}"
 if [ "$isMac" = "false" ] && [ ! -z "$DESKTOP_CLASS" ] && [ -f "$exec_exe" ]; then
   exec_cmd="${exec_exe} \"${DESKTOP_CLASS}\" "
 else
