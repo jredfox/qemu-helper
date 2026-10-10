@@ -468,8 +468,8 @@ for file in "iso"/*; do
             echo "export q_audio=\"sb16\"" >>"$bootisosh"
             echo "export q_audio=\"sb16\"" >>"$bootsh"
         fi
-        echo "sh boot.sh \"${name}\" true ${arch} ${qram} ${qcore}" >>"$bootisosh"
-        echo "sh boot.sh \"${name}\" false ${arch} ${qram} ${qcore}" >>"$bootsh"
+        echo "exec sh boot.sh \"${name}\" true ${arch} ${qram} ${qcore}" >>"$bootisosh"
+        echo "exec sh boot.sh \"${name}\" false ${arch} ${qram} ${qcore}" >>"$bootsh"
         chmod +x "$bootisosh"
         chmod +x "$bootsh"
 
