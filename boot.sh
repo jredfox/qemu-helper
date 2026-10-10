@@ -150,22 +150,26 @@ createDesktop() {
   if [ -z "$USER_DESKTOP" ] || [ "$USER_DESKTOP" = "$HOME" ]; then
     USER_DESKTOP="$HOME/Desktop"
   fi
-  DESKTOP_DESKTOP="$USER_DESKTOP/${dname}${sname}.desktop"
-  #sometimes the DE renames the file search for it
-  if [ ! -f "$DESKTOP_DESKTOP" ]; then
-    DESKTOP_DESKTOP="$USER_DESKTOP/${ddname}${dname}.desktop"
-  fi
-  if [ ! -f "$DESKTOP_DESKTOP" ]; then
-    DESKTOP_DESKTOP="$USER_DESKTOP/${ddname}${dname}${sname}.desktop"
-  fi
-  echo "file $DESKTOP_DESKTOP"
-  if [ "$DESKTOP_SYNC" = "true" ] && [ -f "$DESKTOP_DESKTOP" ]; then
-    DSK_DSK="$(cat "$DESKTOP_DESKTOP" 2>/dev/null)"
-    if [ "$DSK_DSK" != "$DSK_AFTER" ]; then
-      DSK_UPDATE="true"
-      cp -a "$DESKTOP_FILE" "$DESKTOP_DESKTOP"
+  if [ "$DESKTOP_SYNC" = "true" ]; then
+    DESKTOP_DESKTOP="$USER_DESKTOP/${dname}${sname}.desktop"
+    #sometimes the DE renames the file search for it
+    if [ ! -f "$DESKTOP_DESKTOP" ]; then
+      DESKTOP_DESKTOP="$USER_DESKTOP/${ddname}${dname}.desktop"
     fi
-    chmodDesktop "$DESKTOP_DESKTOP"
+    if [ ! -f "$DESKTOP_DESKTOP" ]; then
+      DESKTOP_DESKTOP="$USER_DESKTOP/${ddname}${dname}${sname}.desktop"
+    fi
+    if [ ! -f "$DESKTOP_DESKTOP" ]; then
+      DESKTOP_DESKTOP="$USER_DESKTOP/$DESKTOP_TITLE"
+    fi
+    if [ -f "$DESKTOP_DESKTOP" ]; then
+      DSK_DSK="$(cat "$DESKTOP_DESKTOP" 2>/dev/null)"
+      if [ "$DSK_DSK" != "$DSK_AFTER" ]; then
+        DSK_UPDATE="true"
+        cp -a "$DESKTOP_FILE" "$DESKTOP_DESKTOP"
+      fi
+      chmodDesktop "$DESKTOP_DESKTOP"
+    fi
   fi
   #Refresh Desktop
   if [ "$DSK_BEFORE" != "$DSK_AFTER" ] || [ "$DSK_UPDATE" = "true" ]; then
