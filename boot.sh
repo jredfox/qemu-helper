@@ -157,9 +157,6 @@ createDesktop() {
     #Sometimes the DE renames the physical file to match the title
     if [ ! -f "$DESKTOP_DESKTOP" ]; then
       for ddf in "$USER_DESKTOP"/*; do
-        if [ ! -f "$ddf" ]; then
-            continue
-        fi
         ddfname="$(basename "$ddf" | tr '[:upper:]' '[:lower:]')"
         #filter based on .DESKTOP file
         case "$ddfname" in
