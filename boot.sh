@@ -152,6 +152,8 @@ createDesktop() {
   fi
   if [ "$DESKTOP_SYNC" = "true" ]; then
     DESKTOP_DESKTOP="$USER_DESKTOP/${dname}${sname}.desktop"
+    ldname="$(printf '%s' "$dname" | tr '[:upper:]' '[:lower:]')"
+    ldtitle="$(printf '%s' "$DESKTOP_TITLE" | tr '[:upper:]' '[:lower:]')"
     #Sometimes the DE renames the physical file to match the title
     if [ ! -f "$DESKTOP_DESKTOP" ]; then
       for ddf in "$USER_DESKTOP"/*; do
@@ -164,8 +166,6 @@ createDesktop() {
             *.desktop) ;;
             *)  continue ;;
         esac
-        ldname="$(printf '%s' "$dname" | tr '[:upper:]' '[:lower:]')"
-        ldtitle="$(printf '%s' "$DESKTOP_TITLE" | tr '[:upper:]' '[:lower:]')"
         #filter based upon dname
         case "$ddfname" in
             *"$ldname"*|*"$ldtitle"*) ;;
