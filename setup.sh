@@ -141,9 +141,6 @@ trap "rm -rf \"$setup_exe_dir\"" 0
 
 #create powerpc32 symlinks
 for file in "iso"/*; do
-    if [ ! -f "$file" ]; then
-        continue
-    fi
     name=$(basename "$file")
     case "$name" in
         *.[iI][sS][oO]) ;;
@@ -189,9 +186,6 @@ done
 
 #install cows
 for file in "iso"/*; do
-    if [ ! -f "$file" ]; then
-        continue
-    fi
     name=$(basename "$file")
     case "$name" in
         *.[iI][sS][oO]) ;;
