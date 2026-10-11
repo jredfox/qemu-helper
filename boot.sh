@@ -152,15 +152,30 @@ createDesktop() {
   fi
   if [ "$DESKTOP_SYNC" = "true" ]; then
     DESKTOP_DESKTOP="$USER_DESKTOP/${dname}${sname}.desktop"
-    #sometimes the DE renames the file search for it
+    #Sometimes the DE renames the physical file to match the title
     if [ ! -f "$DESKTOP_DESKTOP" ]; then
-      DESKTOP_DESKTOP="$USER_DESKTOP/${ddname}${dname}.desktop"
-    fi
-    if [ ! -f "$DESKTOP_DESKTOP" ]; then
-      DESKTOP_DESKTOP="$USER_DESKTOP/${ddname}${dname}${sname}.desktop"
-    fi
-    if [ ! -f "$DESKTOP_DESKTOP" ]; then
-      DESKTOP_DESKTOP="$USER_DESKTOP/$DESKTOP_TITLE"
+      for ddf in "$USER_DESKTOP"/*; do
+        if [ ! -f "$ddf" ]; then
+            continue
+        fi
+        ddfname=$(basename "$ddf")
+        #filter based on .DESKTOP file
+        case "$ddfname" in
+            *.[dD][eE][sS][kK][tT][oO][pP]) ;;
+            *)  continue ;;
+        esac
+        echo "checking: $ddfname"
+        #filter based upon dname
+        case "$ddfname" in
+            *"$dname"*|*"$DESKTOP_TITLE"*) ;;
+            *)  continue ;;
+        esac
+        #check for WM_CLASS
+        if grep -qxF "StartupWMClass=${DESKTOP_CLASS}" "$ddf" 2>/dev/null; then
+          DESKTOP_DESKTOP="$ddf"
+          break
+        fi
+      done
     fi
     if [ -f "$DESKTOP_DESKTOP" ]; then
       DSK_DSK="$(cat "$DESKTOP_DESKTOP" 2>/dev/null)"

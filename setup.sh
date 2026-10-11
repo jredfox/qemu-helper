@@ -145,7 +145,7 @@ for file in "iso"/*; do
         continue
     fi
     name=$(basename "$file")
-    case $name in
+    case "$name" in
         *.[iI][sS][oO]) ;;
         *)  continue ;;
     esac
@@ -193,7 +193,7 @@ for file in "iso"/*; do
         continue
     fi
     name=$(basename "$file")
-    case $name in
+    case "$name" in
         *.[iI][sS][oO]) ;;
         *)  continue ;;
     esac
