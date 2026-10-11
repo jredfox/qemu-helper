@@ -158,15 +158,17 @@ createDesktop() {
         if [ ! -f "$ddf" ]; then
             continue
         fi
-        ddfname=$(basename "$ddf")
+        ddfname="$(basename "$ddf" | tr '[:upper:]' '[:lower:]')"
         #filter based on .DESKTOP file
         case "$ddfname" in
-            *.[dD][eE][sS][kK][tT][oO][pP]) ;;
+            *.desktop) ;;
             *)  continue ;;
         esac
+        ldname="$(printf '%s' "$dname" | tr '[:upper:]' '[:lower:]')"
+        ldtitle="$(printf '%s' "$DESKTOP_TITLE" | tr '[:upper:]' '[:lower:]')"
         #filter based upon dname
         case "$ddfname" in
-            *"$dname"*|*"$DESKTOP_TITLE"*) ;;
+            *"$ldname"*|*"$ldtitle"*) ;;
             *)  continue ;;
         esac
         #check for WM_CLASS
