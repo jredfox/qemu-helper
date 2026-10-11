@@ -45,7 +45,7 @@ if ! output=$(qemu-img "--version" >/dev/null 2>&1); then
         #md5sum is required for icons to work
         if ! command -v md5sum >/dev/null 2>&1 && ! command -v md5 >/dev/null 2>&1; then
             echo "Installing md5sum"
-            sudo apt install coreutils
+            sudo apt install coreutils -y
         fi
     elif command -v dnf >/dev/null 2>&1; then
         #Fedora Support
@@ -433,6 +433,10 @@ for file in "iso"/*; do
         if [ "$DESKTOP_GEN" != "true" ]; then
             echo "export DESKTOP_GEN=\"false\"" >>"$bootisosh"
             echo "export DESKTOP_GEN=\"false\"" >>"$bootsh"
+            if [ "$DESKTOP_SYNC" = "true" ]; then
+                echo "export DESKTOP_SYNC=\"true\"" >>"$bootisosh"
+                echo "export DESKTOP_SYNC=\"true\"" >>"$bootsh"
+            fi
         fi
         if [ "$windows_11" = "true" ]; then
             echo "export windows_11=\"true\"" >>"$bootisosh"
