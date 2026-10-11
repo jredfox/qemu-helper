@@ -157,12 +157,12 @@ createDesktop() {
     #Sometimes the DE renames the physical file to match the title
     if [ ! -f "$DESKTOP_DESKTOP" ]; then
       for ddf in "$USER_DESKTOP"/*; do
-        ddfname="$(basename "$ddf" | tr '[:upper:]' '[:lower:]')"
         #filter based on .DESKTOP file
-        case "$ddfname" in
-            *.desktop) ;;
+        case "$ddf" in
+            *.[dD][eE][sS][kK][tT][oO][pP]) ;;
             *)  continue ;;
         esac
+        ddfname="$(basename "$ddf" | tr '[:upper:]' '[:lower:]')"
         #filter based upon dname
         case "$ddfname" in
             *"$ldname"*|*"$ldtitle"*) ;;
