@@ -164,7 +164,6 @@ createDesktop() {
             *.[dD][eE][sS][kK][tT][oO][pP]) ;;
             *)  continue ;;
         esac
-        echo "checking: $ddfname"
         #filter based upon dname
         case "$ddfname" in
             *"$dname"*|*"$DESKTOP_TITLE"*) ;;
