@@ -433,10 +433,10 @@ for file in "iso"/*; do
         if [ "$DESKTOP_GEN" != "true" ]; then
             echo "export DESKTOP_GEN=\"false\"" >>"$bootisosh"
             echo "export DESKTOP_GEN=\"false\"" >>"$bootsh"
-            if [ "$DESKTOP_SYNC" = "true" ]; then
-                echo "export DESKTOP_SYNC=\"true\"" >>"$bootisosh"
-                echo "export DESKTOP_SYNC=\"true\"" >>"$bootsh"
-            fi
+        fi
+        if [ "$DESKTOP_SYNC" = "true" ]; then
+            echo "export DESKTOP_SYNC=\"true\"" >>"$bootisosh"
+            echo "export DESKTOP_SYNC=\"true\"" >>"$bootsh"
         fi
         if [ "$windows_11" = "true" ]; then
             echo "export windows_11=\"true\"" >>"$bootisosh"
