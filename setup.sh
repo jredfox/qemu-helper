@@ -49,13 +49,13 @@ if ! output=$(qemu-img "--version" >/dev/null 2>&1); then
         fi
     elif command -v dnf >/dev/null 2>&1; then
         #Fedora Support
-        qemu_sys=qemu-system-x86
-        if ! dnf list --quiet "$qemu_sys" >/dev/null 2>&1; then
-            qemu_sys=qemu-system-aarch64
-        fi
-        sudo dnf install -y qemu-system
-        sudo dnf install -y $qemu_sys
-        sudo dnf install -y qemu-kvm virt-manager
+        sudo dnf check-update
+        #TODO: fix missing u-boot-qemu
+        for pkg in qemu-kvm 'qemu-system-*' virt-manager bridge-utils edk2-aarch64 edk2-arm edk2-riscv64 opensbi; do
+            echo "installing pkg: ${pkg}"
+            sudo dnf install -y "$pkg"
+        done
+        sudo dnf group install -y virtualization
     else
         echo "Unsupported Linux Distro Please Manually install QEMU then run this script again!"
         exit 1
