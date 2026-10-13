@@ -42,16 +42,13 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ]; then
             sudo apt install coreutils -y
         fi
         #Install 7z
-        if ! 7z "--help" >/dev/null 2>&1; then
+        if ! command -v 7z >/dev/null 2>&1; then
             for pkg7z in 7zip p7zip-full p7zip-plugins p7zip 7zz 7z; do
                 sudo apt install -y "$pkg7z" || continue
-                if 7z "--help" >/dev/null 2>&1 || 7zz "--help" >/dev/null 2>&1; then
+                if command -v 7z >/dev/null 2>&1 || command -v 7zz >/dev/null 2>&1; then
                     break
                 fi
             done
-            if [ ! -f "/usr/bin/7z" ]; then
-                sudo ln -sfn "$(which 7zz)" "/usr/bin/7z"
-            fi
         fi
     elif command -v dnf >/dev/null 2>&1; then
         #Fedora Support
@@ -62,20 +59,24 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ]; then
         done
         sudo dnf group install -y virtualization
         #Install 7z with symlink of 7zz to 7z
-        if ! 7z "--help" >/dev/null 2>&1; then
+        if ! command -v 7z >/dev/null 2>&1; then
             for pkg7z in 7zip p7zip-full p7zip-plugins p7zip 7zz 7z; do
                 sudo dnf install -y "$pkg7z" || continue
-                if 7z "--help" >/dev/null 2>&1 || 7zz "--help" >/dev/null 2>&1; then
+                if command -v 7z >/dev/null 2>&1 || command -v 7zz >/dev/null 2>&1; then
                     break
                 fi
             done
-            if [ ! -f "/usr/bin/7z" ]; then
-                sudo ln -sfn "$(which 7zz)" "/usr/bin/7z"
-            fi
         fi
     else
         echo "Unsupported Linux Distro Please Manually install QEMU then run this script again!"
         exit 1
+    fi
+    #Create 7z symlink if required
+    if [ ! -f "/usr/bin/7z" ]; then
+        path7z="$(command -v 7zz 2>/dev/null)"
+        if [ ! -z "$path7z" ]; then
+            sudo ln -sfn "$path7z" "/usr/bin/7z"
+        fi
     fi
 fi
 
