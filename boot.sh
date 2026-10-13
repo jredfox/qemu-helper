@@ -626,7 +626,11 @@ case "$arch" in
   ppc64le|ppc64|ppc)
     if [ "$arch" != "ppc" ]; then
       q_cpu="power8"
-      q_machine="pseries-2.6,cap-htm=off"
+      if qemu-system-$arch -M help | grep -Eiq 'pseries-2.6'; then
+        q_machine="pseries-2.6,cap-htm=off"
+      else
+        q_machine="pseries"
+      fi
     else
       q_cpu="G4"
       q_machine="mac99"
