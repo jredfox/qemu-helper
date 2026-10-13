@@ -51,7 +51,7 @@ if ! output=$(qemu-img "--version" >/dev/null 2>&1); then
         #Fedora Support
         sudo dnf check-update
         #TODO: fix missing u-boot-qemu
-        for pkg in qemu-kvm 'qemu-system-*' virt-manager bridge-utils edk2-aarch64 edk2-arm edk2-riscv64 opensbi; do
+        for pkg in qemu-kvm 'qemu-system-*' virt-manager bridge-utils edk2-aarch64 edk2-arm edk2-riscv64 opensbi coreutils; do
             echo "installing pkg: ${pkg}"
             sudo dnf install -y "$pkg"
         done
