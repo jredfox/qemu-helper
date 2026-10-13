@@ -53,7 +53,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ]; then
     elif command -v dnf >/dev/null 2>&1; then
         #Fedora Support
         sudo dnf check-update
-        for pkg in qemu-kvm 'qemu-system-*' virt-manager bridge-utils edk2-aarch64 edk2-arm edk2-riscv64 opensbi coreutils; do
+        for pkg in qemu-kvm 'qemu-system-*' virt-manager bridge-utils edk2-aarch64 edk2-arm edk2-riscv64 opensbi coreutils curl lsof python3-virt-firmware; do
             echo "installing pkg: ${pkg}"
             sudo dnf install -y "$pkg"
         done
