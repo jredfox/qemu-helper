@@ -44,8 +44,11 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ]; then
         #Install 7z
         if ! 7z "--help" >/dev/null 2>&1; then
             for pkg7z in 7zip p7zip-full p7zip-plugins p7zip 7zz 7z; do
-                sudo apt install -y "$pkg7z"
-                if 7z "--help" >/dev/null 2>&1; then
+                sudo apt install -y "$pkg7z" || continue
+                if 7z "--help" >/dev/null 2>&1 || 7zz "--help" >/dev/null 2>&1; then
+                    if [ ! -f "/usr/bin/7z" ]; then
+                        sudo ln -sfn "$(which 7zz)" "/usr/bin/7z"
+                    fi
                     break
                 fi
             done
