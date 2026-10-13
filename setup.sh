@@ -43,7 +43,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ]; then
         fi
         #Install 7z
         if ! 7z "--help" >/dev/null 2>&1; then
-            for pkg7z in 7z 7zip p7zip-full p7zip p7zip-plugins 7zz; do
+            for pkg7z in 7z 7zip p7zip-full p7zip-plugins p7zip 7zz; do
                 sudo apt install -y "$pkg7z"
                 if 7z "--help" >/dev/null 2>&1; then
                     break
@@ -53,19 +53,18 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ]; then
     elif command -v dnf >/dev/null 2>&1; then
         #Fedora Support
         sudo dnf check-update
-        #TODO: fix missing u-boot-qemu
         for pkg in qemu-kvm 'qemu-system-*' virt-manager bridge-utils edk2-aarch64 edk2-arm edk2-riscv64 opensbi coreutils; do
             echo "installing pkg: ${pkg}"
             sudo dnf install -y "$pkg"
         done
         sudo dnf group install -y virtualization
-        #Install 7z
+        #Install 7z with symlink of 7zz to 7z
         if ! 7z "--help" >/dev/null 2>&1; then
-            for pkg7z in 7z 7zip 7zz p7zip-full p7zip-plugins p7zip; do
+            for pkg7z in 7z 7zip p7zip-full p7zip-plugins p7zip 7zz; do
                 sudo dnf install -y "$pkg7z" || continue
                 if 7z "--help" >/dev/null 2>&1 || 7zz "--help" >/dev/null 2>&1; then
                     if [ ! -f "/usr/bin/7z" ]; then
-                        sudo ln -sfn "$(command -v 7zz)" "/usr/bin/7z"
+                        sudo ln -sfn "$(which 7zz)" "/usr/bin/7z"
                     fi
                     break
                 fi
