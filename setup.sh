@@ -24,7 +24,7 @@ org_qram32="$qram32"
 org_qcore32="$qcore32"
 
 #install qemu
-if ! output=$(qemu-img "--version" >/dev/null 2>&1); then
+if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ]; then
     echo "Installing QEMU"
     #Debian & Ubuntu Based
     if command -v apt >/dev/null 2>&1; then
@@ -43,7 +43,7 @@ if ! output=$(qemu-img "--version" >/dev/null 2>&1); then
         fi
         #Install 7z
         if ! 7z "--help" >/dev/null 2>&1; then
-            for pkg7z in 7z 7zip p7zip-full p7zip p7zip-plugins; do
+            for pkg7z in 7z 7zip p7zip-full p7zip p7zip-plugins 7zz; do
                 sudo apt install -y "$pkg7z"
                 if 7z "--help" >/dev/null 2>&1; then
                     break
