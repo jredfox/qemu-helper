@@ -71,6 +71,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ]; then
         echo "Unsupported Linux Distro Please Manually install QEMU then run this script again!"
         exit 1
     fi
+    
     #Create 7z symlink if required
     if [ ! -f "/usr/bin/7z" ]; then
         path7z="$(command -v 7zz 2>/dev/null)"
