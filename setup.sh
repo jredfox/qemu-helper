@@ -32,15 +32,18 @@ if ! output=$(qemu-img "--version" >/dev/null 2>&1); then
         sudo apt install -y qemu-kvm qemu-system virt-manager bridge-utils qemu-efi-aarch64 qemu-efi-arm
         #RISC-V DEPS
         sudo apt install -y opensbi qemu-system-riscv64 qemu-efi-riscv64 u-boot-qemu
-        #TODO: install 7z or py7zip depending upon what is avaliable
+        #Install 7z
+        if ! 7z "--help" >/dev/null 2>&1; then
+            for pkg7z in 7z 7zip p7zip-full; do
+                sudo apt install -y "$pkg7z"
+                if 7z "--help" >/dev/null 2>&1; then
+                    break
+                fi
+            done
+        fi
+        #install virt-fw-vars
         if ! virt-fw-vars "--help" >/dev/null 2>&1; then
-            printf "%s" "Do you want to install virt-fw-vars which is recomended for older Ubuntu Arm64 images? [Y/N] "
-            read -r result
-            case "$result" in
-                [Yy]*) 
-                    sudo apt install -y python3-virt-firmware
-                    ;;
-            esac
+            sudo apt install -y python3-virt-firmware
         fi
         #md5sum is required for icons to work
         if ! command -v md5sum >/dev/null 2>&1 && ! command -v md5 >/dev/null 2>&1; then
