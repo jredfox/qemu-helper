@@ -37,7 +37,7 @@ if ! output=$(qemu-img "--version" >/dev/null 2>&1); then
             sudo apt install -y "$pkg"
         done
         #md5sum is required for icons to work
-        if ! command -v md5sum >/dev/null 2>&1 && ! command -v md5 >/dev/null 2>&1; then
+        if ! md5sum "--help" >/dev/null 2>&1 && ! md5 "--help" >/dev/null 2>&1; then
             echo "Installing md5sum"
             sudo apt install coreutils -y
         fi
@@ -59,6 +59,18 @@ if ! output=$(qemu-img "--version" >/dev/null 2>&1); then
             sudo dnf install -y "$pkg"
         done
         sudo dnf group install -y virtualization
+        #Install 7z
+        if ! 7z "--help" >/dev/null 2>&1; then
+            for pkg7z in 7z 7zip 7zz p7zip-full p7zip-plugins p7zip; do
+                sudo dnf install -y "$pkg7z" || continue
+                if 7z "--help" >/dev/null 2>&1 || 7zz "--help" >/dev/null 2>&1; then
+                    if [ ! -f "/usr/bin/7z" ]; then
+                        sudo ln -sfn "$(command -v 7zz)" "/usr/bin/7z"
+                    fi
+                    break
+                fi
+            done
+        fi
     else
         echo "Unsupported Linux Distro Please Manually install QEMU then run this script again!"
         exit 1
