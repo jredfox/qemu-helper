@@ -183,6 +183,7 @@ createDesktop() {
       if [ "$DSK_DSK" != "$DSK_AFTER" ]; then
         DSK_UPDATE="true"
         cp -a "$DESKTOP_FILE" "$DESKTOP_DESKTOP"
+        touch "$DESKTOP_DESKTOP"
       fi
       chmodDesktop "$DESKTOP_DESKTOP"
     fi
