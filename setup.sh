@@ -46,12 +46,12 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ]; then
             for pkg7z in 7zip p7zip-full p7zip-plugins p7zip 7zz 7z; do
                 sudo apt install -y "$pkg7z" || continue
                 if 7z "--help" >/dev/null 2>&1 || 7zz "--help" >/dev/null 2>&1; then
-                    if [ "$pkg7z" = "7zz" ] && [ ! -f "/usr/bin/7z" ]; then
-                        sudo ln -sfn "$(which 7zz)" "/usr/bin/7z"
-                    fi
                     break
                 fi
             done
+            if [ ! -f "/usr/bin/7z" ]; then
+                sudo ln -sfn "$(which 7zz)" "/usr/bin/7z"
+            fi
         fi
     elif command -v dnf >/dev/null 2>&1; then
         #Fedora Support
@@ -66,12 +66,12 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ]; then
             for pkg7z in 7zip p7zip-full p7zip-plugins p7zip 7zz 7z; do
                 sudo dnf install -y "$pkg7z" || continue
                 if 7z "--help" >/dev/null 2>&1 || 7zz "--help" >/dev/null 2>&1; then
-                    if [ "$pkg7z" = "7zz" ] && [ ! -f "/usr/bin/7z" ]; then
-                        sudo ln -sfn "$(which 7zz)" "/usr/bin/7z"
-                    fi
                     break
                 fi
             done
+            if [ ! -f "/usr/bin/7z" ]; then
+                sudo ln -sfn "$(which 7zz)" "/usr/bin/7z"
+            fi
         fi
     else
         echo "Unsupported Linux Distro Please Manually install QEMU then run this script again!"
