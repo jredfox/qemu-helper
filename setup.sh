@@ -59,7 +59,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
             pkg_dnf="yum"
         fi
         sudo $pkg_dnf check-update
-        for pkg in qemu-kvm 'qemu-system-*' virt-manager bridge-utils edk2-aarch64 edk2-arm edk2-riscv64 opensbi coreutils zstd curl lsof python3-virt-firmware; do
+        for pkg in qemu-kvm 'qemu-system-*' virt-manager bridge-utils edk2-aarch64 edk2-riscv64 opensbi coreutils zstd curl lsof python3-virt-firmware; do
             echo "installing pkg: ${pkg}"
             sudo $pkg_dnf install -y "$pkg"
         done
