@@ -22,6 +22,7 @@ org_qram="$qram"
 org_qcore="$qcore"
 org_qram32="$qram32"
 org_qcore32="$qcore32"
+org_pwd="$PWD"
 
 #install qemu
 alpine="false"
@@ -107,11 +108,15 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ]; then
         if [ -f "$qemu_efi_deb" ]; then
             echo "Installing qemu-efi-arm"
             7z x "$qemu_efi_deb" -o"$qemu_efi_dir" "data.tar" "data.tar.zst" -aoa -y >/dev/null
+            #Handle data.tar.zst
             if [ -f "$qemu_efi_dir/data.tar.zst" ]; then
-                org_pwd="$PWD"
                 cd "$qemu_efi_dir"
                 unzstd "$qemu_efi_dir/data.tar.zst"
                 cd "$org_pwd"
+            fi
+            #Handle data.tar.xz
+            if [ -f "$qemu_efi_dir/data.tar.xz" ]; then
+                7z x "$qemu_efi_dir/data.tar.xz" -o"$qemu_efi_dir"
             fi
             7z x "$qemu_efi_dir/data.tar" -o"$qemu_efi_dir" -aoa -y >/dev/null
             rm -rf "$qemu_efi_deb" "$qemu_efi_dir/data.tar"
