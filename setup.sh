@@ -103,8 +103,8 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ]; then
         done
         if [ -f "$qemu_efi_deb" ]; then
             echo "Installing qemu-efi-arm"
-            7z x "$qemu_efi_deb" -o"$qemu_efi_dir" -mtc -mta -mtm -aoa -y -ssc- >/dev/null
-            7z x "$qemu_efi_dir/data.tar" -o"$qemu_efi_dir" -mtc -mta -mtm -aoa -y -ssc- >/dev/null
+            7z x "$qemu_efi_deb" -o"$qemu_efi_dir" -aoa -y -ssc- >/dev/null
+            7z x "$qemu_efi_dir/data.tar" -o"$qemu_efi_dir" -aoa -y -ssc- >/dev/null
             rm -rf "$qemu_efi_deb" "$qemu_efi_dir/data.tar"
             sudo cp -a "$qemu_efi_dir"/* "/"
             rm -rf "$qemu_efi_dir"
