@@ -113,8 +113,8 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ]; then
             else
                 sudo cp -rf "$qemu_efi_dir"/* "/"
             fi
-            rm -rf "$qemu_efi_dir"
         fi
+        rm -rf "$qemu_efi_dir"
     fi
 fi
 
