@@ -107,7 +107,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ]; then
         done
         if [ -f "$qemu_efi_deb" ]; then
             echo "Installing qemu-efi-arm"
-            7z x "$qemu_efi_deb" -o"$qemu_efi_dir" "data.tar" "data.tar.zst" -aoa -y >/dev/null
+            7z x "$qemu_efi_deb" -o"$qemu_efi_dir" "data.tar" "data.tar.zst" "data.tar.xz" -aoa -y >/dev/null
             #Handle data.tar.zst
             if [ -f "$qemu_efi_dir/data.tar.zst" ]; then
                 cd "$qemu_efi_dir"
