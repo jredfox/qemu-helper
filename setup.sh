@@ -26,7 +26,7 @@ org_pwd="$PWD"
 
 #install qemu
 alpine="false"
-if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ]; then
+if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ ! -f "$HOME/.qemu-helper" ]; then
     echo "Installing QEMU"
     #Debian & Ubuntu Based
     if command -v apt >/dev/null 2>&1; then
@@ -79,14 +79,6 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ]; then
         echo "Unsupported Linux Distro Please Manually install QEMU then run this script again!"
         exit 1
     fi
-    
-    #Create 7z symlink if required
-    if [ ! -f "/usr/bin/7z" ]; then
-        path7z="$(command -v 7zz 2>/dev/null)"
-        if [ ! -z "$path7z" ]; then
-            sudo ln -sfn "$path7z" "/usr/bin/7z"
-        fi
-    fi
 
     #Install arm32 efi firmware
     efi_arm32_code="/usr/share/AAVMF/AAVMF32_CODE.fd"
@@ -127,6 +119,17 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ]; then
             fi
         fi
         rm -rf "$qemu_efi_dir"
+    fi
+
+    #Create the installed dir file
+    touch "$HOME/.qemu-helper"
+fi
+
+#Create 7z symlink if required
+if [ ! -f "/usr/bin/7z" ]; then
+    path7z="$(command -v 7zz 2>/dev/null)"
+    if [ ! -z "$path7z" ]; then
+        sudo ln -sfn "$path7z" "/usr/bin/7z"
     fi
 fi
 
