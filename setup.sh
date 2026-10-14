@@ -107,6 +107,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ]; then
             7z x "$qemu_efi_dir/data.tar" -o"$qemu_efi_dir" -mtc -mta -mtm -aoa -y -ssc- >/dev/null
             rm -rf "$qemu_efi_deb" "$qemu_efi_dir/data.tar"
             sudo cp -a "$qemu_efi_dir"/* "/"
+            rm -rf "$qemu_efi_dir"
         fi
     fi
 fi
