@@ -24,6 +24,7 @@ org_qram32="$qram32"
 org_qcore32="$qcore32"
 
 #install qemu
+alpine="false"
 if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ]; then
     echo "Installing QEMU"
     #Debian & Ubuntu Based
