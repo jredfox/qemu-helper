@@ -30,7 +30,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ]; then
     #Debian & Ubuntu Based
     if command -v apt >/dev/null 2>&1; then
         sudo apt update
-        sudo apt install -y qemu-kvm qemu-system virt-manager bridge-utils qemu-efi-aarch64 qemu-efi-arm
+        sudo apt install -y qemu-kvm qemu-system virt-manager bridge-utils qemu-efi-aarch64 qemu-efi-arm zstd
         #RISC-V DEPS
         sudo apt install -y opensbi qemu-system-riscv64 qemu-efi-riscv64 u-boot-qemu
         #Additional Deps
@@ -58,7 +58,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ]; then
             pkg_dnf="yum"
         fi
         sudo $pkg_dnf check-update
-        for pkg in qemu-kvm 'qemu-system-*' virt-manager bridge-utils edk2-aarch64 edk2-arm edk2-riscv64 opensbi coreutils curl lsof python3-virt-firmware; do
+        for pkg in qemu-kvm 'qemu-system-*' virt-manager bridge-utils edk2-aarch64 edk2-arm edk2-riscv64 opensbi coreutils zstd curl lsof python3-virt-firmware; do
             echo "installing pkg: ${pkg}"
             sudo $pkg_dnf install -y "$pkg"
         done
@@ -106,7 +106,13 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ]; then
         done
         if [ -f "$qemu_efi_deb" ]; then
             echo "Installing qemu-efi-arm"
-            7z x "$qemu_efi_deb" -o"$qemu_efi_dir" "data.tar" -aoa -y >/dev/null
+            7z x "$qemu_efi_deb" -o"$qemu_efi_dir" "data.tar" "data.tar.zst" -aoa -y >/dev/null
+            if [ -f "$qemu_efi_dir/data.tar.zst" ]; then
+                org_pwd="$PWD"
+                cd "$qemu_efi_dir"
+                unzstd "$qemu_efi_dir/data.tar.zst"
+                cd "$org_pwd"
+            fi
             7z x "$qemu_efi_dir/data.tar" -o"$qemu_efi_dir" -aoa -y >/dev/null
             rm -rf "$qemu_efi_deb" "$qemu_efi_dir/data.tar"
             if [ "$alpine" != "true" ]; then
