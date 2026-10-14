@@ -87,7 +87,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ]; then
     #Install arm32 efi firmware
     efi_arm32_code="/usr/share/AAVMF/AAVMF32_CODE.fd"
     if [ ! -f "$efi_arm32_code" ]; then
-        qemu_efi_dir="$install_dir/tmp"
+        qemu_efi_dir="$install_dir/tmp/qemu-efi-arm"
         mkdir -p "$qemu_efi_dir"
         qemu_efi_deb="$qemu_efi_dir/qemu-efi-arm.deb"
         for efi_arm32_url in 'https://launchpadlibrarian.net/794789100/qemu-efi-arm_2024.02-2ubuntu0.2_all.deb' 'https://launchpad.net/ubuntu/+archive/primary/+files/qemu-efi-arm_2022.02-3ubuntu0.22.04.7_all.deb' 'https://launchpadlibrarian.net/753273806/qemu-efi-arm_0~20191122.bd85bf54-2ubuntu3.6_all.deb'; do
@@ -101,10 +101,13 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ]; then
                 break
             fi
         done
-        7z x "$qemu_efi_deb" -o"$qemu_efi_dir" -mtc -mta -mtm -aoa -y -ssc- >/dev/null
-        7z x "$qemu_efi_dir/data.tar" -o"$qemu_efi_dir" -mtc -mta -mtm -aoa -y -ssc- >/dev/null
-        rm -rf "$qemu_efi_deb" "$qemu_efi_dir/data.tar"
-        sudo cp -a "$qemu_efi_dir"/* "/"
+        if [ -f "$qemu_efi_deb" ]; then
+            echo "Installing qemu-efi-arm"
+            7z x "$qemu_efi_deb" -o"$qemu_efi_dir" -mtc -mta -mtm -aoa -y -ssc- >/dev/null
+            7z x "$qemu_efi_dir/data.tar" -o"$qemu_efi_dir" -mtc -mta -mtm -aoa -y -ssc- >/dev/null
+            rm -rf "$qemu_efi_deb" "$qemu_efi_dir/data.tar"
+            sudo cp -a "$qemu_efi_dir"/* "/"
+        fi
     fi
 fi
 
