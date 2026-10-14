@@ -50,18 +50,22 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ]; then
                 fi
             done
         fi
-    elif command -v dnf >/dev/null 2>&1; then
+    elif command -v dnf >/dev/null 2>&1 || command -v yum >/dev/null 2>&1; then
         #Fedora Support
-        sudo dnf check-update
+        pkg_dnf="dnf"
+        if ! command -v dnf >/dev/null 2>&1; then
+            pkg_dnf="yum"
+        fi
+        sudo $pkg_dnf check-update
         for pkg in qemu-kvm 'qemu-system-*' virt-manager bridge-utils edk2-aarch64 edk2-arm edk2-riscv64 opensbi coreutils curl lsof python3-virt-firmware; do
             echo "installing pkg: ${pkg}"
-            sudo dnf install -y "$pkg"
+            sudo $pkg_dnf install -y "$pkg"
         done
-        sudo dnf group install -y virtualization
+        sudo $pkg_dnf group install -y virtualization
         #Install 7z with symlink of 7zz to 7z
         if ! command -v 7z >/dev/null 2>&1; then
             for pkg7z in 7zip 7z p7zip-full p7zip-plugins p7zip 7zz; do
-                sudo dnf install -y "$pkg7z" || continue
+                sudo $pkg_dnf install -y "$pkg7z" || continue
                 if command -v 7z >/dev/null 2>&1 || command -v 7zz >/dev/null 2>&1; then
                     break
                 fi
