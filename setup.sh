@@ -116,7 +116,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ]; then
             fi
             #Handle data.tar.xz
             if [ -f "$qemu_efi_dir/data.tar.xz" ]; then
-                7z x "$qemu_efi_dir/data.tar.xz" -o"$qemu_efi_dir"
+                7z x "$qemu_efi_dir/data.tar.xz" -o"$qemu_efi_dir" -aoa -y >/dev/null
             fi
             7z x "$qemu_efi_dir/data.tar" -o"$qemu_efi_dir" -aoa -y >/dev/null
             rm -rf -- "$qemu_efi_deb" "$qemu_efi_dir/"data.tar*
