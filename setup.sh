@@ -43,7 +43,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ]; then
         fi
         #Install 7z
         if ! command -v 7z >/dev/null 2>&1; then
-            for pkg7z in 7zip p7zip-full p7zip-plugins p7zip 7zz 7z; do
+            for pkg7z in 7zip p7zip-full p7zip-plugins p7zip 7z 7zz; do
                 sudo apt install -y "$pkg7z" || continue
                 if command -v 7z >/dev/null 2>&1 || command -v 7zz >/dev/null 2>&1; then
                     break
@@ -60,7 +60,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ]; then
         sudo dnf group install -y virtualization
         #Install 7z with symlink of 7zz to 7z
         if ! command -v 7z >/dev/null 2>&1; then
-            for pkg7z in 7zip p7zip-full p7zip-plugins p7zip 7zz 7z; do
+            for pkg7z in 7zip 7z p7zip-full p7zip-plugins p7zip 7zz; do
                 sudo dnf install -y "$pkg7z" || continue
                 if command -v 7z >/dev/null 2>&1 || command -v 7zz >/dev/null 2>&1; then
                     break
