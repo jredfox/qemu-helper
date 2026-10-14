@@ -138,7 +138,7 @@ createDesktop() {
   printf '%s\n' "Icon=${icon}" >>"$DESKTOP_FILE"
   printf '%s\n' "Categories=${DESKTOP_CATEGORIES:-Development;Emulator;}" >>"$DESKTOP_FILE"
   printf '%s\n' "Keywords=${DESKTOP_KEYWORDS:-Qemu;Emulator;Qemu-Helper;QemuHelper;Qemu Helper;QH;Windows;Linux;Alpine;Ubuntu;mac;macOS;osx;}" >>"$DESKTOP_FILE"
-  printf '%s\n' "Terminal=false" >>"$DESKTOP_FILE"
+  printf '%s\n' "Terminal=${no_graphics}" >>"$DESKTOP_FILE"
   printf '%s\n' "Type=Application" >>"$DESKTOP_FILE"
   printf '%s\n' "StartupWMClass=$DESKTOP_CLASS" >>"$DESKTOP_FILE"
   #Make the DESKTOP File Executable
@@ -196,8 +196,6 @@ createDesktop() {
   return 0
 
 }
-
-createDesktop ""
 
 onExit() {
   echo "$1" >&2
@@ -588,6 +586,9 @@ if [ -z "$no_graphics" ]; then
     no_graphics="true"
   fi
 fi
+
+#Create the DESKTOP Launcher
+createDesktop ""
 
 q_netdev="user,id=net0"
 q_netdev_device="virtio-net-device"
