@@ -81,7 +81,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
     fi
 
     #Install arm32 efi firmware
-    efi_arm32_code="/usr/share/AAVMF/AAVMF32_CODE.fd"
+    efi_arm32_code="/usr/share/AAVMF/AAVMF32_VARS.fd"
     if [ ! -f "$efi_arm32_code" ]; then
         qemu_efi_dir="$install_dir/tmp/qemu-efi-arm"
         mkdir -p "$qemu_efi_dir"
