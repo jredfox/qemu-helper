@@ -33,7 +33,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
         sudo apt update
         sudo apt install -y qemu-kvm qemu-system virt-manager bridge-utils qemu-efi-aarch64 qemu-efi-arm zstd
         #RISC-V DEPS
-        sudo apt install -y opensbi qemu-system-riscv64 qemu-efi-riscv64 u-boot-qemu
+        sudo apt install -y opensbi qemu-system-riscv64 qemu-efi-riscv64
         #Additional Deps
         for pkg in curl lsof python3-virt-firmware; do
             sudo apt install -y "$pkg"

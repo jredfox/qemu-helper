@@ -524,7 +524,7 @@ qdrive() {
   qdrives="$qdrives $1"
 }
 
-load_arm_qfwr () {
+load_arm_qfwr() {
 
     mkdir -p "$fwrdir"
     if [ "$arch" = "aarch64" ]; then
@@ -570,6 +570,53 @@ load_arm_qfwr () {
     fi
     qarg "-drive \"if=pflash,format=raw,unit=0,file=${AAVMF_CODE},readonly=on\""
     qarg "-drive \"if=pflash,format=raw,unit=1,file=${AAVMF_VARS}\""
+
+}
+
+load_riscv_qfwr() {
+
+    mkdir -p "$fwrdir"
+    if [ -f "$RISCV_VARS_PATH" ]; then
+      RISCV_CODE_PATH="/usr/share/edk2/riscv/RISCV_VIRT_CODE.fd"
+      RISCV_VARS_PATH="/usr/share/edk2/riscv/RISCV_VIRT_VARS.fd"
+    else
+      RISCV_CODE_PATH="/usr/share/qemu-efi-riscv64/RISCV_VIRT_CODE.fd"
+      RISCV_VARS_PATH="/usr/share/qemu-efi-riscv64/RISCV_VIRT_VARS.fd"
+    fi
+    RISCV_CODE="$fwrdir/RISCV_CODE.fd"
+    RISCV_VARS_NORMAL="$fwrdir/${dname}_RISCV_VARS.fd"
+    RISCV_VARS_ISO="$fwrdir/${dname}_RISCV_VARS${sname}.fd"
+
+    if [ "$iso_boot" = "true" ]; then
+      RISCV_VARS="$RISCV_VARS_ISO"
+    else
+      RISCV_VARS="$RISCV_VARS_NORMAL"
+    fi
+    #Copy RISCV_VARS_ISO to RISCV_VARS_NORMAL if it has boot entries before clearing NVRAM
+    if virt-fw-vars "--help" >/dev/null 2>&1; then
+      boot_entries="$(virt-fw-vars -i "$RISCV_VARS_ISO" --print 2>/dev/null | grep -iE '^Boot[0-9]{4}' | grep -iE '[/\\]File')"
+    else
+      echo "WARNING: Falling back to strings command for EFI boot entries check!"
+      boot_entries="$(strings -e l "$RISCV_VARS_ISO" 2>/dev/null | grep -iE '\\EFI\\|/EFI/')"
+    fi
+    if [ ! -z "$boot_entries" ]; then
+      echo "Setting NVRAM of normal boot"
+      cp "$RISCV_VARS_ISO" "$RISCV_VARS_NORMAL"
+      rm -f "$RISCV_VARS_ISO"
+    fi
+    #Optimization
+    if [ ! -f "$RISCV_CODE" ]; then
+      cp "$RISCV_CODE_PATH" "$RISCV_CODE"
+    fi
+    if [ "$iso_boot" != "true" ]; then
+      if [ ! -f "$RISCV_VARS" ]; then
+        cp "$RISCV_VARS_PATH" "$RISCV_VARS"
+      fi
+    else
+      cp "$RISCV_VARS_PATH" "$RISCV_VARS"
+    fi
+    qarg "-drive \"if=pflash,format=raw,unit=0,file=${RISCV_CODE},readonly=on\""
+    qarg "-drive \"if=pflash,format=raw,unit=1,file=${RISCV_VARS}\""
 
 }
 
@@ -622,7 +669,7 @@ case "$arch" in
         acpi=",acpi=off"
       fi
     fi
-    q_kernal="/usr/lib/u-boot/qemu-riscv64_smode/uboot.elf"
+    #q_kernal="/usr/lib/u-boot/qemu-riscv64_smode/uboot.elf"
     if [ "$iso_boot" = "true" ]; then
       qdrive "-drive \"file=${iso},format=raw,readonly=on,if=virtio\""
     fi
@@ -835,6 +882,9 @@ else
   fi
   if [ "$family_target" = "arm" ]; then
     load_arm_qfwr "INIT"
+  fi
+  if [ "$family_target" = "riscv" ]; then
+    load_riscv_qfwr "INIT"
   fi
 fi
 
