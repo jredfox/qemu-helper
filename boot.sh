@@ -615,6 +615,21 @@ load_riscv_qfwr() {
     else
       cp "$RISCV_VARS_PATH" "$RISCV_VARS"
     fi
+    cat >"tmp/riscv-timeout.json" <<'EOF'
+{
+  "version": 2,
+  "variables": [
+    {
+      "name": "Timeout",
+      "guid": "8be4df61-93ca-11d2-aa0d-00e098032b8c",
+      "attr": 7,
+      "data": "0000"
+    }
+  ]
+}
+EOF
+    virt-fw-vars -i "$RISCV_VARS" -o "$RISCV_VARS.tmp" --set-json "tmp/riscv-timeout.json"
+    cp -a "$RISCV_VARS.tmp" "$RISCV_VARS"
     qarg "-drive \"if=pflash,format=raw,unit=0,file=${RISCV_CODE},readonly=on\""
     qarg "-drive \"if=pflash,format=raw,unit=1,file=${RISCV_VARS}\""
 
