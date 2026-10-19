@@ -577,10 +577,10 @@ load_riscv_qfwr() {
 
     mkdir -p "$fwrdir"
     if [ -f "/usr/share/edk2/riscv/RISCV_VIRT_VARS.fd" ]; then
-      RISCV_CODE_PATH="/usr/share/edk2/riscv/RISCV_VIRT_CODE.fd"
+      RISCV_CODE_PATH="/usr/share/edk2/riscv/RISCV_VIRT_CODE_QH.fd"
       RISCV_VARS_PATH="/usr/share/edk2/riscv/RISCV_VIRT_VARS_QH.fd"
     else
-      RISCV_CODE_PATH="/usr/share/qemu-efi-riscv64/RISCV_VIRT_CODE.fd"
+      RISCV_CODE_PATH="/usr/share/qemu-efi-riscv64/RISCV_VIRT_CODE_QH.fd"
       RISCV_VARS_PATH="/usr/share/qemu-efi-riscv64/RISCV_VIRT_VARS_QH.fd"
     fi
     RISCV_CODE="$fwrdir/RISCV_CODE.fd"

@@ -24,6 +24,22 @@ org_qram32="$qram32"
 org_qcore32="$qcore32"
 org_pwd="$PWD"
 
+patchNVRAMPADDING() {
+
+    PF_CODE="${1}_QH.fd"
+    PF_VARS="${2}_QH.fd"
+    if [ "$(wc -c <"${1}.fd")" -lt "${3}" ]; then
+        sudo cp "${1}.fd" "${PF_CODE}"
+        sudo truncate -s "${3}" "${PF_CODE}"
+    else
+        sudo ln -sfn "${1}.fd" "${PF_CODE}"
+    fi
+    if [ "$(wc -c <"${PF_VARS}")" -lt "${3}" ]; then
+        sudo truncate -s "${3}" "${PF_VARS}"
+    fi
+
+}
+
 patchNVRAMTimeOut() {
 
     if [ ! -f "${1}" ]; then
@@ -148,8 +164,10 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
     patchNVRAMTimeOut "/usr/share/AAVMF/AAVMF32_VARS.fd" "/usr/share/AAVMF/AAVMF32_VARS_QH.fd"
     if [ -f "/usr/share/edk2/riscv/RISCV_VIRT_VARS.fd" ]; then
         patchNVRAMTimeOut "/usr/share/edk2/riscv/RISCV_VIRT_VARS.fd" "/usr/share/edk2/riscv/RISCV_VIRT_VARS_QH.fd"
+        patchNVRAMPADDING "/usr/share/edk2/riscv/RISCV_VIRT_CODE" "/usr/share/edk2/riscv/RISCV_VIRT_VARS" "33554432"
     else
         patchNVRAMTimeOut "/usr/share/qemu-efi-riscv64/RISCV_VIRT_VARS.fd" "/usr/share/qemu-efi-riscv64/RISCV_VIRT_VARS_QH.fd"
+        patchNVRAMPADDING "/usr/share/qemu-efi-riscv64/RISCV_VIRT_CODE" "/usr/share/qemu-efi-riscv64/RISCV_VIRT_VARS" "33554432"
     fi
     rm -f "$install_dir/tmp/timeout.json"
 
