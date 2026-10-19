@@ -120,6 +120,9 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
         exit 1
     fi
 
+    #Make tmp dir
+    mkdir -p "$install_dir/tmp"
+
     #Install arm32 efi firmware
     efi_arm32_code="/usr/share/AAVMF/AAVMF32_VARS.fd"
     if [ ! -f "$efi_arm32_code" ]; then
@@ -160,9 +163,6 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
         fi
         rm -rf "$qemu_efi_dir"
     fi
-
-    #Make tmp dir
-    mkdir -p "$install_dir/tmp"
 
     #Modify the NVRAM to disabled the timeout of 5 seconds option arm and risc-v
     patchNVRAMTimeOut "/usr/share/AAVMF/AAVMF_VARS.fd" "/usr/share/AAVMF/AAVMF_VARS_QH.fd"
