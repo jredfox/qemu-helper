@@ -26,6 +26,11 @@ org_pwd="$PWD"
 
 patchNVRAMPADDING() {
 
+    if [ ! -f "${1}.fd" ]; then
+        echo "ERROR NVRAM File not found: \"${1}.fd\""
+        return 1
+    fi
+
     PF_CODE="${1}_QH.fd"
     PF_VARS="${2}_QH.fd"
     sudo rm -f "${PF_CODE}"
