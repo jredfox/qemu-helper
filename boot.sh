@@ -536,7 +536,7 @@ load_arm_qfwr() {
     else
       AAVMF_CODE_PATH="/usr/share/AAVMF/AAVMF32_CODE.fd"
       AAVMF_VARS_PATH="/usr/share/AAVMF/AAVMF32_VARS_QH.fd"
-      AAVMF_CODE="$fwrdir/AAVMF_CODE32.fd"
+      AAVMF_CODE="$fwrdir/AAVMF32_CODE.fd"
       AAVMF_VARS_NORMAL="$fwrdir/${dname}_AAVMF32_VARS.fd"
       AAVMF_VARS_ISO="$fwrdir/${dname}_AAVMF32_VARS${sname}.fd"
     fi
