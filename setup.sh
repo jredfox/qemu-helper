@@ -28,6 +28,7 @@ patchNVRAMPADDING() {
 
     PF_CODE="${1}_QH.fd"
     PF_VARS="${2}_QH.fd"
+    sudo rm -f "${PF_CODE}"
     if [ "$(wc -c <"${1}.fd")" -lt "${3}" ]; then
         sudo cp "${1}.fd" "${PF_CODE}"
         sudo truncate -s "${3}" "${PF_CODE}"
@@ -35,6 +36,9 @@ patchNVRAMPADDING() {
         sudo ln -sfn "${1}.fd" "${PF_CODE}"
     fi
     if [ "$(wc -c <"${PF_VARS}")" -lt "${3}" ]; then
+        if [ -L "${PF_VARS}" ]; then
+            sudo cp -f "${2}.fd" "${PF_VARS}"
+        fi
         sudo truncate -s "${3}" "${PF_VARS}"
     fi
 
