@@ -35,10 +35,11 @@ patchNVRAMPADDING() {
     else
         sudo ln -sfn "${1}.fd" "${PF_CODE}"
     fi
-    if [ -L "${PF_VARS}" ]; then
-        sudo cp "${2}.fd" "${PF_VARS}"
-    fi
     if [ "$(wc -c <"${PF_VARS}")" -lt "${3}" ]; then
+        if [ -L "${PF_VARS}" ]; then
+            sudo rm -f "${PF_VARS}"
+            sudo cp "${2}.fd" "${PF_VARS}"
+        fi
         sudo truncate -s "${3}" "${PF_VARS}"
     fi
 
