@@ -133,7 +133,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
     if [ ! -f "$RISCV_VARS_QH" ]; then
         mkdir -p "$install_dir/tmp"
         printf '%s\n' '{ "version": 2, "variables": [ { "name": "Timeout", "guid": "8be4df61-93ca-11d2-aa0d-00e098032b8c", "attr": 7, "data": "0000" } ] }' >"$install_dir/tmp/riscv-timeout.json"
-        virt-fw-vars -i "$RISCV_VARS" -o "$RISCV_VARS_QH" --set-json "$install_dir/tmp/riscv-timeout.json"
+        sudo virt-fw-vars -i "$RISCV_VARS" -o "$RISCV_VARS_QH" --set-json "$install_dir/tmp/riscv-timeout.json" || sudo rm -rf "$RISCV_VARS_QH"
     fi
 
     #Create the installed dir file
