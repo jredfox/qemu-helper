@@ -143,7 +143,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
     #Make tmp dir
     mkdir -p "$install_dir/tmp"
 
-    #Modify the NVRAM to disabled the timeout of 5 seconds option arm64
+    #Modify the NVRAM to disabled the timeout of 5 seconds option arm and risc-v
     patchNVRAMTimeOut "/usr/share/AAVMF/AAVMF_VARS.fd" "/usr/share/AAVMF/AAVMF_VARS_QH.fd"
     patchNVRAMTimeOut "/usr/share/AAVMF/AAVMF32_VARS.fd" "/usr/share/AAVMF/AAVMF32_VARS_QH.fd"
     if [ -f "/usr/share/edk2/riscv/RISCV_VIRT_VARS.fd" ]; then
