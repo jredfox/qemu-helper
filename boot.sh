@@ -576,28 +576,16 @@ load_arm_qfwr() {
 load_riscv_qfwr() {
 
     mkdir -p "$fwrdir"
-    RISCV_VARS_PKG="/usr/share/edk2/riscv/RISCV_VIRT_VARS.fd"
-    if [ -f "$RISCV_VARS_PKG" ]; then
-      RISCV_CODE_PKG="/usr/share/edk2/riscv/RISCV_VIRT_CODE.fd"
+    if [ -f "/usr/share/edk2/riscv/RISCV_VIRT_VARS.fd" ]; then
+      RISCV_CODE_PATH="/usr/share/edk2/riscv/RISCV_VIRT_CODE.fd"
+      RISCV_VARS_PATH="/usr/share/edk2/riscv/RISCV_VIRT_VARS_QH.fd"
     else
-      RISCV_CODE_PKG="/usr/share/qemu-efi-riscv64/RISCV_VIRT_CODE.fd"
-      RISCV_VARS_PKG="/usr/share/qemu-efi-riscv64/RISCV_VIRT_VARS.fd"
+      RISCV_CODE_PATH="/usr/share/qemu-efi-riscv64/RISCV_VIRT_CODE.fd"
+      RISCV_VARS_PATH="/usr/share/qemu-efi-riscv64/RISCV_VIRT_VARS_QH.fd"
     fi
     RISCV_CODE="$fwrdir/RISCV_CODE.fd"
-    RISCV_VARS_PATH="$fwrdir/RISCV_VARS.fd"
-    if [ ! -f "$RISCV_CODE" ]; then
-      cp "$RISCV_CODE_PKG" "$RISCV_CODE"
-    fi
-    #Modify the NVRAM to disabled the timeout of 5 seconds option that's only appears to be in risc-v
-    if [ ! -f "$RISCV_VARS_PATH" ]; then
-      cp "$RISCV_VARS_PKG" "$RISCV_VARS_PATH"
-      printf '%s\n' '{ "version": 2, "variables": [ { "name": "Timeout", "guid": "8be4df61-93ca-11d2-aa0d-00e098032b8c", "attr": 7, "data": "0000" } ] }' >"tmp/riscv-timeout.json"
-      virt-fw-vars -i "$RISCV_VARS_PATH" -o "$RISCV_VARS_PATH.tmp" --set-json "tmp/riscv-timeout.json"
-      mv "$RISCV_VARS_PATH.tmp" "$RISCV_VARS_PATH"
-    fi
     RISCV_VARS_NORMAL="$fwrdir/${dname}_RISCV_VARS.fd"
     RISCV_VARS_ISO="$fwrdir/${dname}_RISCV_VARS${sname}.fd"
-
     if [ "$iso_boot" = "true" ]; then
       RISCV_VARS="$RISCV_VARS_ISO"
     else
@@ -614,6 +602,10 @@ load_riscv_qfwr() {
       echo "Setting NVRAM of normal boot"
       cp "$RISCV_VARS_ISO" "$RISCV_VARS_NORMAL"
       rm -f "$RISCV_VARS_ISO"
+    fi
+    #Optimization
+    if [ ! -f "$RISCV_CODE" ]; then
+      cp "$RISCV_CODE_PATH" "$RISCV_CODE"
     fi
     if [ "$iso_boot" != "true" ]; then
       if [ ! -f "$RISCV_VARS" ]; then

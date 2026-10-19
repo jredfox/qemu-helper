@@ -121,6 +121,21 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
         rm -rf "$qemu_efi_dir"
     fi
 
+    #Detect RISC-V NVRAM PFLASH
+    if [ -f "/usr/share/edk2/riscv/RISCV_VIRT_VARS.fd" ]; then
+      RISCV_VARS="/usr/share/edk2/riscv/RISCV_VIRT_VARS.fd"
+      RISCV_VARS_QH="/usr/share/edk2/riscv/RISCV_VIRT_VARS_QH.fd"
+    else
+      RISCV_VARS="/usr/share/qemu-efi-riscv64/RISCV_VIRT_VARS.fd"
+      RISCV_VARS_QH="/usr/share/qemu-efi-riscv64/RISCV_VIRT_VARS_QH.fd"
+    fi
+    #Modify the NVRAM to disabled the timeout of 5 seconds option that's only appears to be in risc-v
+    if [ ! -f "$RISCV_VARS_QH" ]; then
+        mkdir -p "$install_dir/tmp"
+        printf '%s\n' '{ "version": 2, "variables": [ { "name": "Timeout", "guid": "8be4df61-93ca-11d2-aa0d-00e098032b8c", "attr": 7, "data": "0000" } ] }' >"tmp/riscv-timeout.json"
+        virt-fw-vars -i "$RISCV_VARS" -o "$RISCV_VARS_QH" --set-json "tmp/riscv-timeout.json"
+    fi
+
     #Create the installed dir file
     touch "$HOME/.qemu-helper"
 fi
