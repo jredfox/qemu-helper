@@ -579,7 +579,6 @@ load_riscv_qfwr() {
     RISCV_VARS_PKG="/usr/share/edk2/riscv/RISCV_VIRT_VARS.fd"
     if [ -f "$RISCV_VARS_PKG" ]; then
       RISCV_CODE_PKG="/usr/share/edk2/riscv/RISCV_VIRT_CODE.fd"
-      RISCV_VARS_PKG="/usr/share/edk2/riscv/RISCV_VIRT_VARS.fd"
     else
       RISCV_CODE_PKG="/usr/share/qemu-efi-riscv64/RISCV_VIRT_CODE.fd"
       RISCV_VARS_PKG="/usr/share/qemu-efi-riscv64/RISCV_VIRT_VARS.fd"
@@ -593,8 +592,8 @@ load_riscv_qfwr() {
     if [ ! -f "$RISCV_VARS_PATH" ]; then
       cp "$RISCV_VARS_PKG" "$RISCV_VARS_PATH"
       printf '%s\n' '{ "version": 2, "variables": [ { "name": "Timeout", "guid": "8be4df61-93ca-11d2-aa0d-00e098032b8c", "attr": 7, "data": "0000" } ] }' >"tmp/riscv-timeout.json"
-      virt-fw-vars -i "$RISCV_VARS" -o "$RISCV_VARS.tmp" --set-json "tmp/riscv-timeout.json"
-      cp -a "$RISCV_VARS.tmp" "$RISCV_VARS"
+      virt-fw-vars -i "$RISCV_VARS_PATH" -o "$RISCV_VARS_PATH.tmp" --set-json "tmp/riscv-timeout.json"
+      mv "$RISCV_VARS_PATH.tmp" "$RISCV_VARS_PATH"
     fi
     RISCV_VARS_NORMAL="$fwrdir/${dname}_RISCV_VARS.fd"
     RISCV_VARS_ISO="$fwrdir/${dname}_RISCV_VARS${sname}.fd"
