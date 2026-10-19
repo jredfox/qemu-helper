@@ -37,7 +37,7 @@ patchNVRAMTimeOut() {
     if [ ! -z "$virt_fw" ]; then
         sudo "$virt_fw" -i "${1}" -o "${2}" --set-json "$install_dir/tmp/timeout.json" || sudo cp -a "${1}" "${2}"
     else
-        echo "ERROR: virt-fw-vars not found risc-v timeout will be 5 seconds. To fix this install it and run \"rm -f ~/.qemu-helper\" then finally sh setup.sh again"
+        echo "ERROR: virt-fw-vars not found arm32 arm64 and risc-v timeout will be 5 seconds. To fix this install it and run \"rm -f ~/.qemu-helper\" then finally sh setup.sh again"
         sudo cp -a "${1}" "${2}"
     fi
 
