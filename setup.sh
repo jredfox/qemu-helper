@@ -136,7 +136,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
         if command -v virt-fw-vars; then
             sudo virt-fw-vars -i "$RISCV_VARS" -o "$RISCV_VARS_QH" --set-json "$install_dir/tmp/riscv-timeout.json" || sudo rm -f "$RISCV_VARS_QH"
         else
-            echo "ERROR: virt-fw-vars not found risc-v timeout will be 5 seconds until install it and then run \"rm -f ${RISCV_VARS_QH}\""
+            echo "ERROR: virt-fw-vars not found risc-v timeout will be 5 seconds until install it and then run \"rm -f ${RISCV_VARS_QH}\" and \"rm -f ~/.qemu-helper\" then finally sh setup.sh again"
             sudo cp -a "$RISCV_VARS" "$RISCV_VARS_QH"
         fi
     fi
