@@ -31,7 +31,7 @@ patchNVRAMTimeOut() {
         return 1
     fi
 
-    rm -f "${2}"
+    sudo rm -f "${2}"
     printf '%s\n' '{ "version": 2, "variables": [ { "name": "Timeout", "guid": "8be4df61-93ca-11d2-aa0d-00e098032b8c", "attr": 7, "data": "0000" } ] }' >"$install_dir/tmp/timeout.json"
     virt_fw="$(command -v virt-fw-vars 2>/dev/null)"
     if [ ! -z "$virt_fw" ]; then
