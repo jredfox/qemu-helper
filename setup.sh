@@ -24,6 +24,25 @@ org_qram32="$qram32"
 org_qcore32="$qcore32"
 org_pwd="$PWD"
 
+patchNVRAMTimeOut() {
+
+    if [ ! -f "${1}" ]; then
+        echo "ERROR NVRAM File not found: \"${1}\""
+        return 1
+    fi
+
+    rm -f "${2}"
+    printf '%s\n' '{ "version": 2, "variables": [ { "name": "Timeout", "guid": "8be4df61-93ca-11d2-aa0d-00e098032b8c", "attr": 7, "data": "0000" } ] }' >"$install_dir/tmp/timeout.json"
+    virt_fw="$(command -v virt-fw-vars 2>/dev/null)"
+    if [ ! -z "$virt_fw" ]; then
+        sudo "$virt_fw" -i "${1}" -o "${2}" --set-json "$install_dir/tmp/timeout.json" || sudo cp -a "${1}" "${2}"
+    else
+        echo "ERROR: virt-fw-vars not found risc-v timeout will be 5 seconds. To fix this install it and run \"rm -f ~/.qemu-helper\" then finally sh setup.sh again"
+        sudo cp -a "${1}" "${2}"
+    fi
+
+}
+
 #install qemu
 alpine="false"
 if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ ! -f "$HOME/.qemu-helper" ]; then
@@ -121,27 +140,18 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
         rm -rf "$qemu_efi_dir"
     fi
 
-    #Detect RISC-V NVRAM PFLASH
+    #Make tmp dir
+    mkdir -p "$install_dir/tmp"
+
+    #Modify the NVRAM to disabled the timeout of 5 seconds option arm64
+    patchNVRAMTimeOut "/usr/share/AAVMF/AAVMF_VARS.fd" "/usr/share/AAVMF/AAVMF_VARS_QH.fd"
+    patchNVRAMTimeOut "/usr/share/AAVMF/AAVMF32_VARS.fd" "/usr/share/AAVMF/AAVMF32_VARS_QH.fd"
     if [ -f "/usr/share/edk2/riscv/RISCV_VIRT_VARS.fd" ]; then
-      RISCV_VARS="/usr/share/edk2/riscv/RISCV_VIRT_VARS.fd"
-      RISCV_VARS_QH="/usr/share/edk2/riscv/RISCV_VIRT_VARS_QH.fd"
+        patchNVRAMTimeOut "/usr/share/edk2/riscv/RISCV_VIRT_VARS.fd" "/usr/share/edk2/riscv/RISCV_VIRT_VARS_QH.fd"
     else
-      RISCV_VARS="/usr/share/qemu-efi-riscv64/RISCV_VIRT_VARS.fd"
-      RISCV_VARS_QH="/usr/share/qemu-efi-riscv64/RISCV_VIRT_VARS_QH.fd"
+        patchNVRAMTimeOut "/usr/share/qemu-efi-riscv64/RISCV_VIRT_VARS.fd" "/usr/share/qemu-efi-riscv64/RISCV_VIRT_VARS_QH.fd"
     fi
-    #Modify the NVRAM to disabled the timeout of 5 seconds option that's only appears to be in risc-v
-    if [ ! -f "$RISCV_VARS_QH" ]; then
-        mkdir -p "$install_dir/tmp"
-        printf '%s\n' '{ "version": 2, "variables": [ { "name": "Timeout", "guid": "8be4df61-93ca-11d2-aa0d-00e098032b8c", "attr": 7, "data": "0000" } ] }' >"$install_dir/tmp/riscv-timeout.json"
-        virt_fw="$(command -v virt-fw-vars 2>/dev/null)"
-        if [ ! -z "$virt_fw" ]; then
-            sudo "$virt_fw" -i "$RISCV_VARS" -o "$RISCV_VARS_QH" --set-json "$install_dir/tmp/riscv-timeout.json" || sudo cp -a "$RISCV_VARS" "$RISCV_VARS_QH"
-        else
-            echo "ERROR: virt-fw-vars not found risc-v timeout will be 5 seconds. To fix this install it and then run \"rm -f ${RISCV_VARS_QH}\" and \"rm -f ~/.qemu-helper\" then finally sh setup.sh again"
-            sudo cp -a "$RISCV_VARS" "$RISCV_VARS_QH"
-        fi
-        rm -f "$install_dir/tmp/riscv-timeout.json"
-    fi
+    rm -f "$install_dir/tmp/timeout.json"
 
     #Create the installed dir file
     touch "$HOME/.qemu-helper"
