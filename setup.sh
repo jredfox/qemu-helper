@@ -24,53 +24,8 @@ org_qram32="$qram32"
 org_qcore32="$qcore32"
 org_pwd="$PWD"
 
-patchNVRAMPADDING() {
-
-    if [ ! -f "${1}.fd" ]; then
-        echo "ERROR NVRAM File not found: \"${1}.fd\""
-        return 1
-    fi
-
-    PF_CODE="${1}_QH.fd"
-    PF_VARS="${2}_QH.fd"
-    sudo rm -f "${PF_CODE}"
-    if [ "$(wc -c <"${1}.fd")" -lt "${3}" ]; then
-        sudo cp "${1}.fd" "${PF_CODE}"
-        sudo truncate -s "${3}" "${PF_CODE}"
-    else
-        sudo ln -sfn "${1}.fd" "${PF_CODE}"
-    fi
-    if [ "$(wc -c <"${PF_VARS}")" -lt "${3}" ]; then
-        if [ -L "${PF_VARS}" ]; then
-            sudo rm -f "${PF_VARS}"
-            sudo cp "${2}.fd" "${PF_VARS}"
-        fi
-        sudo truncate -s "${3}" "${PF_VARS}"
-    fi
-
-}
-
-patchNVRAMTimeOut() {
-
-    if [ ! -f "${1}" ]; then
-        echo "ERROR NVRAM File not found: \"${1}\""
-        return 1
-    fi
-
-    sudo rm -f "${2}"
-    printf '%s\n' '{ "version": 2, "variables": [ { "name": "Timeout", "guid": "8be4df61-93ca-11d2-aa0d-00e098032b8c", "attr": 7, "data": "0000" } ] }' >"$install_dir/tmp/timeout.json"
-    virt_fw="$(command -v virt-fw-vars 2>/dev/null)"
-    if [ ! -z "$virt_fw" ]; then
-        sudo "$virt_fw" -i "${1}" -o "${2}" --set-json "$install_dir/tmp/timeout.json" || sudo cp -a "${1}" "${2}"
-    else
-        echo "ERROR: virt-fw-vars not found arm32 arm64 and risc-v timeout will be 5 seconds. To fix this install it and run \"rm -f ~/.qemu-helper\" then finally sh setup.sh again"
-        sudo cp -a "${1}" "${2}"
-    fi
-
-}
-
 #Find sudo command
-if command -v sudo >/dev/null 2>&1; then
+if command -v "$sudo_cmd" >/dev/null 2>&1; then
     sudo_cmd="sudo"
 elif command -v sudo-rs >/dev/null 2>&1; then
     sudo_cmd="sudo-rs"
@@ -87,29 +42,74 @@ else
     exit 1
 fi
 
+patchNVRAMPADDING() {
+
+    if [ ! -f "${1}.fd" ]; then
+        echo "ERROR NVRAM File not found: \"${1}.fd\""
+        return 1
+    fi
+
+    PF_CODE="${1}_QH.fd"
+    PF_VARS="${2}_QH.fd"
+    "$sudo_cmd" rm -f "${PF_CODE}"
+    if [ "$(wc -c <"${1}.fd")" -lt "${3}" ]; then
+        "$sudo_cmd" cp "${1}.fd" "${PF_CODE}"
+        "$sudo_cmd" truncate -s "${3}" "${PF_CODE}"
+    else
+        "$sudo_cmd" ln -sfn "${1}.fd" "${PF_CODE}"
+    fi
+    if [ "$(wc -c <"${PF_VARS}")" -lt "${3}" ]; then
+        if [ -L "${PF_VARS}" ]; then
+            "$sudo_cmd" rm -f "${PF_VARS}"
+            "$sudo_cmd" cp "${2}.fd" "${PF_VARS}"
+        fi
+        "$sudo_cmd" truncate -s "${3}" "${PF_VARS}"
+    fi
+
+}
+
+patchNVRAMTimeOut() {
+
+    if [ ! -f "${1}" ]; then
+        echo "ERROR NVRAM File not found: \"${1}\""
+        return 1
+    fi
+
+    "$sudo_cmd" rm -f "${2}"
+    printf '%s\n' '{ "version": 2, "variables": [ { "name": "Timeout", "guid": "8be4df61-93ca-11d2-aa0d-00e098032b8c", "attr": 7, "data": "0000" } ] }' >"$install_dir/tmp/timeout.json"
+    virt_fw="$(command -v virt-fw-vars 2>/dev/null)"
+    if [ ! -z "$virt_fw" ]; then
+        "$sudo_cmd" "$virt_fw" -i "${1}" -o "${2}" --set-json "$install_dir/tmp/timeout.json" || "$sudo_cmd" cp -a "${1}" "${2}"
+    else
+        echo "ERROR: virt-fw-vars not found arm32 arm64 and risc-v timeout will be 5 seconds. To fix this install it and run \"rm -f ~/.qemu-helper\" then finally sh setup.sh again"
+        "$sudo_cmd" cp -a "${1}" "${2}"
+    fi
+
+}
+
 #install qemu
 alpine="false"
 if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ ! -f "$HOME/.qemu-helper" ]; then
     echo "Installing QEMU"
     #Debian & Ubuntu Based
     if command -v apt >/dev/null 2>&1; then
-        sudo apt update
-        sudo apt install -y qemu-kvm qemu-system virt-manager bridge-utils qemu-efi-aarch64 qemu-efi-arm zstd
+        "$sudo_cmd" apt update
+        "$sudo_cmd" apt install -y qemu-kvm qemu-system virt-manager bridge-utils qemu-efi-aarch64 qemu-efi-arm zstd
         #RISC-V DEPS
-        sudo apt install -y opensbi qemu-system-riscv64 qemu-efi-riscv64
+        "$sudo_cmd" apt install -y opensbi qemu-system-riscv64 qemu-efi-riscv64
         #Additional Deps
         for pkg in curl lsof python3-virt-firmware; do
-            sudo apt install -y "$pkg"
+            "$sudo_cmd" apt install -y "$pkg"
         done
         #md5sum is required for icons to work
         if ! md5sum "--help" >/dev/null 2>&1 && ! md5 "--help" >/dev/null 2>&1; then
             echo "Installing md5sum"
-            sudo apt install coreutils -y
+            "$sudo_cmd" apt install coreutils -y
         fi
         #Install 7z
         if ! command -v 7z >/dev/null 2>&1; then
             for pkg7z in 7zip p7zip-full p7zip-plugins p7zip 7z 7zz; do
-                sudo apt install -y "$pkg7z" || continue
+                "$sudo_cmd" apt install -y "$pkg7z" || continue
                 if command -v 7z >/dev/null 2>&1 || command -v 7zz >/dev/null 2>&1; then
                     break
                 fi
@@ -121,16 +121,16 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
         if ! command -v dnf >/dev/null 2>&1; then
             pkg_dnf="yum"
         fi
-        sudo $pkg_dnf check-update
+        "$sudo_cmd" $pkg_dnf check-update
         for pkg in qemu-kvm 'qemu-system-*' virt-manager bridge-utils edk2-aarch64 edk2-riscv64 opensbi coreutils zstd curl lsof python3-virt-firmware; do
             echo "installing pkg: ${pkg}"
-            sudo $pkg_dnf install -y "$pkg"
+            "$sudo_cmd" $pkg_dnf install -y "$pkg"
         done
-        sudo $pkg_dnf group install -y virtualization
+        "$sudo_cmd" $pkg_dnf group install -y virtualization
         #Install 7z with symlink of 7zz to 7z
         if ! command -v 7z >/dev/null 2>&1; then
             for pkg7z in 7zip 7z p7zip-full p7zip-plugins p7zip 7zz; do
-                sudo $pkg_dnf install -y "$pkg7z" || continue
+                "$sudo_cmd" $pkg_dnf install -y "$pkg7z" || continue
                 if command -v 7z >/dev/null 2>&1 || command -v 7zz >/dev/null 2>&1; then
                     break
                 fi
@@ -145,14 +145,14 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
             "$sudo_cmd" apk add "$pkg"
         done
         # virt-firmware (python3-virt-firmware has no apk equivalent that I know of)
-        sudo apk add python3 py3-pip pipx
+        "$sudo_cmd" apk add python3 py3-pip pipx
         pipx install virt-firmware
 
         # md5sum is required for icons to work
         # (BusyBox already provides md5sum on Alpine, but this keeps the fallback)
         if ! md5sum "--help" >/dev/null 2>&1 && ! md5 "--help" >/dev/null 2>&1; then
             echo "Installing md5sum"
-            sudo apk add coreutils
+            "$sudo_cmd" apk add coreutils
         fi
     else
         echo "Unsupported Linux Distro Please Manually install QEMU then run this script again!"
@@ -195,9 +195,9 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
             7z x "$qemu_efi_dir/data.tar" -o"$qemu_efi_dir" -aoa -y >/dev/null
             rm -rf -- "$qemu_efi_deb" "$qemu_efi_dir/"data.tar*
             if [ "$alpine" != "true" ]; then
-                sudo cp -rf --preserve=timestamps "$qemu_efi_dir"/* "/"
+                "$sudo_cmd" cp -rf --preserve=timestamps "$qemu_efi_dir"/* "/"
             else
-                sudo cp -rf "$qemu_efi_dir"/* "/"
+                "$sudo_cmd" cp -rf "$qemu_efi_dir"/* "/"
             fi
         fi
         rm -rf "$qemu_efi_dir"
@@ -223,7 +223,7 @@ fi
 if [ ! -f "/usr/bin/7z" ]; then
     path7z="$(command -v 7zz 2>/dev/null)"
     if [ ! -z "$path7z" ]; then
-        sudo ln -sfn "$path7z" "/usr/bin/7z"
+        "$sudo_cmd" ln -sfn "$path7z" "/usr/bin/7z"
     fi
 fi
 
@@ -236,11 +236,11 @@ if ! command -v qemu-system-ppc64le >/dev/null 2>&1; then
         qppc64el="$dir_ppc64/qemu-system-ppc64el"
         if [ -f "$qppc64el" ]; then
             #TODO: check macOS timestamps
-            sudo cp -a "$qppc64el" "$qppc64le" >/dev/null 2>&1
+            "$sudo_cmd" cp -a "$qppc64el" "$qppc64le" >/dev/null 2>&1
         fi
         if ! command -v qemu-system-ppc64le >/dev/null 2>&1; then
             echo "creating symlink $qppc64le -> qemu-system-ppc64"
-            sudo ln -sfn "qemu-system-ppc64" "$qppc64le"
+            "$sudo_cmd" ln -sfn "qemu-system-ppc64" "$qppc64le"
         fi
     fi
 fi
