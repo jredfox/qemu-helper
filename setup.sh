@@ -170,11 +170,13 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
         "$sudo_cmd" apk add qemu qemu-img qemu-modules $qemu_systems virt-manager bridge-utils ovmf swtpm curl lsof zstd
         
         #Install aavmf
-        mkdir -p "$install_dir/tmp/aavmf"
-        "$sudo_cmd" apk fetch --arch aarch64 --no-cache --allow-untrusted aavmf -o "$install_dir/tmp/aavmf" || "$sudo_cmd" apk fetch --no-cache --allow-untrusted aavmf -o "$install_dir/tmp/aavmf" >/dev/null 2>&1
-        aavmf_apk="$(find "$install_dir/tmp/aavmf" -maxdepth 1 -type f | head -n 1)"
-        "$sudo_cmd" apk add --allow-untrusted "$aavmf_apk"
-        rm -rf "$install_dir/tmp/aavmf"
+        if [ "$alpine_legacy" = "true" ]; then
+            mkdir -p "$install_dir/tmp/aavmf"
+            "$sudo_cmd" apk fetch --arch aarch64 --no-cache --allow-untrusted aavmf -o "$install_dir/tmp/aavmf" || "$sudo_cmd" apk fetch --no-cache --allow-untrusted aavmf -o "$install_dir/tmp/aavmf" >/dev/null 2>&1
+            aavmf_apk="$(find "$install_dir/tmp/aavmf" -maxdepth 1 -type f | head -n 1)"
+            "$sudo_cmd" apk add --allow-untrusted "$aavmf_apk"
+            rm -rf "$install_dir/tmp/aavmf"
+        fi
         
         #Install firmware
         qemu_firmware="$("$sudo_cmd" apk search -q 'edk2*' 'qemu-edk2*' 'qemu-*firmware*' 'qemu-*openbios*')"
