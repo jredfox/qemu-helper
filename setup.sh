@@ -167,8 +167,20 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
         "$sudo_cmd" apk update
         qemu_systems="$("$sudo_cmd" apk search -q 'qemu-system-*')"
         qemu_systems="$(printf '%s' "$qemu_systems" | sed 's/-[0-9][0-9.]*-r[0-9]*$//' | tr '\n' ' ')"
-        "$sudo_cmd" apk add qemu qemu-img qemu-modules $qemu_systems virt-manager bridge-utils curl lsof zstd
-
+        "$sudo_cmd" apk add qemu qemu-img qemu-modules $qemu_systems virt-manager bridge-utils ovmf swtpm libvirt libvirt-client libvirt-dev curl lsof zstd
+        
+        #Install aavmf
+        mkdir -p "$install_dir/tmp/aavmf"
+        "$sudo_cmd" apk fetch --arch aarch64 --no-cache --allow-untrusted aavmf -o "$install_dir/tmp/aavmf" || "$sudo_cmd" apk fetch --no-cache --allow-untrusted aavmf -o "$install_dir/tmp/aavmf" >/dev/null 2>&1
+        aavmf_apk="$(find "$install_dir/tmp/aavmf" -maxdepth 1 -type f | head -n 1)"
+        "$sudo_cmd" apk add --allow-untrusted "$aavmf_apk"
+        rm -rf "$install_dir/tmp/aavmf"
+        
+        #Install firmware
+        qemu_firmware="$("$sudo_cmd" apk search -q 'edk2*' 'qemu-*firmware*' 'qemu-*openbios*')"
+        qemu_firmware="$(printf '%s' "$qemu_firmware" | sed 's/-[0-9][0-9.]*-r[0-9]*$//' | tr '\n' ' ')"
+        "$sudo_cmd" apk add $qemu_firmware
+        
         # md5sum is required for icons to work
         if ! md5sum "--help" >/dev/null 2>&1 && ! md5 "--help" >/dev/null 2>&1; then
             echo "Installing md5sum"
