@@ -47,18 +47,17 @@ fi
 
 sudo_script() {
 
-    echo "$sudo_cmd"
     max_tries="${1}"
     index="1"
     while [ "$index" -le "$max_tries" ]; do
         if $sudo_cmd echo "hello" >/dev/null 2>&1; then
-          return 1
+          return 0
         fi
         echo "Password Failed Attempts: $index"
         index=$((index + 1))
     done
 
-    echo "Failed to obtain Admin (sudo) Permissions Exiting"
+    echo "Failed to obtain Admin Permission with ${sudo_cmd}"
     exit 1
 
 }
