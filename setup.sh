@@ -268,6 +268,8 @@ if ! command -v qemu-system-ppc64le >/dev/null 2>&1; then
         dir_ppc64="$(dirname "$qemu_system_ppc64")"
         qppc64le="$dir_ppc64/qemu-system-ppc64le"
         qppc64el="$dir_ppc64/qemu-system-ppc64el"
+        echo "Creating qemu-system-ppc64le"
+        sudo_script "4"
         if [ -f "$qppc64el" ]; then
             #TODO: check macOS timestamps
             "$sudo_cmd" cp -a "$qppc64el" "$qppc64le" >/dev/null 2>&1
