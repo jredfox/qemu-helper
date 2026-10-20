@@ -25,7 +25,7 @@ org_qcore32="$qcore32"
 org_pwd="$PWD"
 
 #Find sudo command
-if command -v "$sudo_cmd" >/dev/null 2>&1; then
+if command -v sudo >/dev/null 2>&1; then
     sudo_cmd="sudo"
 elif command -v sudo-rs >/dev/null 2>&1; then
     sudo_cmd="sudo-rs"
