@@ -27,6 +27,7 @@ org_pwd="$PWD"
 #Find sudo command
 if [ "$(id -u)" -eq 0 ]; then
     sudo_cmd="env"
+    echo "WARNING: Running setup.sh as root every sudo command will run with env command instead of sudo"
 elif command -v sudo >/dev/null 2>&1; then
     sudo_cmd="sudo"
 elif command -v sudo-rs >/dev/null 2>&1; then
