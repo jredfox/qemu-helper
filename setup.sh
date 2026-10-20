@@ -168,9 +168,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
         "$sudo_cmd" apk add qemu qemu-img qemu-modules 'qemu-system-*' virt-manager bridge-utils
         
         # Additional Deps
-        for pkg in curl lsof zstd; do
-            "$sudo_cmd" apk add "$pkg"
-        done
+        "$sudo_cmd" apk add curl lsof zstd
         
         # virt-firmware (python3-virt-firmware has no apk equivalent that I know of)
         "$sudo_cmd" apk add python3 py3-pip pipx
