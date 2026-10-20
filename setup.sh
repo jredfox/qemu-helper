@@ -47,6 +47,11 @@ fi
 
 sudo_script() {
 
+    #If user is root return
+    if [ "$sudo_cmd" = "env" ]; then
+        return 0
+    fi
+
     max_tries="${1}"
     index="1"
     while [ "$index" -le "$max_tries" ]; do
