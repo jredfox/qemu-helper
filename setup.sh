@@ -167,7 +167,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
         "$sudo_cmd" apk update
         qemu_systems="$("$sudo_cmd" apk search -q 'qemu-system-*')"
         qemu_systems="$(printf '%s' "$qemu_systems" | sed 's/-[0-9][0-9.]*-r[0-9]*$//' | tr '\n' ' ')"
-        "$sudo_cmd" apk add qemu qemu-img qemu-modules $qemu_systems virt-manager bridge-utils ovmf swtpm libvirt libvirt-client libvirt-dev curl lsof zstd
+        "$sudo_cmd" apk add qemu qemu-img qemu-modules $qemu_systems virt-manager bridge-utils ovmf swtpm curl lsof zstd
         
         #Install aavmf
         mkdir -p "$install_dir/tmp/aavmf"
