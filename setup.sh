@@ -45,6 +45,24 @@ else
     exit 1
 fi
 
+sudo_script() {
+
+    echo "$sudo_cmd"
+    max_tries="${1}"
+    index="1"
+    while [ "$index" -le "$max_tries" ]; do
+        if $sudo_cmd echo "hello" >/dev/null 2>&1; then
+          return 1
+        fi
+        echo "Password Failed Attempts: $index"
+        index=$((index + 1))
+    done
+
+    echo "Failed to obtain Admin (sudo) Permissions Exiting"
+    exit 1
+
+}
+
 patchNVRAMPADDING() {
 
     if [ ! -f "${1}.fd" ]; then
@@ -94,6 +112,7 @@ patchNVRAMTimeOut() {
 alpine="false"
 if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ ! -f "$HOME/.qemu-helper" ]; then
     echo "Installing QEMU"
+    sudo_script "5"
     #Debian & Ubuntu Based
     if command -v apt >/dev/null 2>&1; then
         "$sudo_cmd" apt update
@@ -163,6 +182,14 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
         exit 1
     fi
 
+    #Create 7z symlink if required
+    if [ ! -f "/usr/bin/7z" ]; then
+        path7z="$(command -v 7zz 2>/dev/null)"
+        if [ ! -z "$path7z" ]; then
+            "$sudo_cmd" ln -sfn "$path7z" "/usr/bin/7z"
+        fi
+    fi
+
     #Make tmp dir
     mkdir -p "$install_dir/tmp"
 
@@ -221,14 +248,6 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
 
     #Create the installed dir file
     touch "$HOME/.qemu-helper"
-fi
-
-#Create 7z symlink if required
-if [ ! -f "/usr/bin/7z" ]; then
-    path7z="$(command -v 7zz 2>/dev/null)"
-    if [ ! -z "$path7z" ]; then
-        "$sudo_cmd" ln -sfn "$path7z" "/usr/bin/7z"
-    fi
 fi
 
 #repair or create qemu-system-ppc64le symlink if it does not exist
