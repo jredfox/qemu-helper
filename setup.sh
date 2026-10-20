@@ -55,7 +55,7 @@ sudo_script() {
     max_tries="${1:-2}"
     index="1"
     while [ "$index" -le "$max_tries" ]; do
-        if $sudo_cmd echo "hello" >/dev/null; then
+        if "$sudo_cmd" echo "hello" >/dev/null; then
           return 0
         fi
         echo "Password Failed Attempts: $index"
