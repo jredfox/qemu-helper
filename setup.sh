@@ -173,6 +173,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
         # virt-firmware (python3-virt-firmware has no apk equivalent that I know of)
         "$sudo_cmd" apk add python3 py3-pip pipx
         "$sudo_cmd" pipx install virt-firmware
+        "$sudo_cmd" pipx ensurepath
 
         # md5sum is required for icons to work
         if ! md5sum "--help" >/dev/null 2>&1 && ! md5 "--help" >/dev/null 2>&1; then
