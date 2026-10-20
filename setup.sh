@@ -189,6 +189,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
             done
         fi
     else
+        touch "$HOME/.qemu-helper"
         echo "Unsupported Linux Distro Please Manually install QEMU then run this script again!"
         exit 1
     fi
