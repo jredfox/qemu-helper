@@ -429,7 +429,7 @@ for file in "iso"/*; do
         #Enable Automatic Support for specified OS
         case "$lname" in
             #Detect Alpine Linux & KDE Plasma
-            *alpine*|*alps*|*[!a-z]kde[!a-z]*|kde[!a-z]*|*[!a-z]kde)
+            *alpine*|*alps*|*[!a-z]kde[!a-z]*|kde[!a-z]*|*[!a-z]kde|*kubuntu*)
                 gpu_3d_fallback="true"
                 ;;
 
