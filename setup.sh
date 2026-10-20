@@ -73,6 +73,23 @@ patchNVRAMTimeOut() {
 alpine="false"
 if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ ! -f "$HOME/.qemu-helper" ]; then
     echo "Installing QEMU"
+    #Find sudo command
+    if command -v sudo >/dev/null 2>&1; then
+        sudo_cmd="sudo"
+    elif command -v sudo-rs >/dev/null 2>&1; then
+        sudo_cmd="sudo-rs"
+    elif command -v doas >/dev/null 2>&1; then
+        sudo_cmd="doas"
+    elif command -v opendoas >/dev/null 2>&1; then
+        sudo_cmd="opendoas"
+    elif command -v doas-rs >/dev/null 2>&1; then
+        sudo_cmd="doas-rs"
+    elif command -v opendoas-rs >/dev/null 2>&1; then
+        sudo_cmd="opendoas-rs"
+    else
+        echo "ERROR: Unable to find sudo sudo-rs doas, opendoas etc"
+        exit 1
+    fi
     #Debian & Ubuntu Based
     if command -v apt >/dev/null 2>&1; then
         sudo apt update
@@ -120,6 +137,22 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
         fi
     elif command -v apk >/dev/null 2>&1; then
         alpine="true"
+        "$sudo_cmd" apk update
+        "$sudo_cmd" apk add qemu qemu-img qemu-modules 'qemu-system-*' virt-manager bridge-utils aavmf ovmf opensbi qemu-riscv64
+        # Additional Deps
+        for pkg in curl lsof zstd; do
+            "$sudo_cmd" apk add "$pkg"
+        done
+        # virt-firmware (python3-virt-firmware has no apk equivalent that I know of)
+        sudo apk add python3 py3-pip pipx
+        pipx install virt-firmware
+
+        # md5sum is required for icons to work
+        # (BusyBox already provides md5sum on Alpine, but this keeps the fallback)
+        if ! md5sum "--help" >/dev/null 2>&1 && ! md5 "--help" >/dev/null 2>&1; then
+            echo "Installing md5sum"
+            sudo apk add coreutils
+        fi
     else
         echo "Unsupported Linux Distro Please Manually install QEMU then run this script again!"
         exit 1
