@@ -177,7 +177,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
         rm -rf "$install_dir/tmp/aavmf"
         
         #Install firmware
-        qemu_firmware="$("$sudo_cmd" apk search -q 'edk2*' 'qemu-*firmware*' 'qemu-*openbios*')"
+        qemu_firmware="$("$sudo_cmd" apk search -q 'edk2*' 'qemu-edk2*' 'qemu-*firmware*' 'qemu-*openbios*')"
         qemu_firmware="$(printf '%s' "$qemu_firmware" | sed 's/-[0-9][0-9.]*-r[0-9]*$//' | tr '\n' ' ')"
         "$sudo_cmd" apk add $qemu_firmware
         
