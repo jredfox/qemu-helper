@@ -116,7 +116,7 @@ patchNVRAMTimeOut() {
 alpine="false"
 if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ ! -f "$HOME/.qemu-helper" ]; then
     echo "Installing QEMU"
-    sudo_script "5"
+    sudo_script "4"
     #Debian & Ubuntu Based
     if command -v apt >/dev/null 2>&1; then
         "$sudo_cmd" apt update
