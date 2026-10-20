@@ -38,7 +38,7 @@ elif command -v doas-rs >/dev/null 2>&1; then
 elif command -v opendoas-rs >/dev/null 2>&1; then
     sudo_cmd="opendoas-rs"
 else
-    echo "ERROR: Unable to find sudo sudo-rs doas, opendoas etc"
+    echo "ERROR: Unable to find sudo sudo-rs doas opendoas etc"
     exit 1
 fi
 
