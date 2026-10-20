@@ -165,7 +165,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
     elif command -v apk >/dev/null 2>&1; then
         alpine="true"
         "$sudo_cmd" apk update
-        qemu_systems="$("$sudo_cmd" apk search 'qemu-system-*')"
+        qemu_systems="$("$sudo_cmd" apk search -q 'qemu-system-*')"
         qemu_systems="$(printf '%s' "$qemu_systems" | tr '\n' ' ' | sed 's/-[0-9][0-9.]*-r[0-9]*$//')"
         "$sudo_cmd" apk add qemu qemu-img qemu-modules $qemu_systems virt-manager bridge-utils
         
