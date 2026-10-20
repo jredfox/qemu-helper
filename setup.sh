@@ -165,21 +165,30 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
     elif command -v apk >/dev/null 2>&1; then
         alpine="true"
         "$sudo_cmd" apk update
-        "$sudo_cmd" apk add qemu qemu-img qemu-modules 'qemu-system-*' virt-manager bridge-utils
+        "$sudo_cmd" apk add --no-interactive qemu qemu-img qemu-modules 'qemu-system-*' virt-manager bridge-utils
         
         # Additional Deps
         for pkg in curl lsof zstd; do
-            "$sudo_cmd" apk add "$pkg"
+            "$sudo_cmd" apk add --no-interactive "$pkg"
         done
         
         # virt-firmware (python3-virt-firmware has no apk equivalent that I know of)
-        "$sudo_cmd" apk add python3 py3-pip pipx
+        "$sudo_cmd" apk add --no-interactive python3 py3-pip pipx
         pipx install virt-firmware
 
         # md5sum is required for icons to work
         if ! md5sum "--help" >/dev/null 2>&1 && ! md5 "--help" >/dev/null 2>&1; then
             echo "Installing md5sum"
-            "$sudo_cmd" apk add coreutils
+            "$sudo_cmd" apk add --no-interactive coreutils
+        fi
+        #Install 7z with symlink of 7zz to 7z
+        if ! command -v 7z >/dev/null 2>&1; then
+            for pkg7z in 7zip 7z p7zip-full p7zip-plugins p7zip 7zz; do
+                "$sudo_cmd" apk add --no-interactive "$pkg7z" || continue
+                if command -v 7z >/dev/null 2>&1 || command -v 7zz >/dev/null 2>&1; then
+                    break
+                fi
+            done
         fi
     else
         echo "Unsupported Linux Distro Please Manually install QEMU then run this script again!"
