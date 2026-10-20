@@ -168,11 +168,6 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
         qemu_systems="$("$sudo_cmd" apk search -q 'qemu-system-*')"
         qemu_systems="$(printf '%s' "$qemu_systems" | sed 's/-[0-9][0-9.]*-r[0-9]*$//' | tr '\n' ' ')"
         "$sudo_cmd" apk add qemu qemu-img qemu-modules $qemu_systems virt-manager bridge-utils curl lsof zstd
-        
-        # virt-firmware (python3-virt-firmware has no apk equivalent that I know of)
-        #"$sudo_cmd" apk add python3 py3-pip pipx
-        #"$sudo_cmd" pipx install virt-firmware
-        #"$sudo_cmd" pipx ensurepath
 
         # md5sum is required for icons to work
         if ! md5sum "--help" >/dev/null 2>&1 && ! md5 "--help" >/dev/null 2>&1; then
