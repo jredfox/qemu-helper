@@ -234,7 +234,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
         tmp_virt="${install_dir}/tmp/virt-fw-vars"
         virt_fw_version="v0.97"
         mkdir -p "${tmp_virt}"
-        mkdir -p "resources"
+        mkdir -p "${install_dir}/resources"
         curl -A "Mozilla/5.0 (X11; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0" -L "https://gitlab.com/kraxel/virt-firmware/-/archive/${virt_fw_version}/virt-firmware-${virt_fw_version}.zip" -o "${tmp_virt}/virt-firmware-${virt_fw_version}.zip"
         7z x "${tmp_virt}/virt-firmware-${virt_fw_version}.zip" -o"${tmp_virt}" -aoa >/dev/null
         vars_src="${tmp_virt}/virt-firmware-${virt_fw_version}/virt"
