@@ -265,7 +265,7 @@ def resource_filename(pkg_name, pkg_path):
     if not pkg_name.startswith('virt.'):
         error_msg = "pkg_name does not start with virt." + str(pkg_name)
         raise Exception(error_msg)
-    return os.path.join(_virt_fw_dir, pkg_name.replace('.', '/'), pkg_path)
+    return os.path.join(_virt_fw_root, pkg_name.replace('.', '/'), pkg_path)
 EOL
         echo "virt-fw-vars has been installed"
     else
