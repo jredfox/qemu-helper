@@ -256,6 +256,18 @@ if __name__ == '__main__':
 EOL
 
         chmod +x "$install_dir/resources/virt-fw-vars"
+        cat >"${install_dir}/resources/virt/firmware/efi/certs.py" <<'EOL'
+#!/usr/bin/python
+
+import os
+
+_CERTDIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'certs')
+REDHAT_PK = os.path.join(_CERTDIR, 'RedHatSecureBootPKKEKkey1.pem')
+MS_KEK = os.path.join(_CERTDIR, 'MicrosoftCorporationKEKCA2011.pem')
+MS_WIN = os.path.join(_CERTDIR, 'MicrosoftWindowsProductionPCA2011.pem')
+MS_3RD = os.path.join(_CERTDIR, 'MicrosoftCorporationUEFICA2011.pem')
+EOL
+        echo "virt-fw-vars has been installed"
     else
         touch "$HOME/.qemu-helper"
         echo "Unsupported Linux Distro Please Manually install QEMU then run this script again!"
