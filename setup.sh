@@ -229,6 +229,14 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
             done
         fi
 
+        #Create 7z symlink if required
+        if [ ! -f "/usr/bin/7z" ]; then
+            path7z="$(command -v 7zz 2>/dev/null)"
+            if [ ! -z "$path7z" ]; then
+                "$sudo_cmd" ln -sfn "$path7z" "/usr/bin/7z"
+            fi
+        fi
+
         #Install virt-fw-vars
         "$sudo_cmd" apk add --no-cache python3 py3-cryptography
         tmp_virt="${install_dir}/tmp/virt-fw-vars"
@@ -275,7 +283,7 @@ EOL
     fi
 
     #Create 7z symlink if required
-    if [ ! -f "/usr/bin/7z" ]; then
+    if [ "$alpine" != "true" ] && [ ! -f "/usr/bin/7z" ]; then
         path7z="$(command -v 7zz 2>/dev/null)"
         if [ ! -z "$path7z" ]; then
             "$sudo_cmd" ln -sfn "$path7z" "/usr/bin/7z"
