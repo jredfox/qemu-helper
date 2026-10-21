@@ -349,8 +349,10 @@ EOL
     fi
     rm -f "$install_dir/tmp/timeout.json"
 
-    #Cleanup
-    "$sudo_cmd" rm -rf "$install_dir/resources/__pycache__"
+    #Prevent resource files from getting admin locked
+    if [ "$sudo_cmd" != "env" ]; then
+        "$sudo_cmd" chown -R "$USER:" "${install_dir}/resources"
+    fi
 
     #Create the installed dir file
     touch "$HOME/.qemu-helper"
