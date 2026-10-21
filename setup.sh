@@ -226,6 +226,9 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
                 fi
             done
         fi
+
+        #Install virt-fw-vars
+        "$sudo_cmd" apk add --no-cache python3 py3-cryptography py3-setuptools
     else
         touch "$HOME/.qemu-helper"
         echo "Unsupported Linux Distro Please Manually install QEMU then run this script again!"
@@ -242,6 +245,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
 
     #Make tmp dir
     mkdir -p "$install_dir/tmp"
+
 
     #Install arm32 efi firmware
     efi_arm32_code="/usr/share/AAVMF/AAVMF32_VARS.fd"
