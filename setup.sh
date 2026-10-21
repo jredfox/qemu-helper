@@ -167,7 +167,12 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
         "$sudo_cmd" apk update
         qemu_systems="$("$sudo_cmd" apk search -q 'qemu-system-*')"
         qemu_systems="$(printf '%s' "$qemu_systems" | sed 's/-[0-9][0-9.]*-r[0-9]*$//' | tr '\n' ' ')"
-        "$sudo_cmd" apk add qemu qemu-img qemu-modules $qemu_systems virt-manager bridge-utils ovmf swtpm virtiofsd curl lsof zstd
+        "$sudo_cmd" apk add qemu qemu-img qemu-modules $qemu_systems virt-manager bridge-utils curl lsof zstd
+
+        #Different alpine versions have different package names
+        for pkg in ovmf swtpm virtiofsd qemu-virtiofsd; do
+            "$sudo_cmd" apk add "$pkg"
+        done
         
         #Install aavmf
         if [ "$alpine_legacy" = "true" ]; then
