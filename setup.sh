@@ -243,7 +243,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
         virt_fw_version="v0.97"
         mkdir -p "${tmp_virt}"
         mkdir -p "${install_dir}/resources"
-        curl -A "Mozilla/5.0 (X11; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0" -L "https://gitlab.com/kraxel/virt-firmware/-/archive/${virt_fw_version}/virt-firmware-${virt_fw_version}.zip" -o "${tmp_virt}/virt-firmware-${virt_fw_version}.zip"
+        curl -A "Mozilla/5.0 (X11; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0" -fsSL "https://gitlab.com/kraxel/virt-firmware/-/archive/${virt_fw_version}/virt-firmware-${virt_fw_version}.zip" -o "${tmp_virt}/virt-firmware-${virt_fw_version}.zip" || exit 1
         7z x "${tmp_virt}/virt-firmware-${virt_fw_version}.zip" -o"${tmp_virt}" -aoa >/dev/null
         vars_src="${tmp_virt}/virt-firmware-${virt_fw_version}/virt"
         rm -rf "${install_dir}/resources/virt"
@@ -275,6 +275,9 @@ def resource_filename(pkg_name, pkg_path):
         raise Exception(error_msg)
     return os.path.join(_virt_fw_root, pkg_name.replace('.', '/'), pkg_path)
 EOL
+        if [ -d "$tmp_virt" ]; then
+            rm -rf "$tmp_virt"
+        fi
         echo "virt-fw-vars has been installed"
     else
         touch "$HOME/.qemu-helper"
