@@ -188,6 +188,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
         "$sudo_cmd" mkdir -p "/usr/share/AAVMF" >/dev/null 2>&1
         "$sudo_cmd" ln -sfn "${qemu_fwr}/edk2-aarch64-code.fd" "/usr/share/AAVMF/AAVMF_CODE.fd"
         "$sudo_cmd" ln -sfn "${qemu_fwr}/edk2-aarch64-vars.fd" "/usr/share/AAVMF/AAVMF_VARS.fd"
+        #copy arm32 firmware if it's there
         if [ -f "${qemu_fwr}/edk2-arm-code.fd" ]; then
             "$sudo_cmd" ln -sfn "${qemu_fwr}/edk2-arm-code.fd" "/usr/share/AAVMF/AAVMF32_CODE.fd"
             "$sudo_cmd" ln -sfn "${qemu_fwr}/edk2-arm-vars.fd" "/usr/share/AAVMF/AAVMF32_VARS.fd"
