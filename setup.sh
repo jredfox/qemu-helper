@@ -182,13 +182,17 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
         qemu_firmware="$("$sudo_cmd" apk search -q 'edk2*' 'qemu-edk2*' 'qemu-*firmware*' 'qemu-*openbios*')"
         qemu_firmware="$(printf '%s' "$qemu_firmware" | sed 's/-[0-9][0-9.]*-r[0-9]*$//' | tr '\n' ' ')"
         "$sudo_cmd" apk add $qemu_firmware
-        exit 1
 
         #Create symlinks
         qemu_fwr="/usr/share/qemu"
         "$sudo_cmd" mkdir -p "/usr/share/AAVMF" >/dev/null 2>&1
         "$sudo_cmd" ln -sfn "${qemu_fwr}/edk2-aarch64-code.fd" "/usr/share/AAVMF/AAVMF_CODE.fd"
-        "$sudo_cmd" ln -sfn "${qemu_fwr}/edk2-aarch64-vars.fd" "/usr/share/AAVMF/AAVMF_VARS.fd"
+        #AAVMF_VARS.fd and AAVMF32_VARS.fd are the binary identicle
+        if [ -f "${qemu_fwr}/edk2-aarch64-vars.fd" ]; then
+            "$sudo_cmd" ln -sfn "${qemu_fwr}/edk2-aarch64-vars.fd" "/usr/share/AAVMF/AAVMF_VARS.fd"
+        else
+            "$sudo_cmd" ln -sfn "${qemu_fwr}/edk2-arm-vars.fd" "/usr/share/AAVMF/AAVMF_VARS.fd"
+        fi
         if [ -f "${qemu_fwr}/edk2-arm-code.fd" ]; then
             "$sudo_cmd" ln -sfn "${qemu_fwr}/edk2-arm-code.fd" "/usr/share/AAVMF/AAVMF32_CODE.fd"
             "$sudo_cmd" ln -sfn "${qemu_fwr}/edk2-arm-vars.fd" "/usr/share/AAVMF/AAVMF32_VARS.fd"
