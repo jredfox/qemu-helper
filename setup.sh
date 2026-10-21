@@ -237,11 +237,11 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
         curl -A "Mozilla/5.0 (X11; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0" -L "https://gitlab.com/kraxel/virt-firmware/-/archive/${virt_fw_version}/virt-firmware-${virt_fw_version}.zip" -o "${tmp_virt}/virt-firmware-${virt_fw_version}.zip"
         7z x "${tmp_virt}/virt-firmware-${virt_fw_version}.zip" -o"${tmp_virt}" -aoa >/dev/null
         vars_src="${tmp_virt}/virt-firmware-${virt_fw_version}/virt"
-        rm -rf "$install_dir/resources/virt"
-        cp -rfa "$vars_src" "$install_dir/resources/virt"
+        rm -rf "${install_dir}/resources/virt"
+        cp -rfa "${vars_src}" "${install_dir}/resources/virt"
 
         # Create the virt-fw-vars launcher
-        cat > "$install_dir/resources/virt-fw-vars" <<'EOL'
+        cat > "${install_dir}/resources/virt-fw-vars" <<'EOL'
 #!/usr/bin/python3
 
 import re
