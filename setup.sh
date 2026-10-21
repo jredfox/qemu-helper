@@ -23,6 +23,8 @@ org_qcore="$qcore"
 org_qram32="$qram32"
 org_qcore32="$qcore32"
 org_pwd="$PWD"
+#Change path to search for resources
+export PATH="$PATH:$install_dir/resources"
 
 #Find sudo command
 if [ "$(id -u)" -eq 0 ]; then

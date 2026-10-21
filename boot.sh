@@ -3,6 +3,7 @@
 if [ -z "${1}" ]; then
   exit 1
 fi
+export PATH="$PATH:resources"
 dname="${1}"
 for ext in iso ISO Iso isO iSo iSO IsO ISo; do
   if [ -f "iso/${dname}.${ext}" ]; then
