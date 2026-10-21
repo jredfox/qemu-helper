@@ -231,6 +231,30 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
 
         #Install virt-fw-vars
         "$sudo_cmd" apk add --no-cache python3 py3-cryptography py3-setuptools
+        tmp_virt="$install_dir/tmp/virt-fw-vars"
+        mkdir -p "$tmp_virt"
+        virt_fw_version="v0.97"
+        curl -A "Mozilla/5.0 (X11; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0" -L "https://gitlab.com/kraxel/virt-firmware/-/archive/${virt_fw_version}/virt-firmware-${virt_fw_version}.zip" -o "$tmp_virt/virt-firmware-${virt_fw_version}.zip"
+        7z x "$tmp_virt/virt-firmware-${virt_fw_version}.zip" -o"$tmp_virt" -aoa >/dev/null
+        vars_src="${tmp_virt}/virt-firmware-${virt_fw_version}/virt"
+        rm -rf "$install_dir/resources/virt"
+        cp -rfa "$vars_src" "$install_dir/resources/virt"
+
+        # Create the virt-fw-vars launcher
+        cat > "$install_dir/resources/virt-fw-vars" <<'EOL'
+#!/usr/bin/python3
+
+import re
+import sys
+
+from virt.firmware.vars import main
+
+    if __name__ == '__main__':
+        sys.argv[0] = re.sub(r'(-script\.pyw|\.exe)?$', '', sys.argv[0])
+        sys.exit(main())
+EOL
+
+        chmod +x "$install_dir/resources/virt-fw-vars"
     else
         touch "$HOME/.qemu-helper"
         echo "Unsupported Linux Distro Please Manually install QEMU then run this script again!"
