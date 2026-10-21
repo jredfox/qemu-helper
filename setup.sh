@@ -262,7 +262,7 @@ import os
 _virt_fw_root = os.path.dirname(os.path.abspath(__file__))
 
 def resource_filename(pkg_name, pkg_path):
-    if not pk_name startswith('virt.'):
+    if not pkg_name.startswith('virt.'):
         error_msg = "pkg_name does not start with virt." + str(pkg_name)
         raise Exception(error_msg)
     return os.path.join(_virt_fw_dir, pkg_name.replace('.', '/'), pkg_path)
