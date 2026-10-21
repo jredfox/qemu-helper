@@ -241,7 +241,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
         cp -rfa "${vars_src}" "${install_dir}/resources/virt"
 
         # Create the virt-fw-vars launcher
-        cat > "${install_dir}/resources/virt-fw-vars" <<'EOL'
+        cat >"${install_dir}/resources/virt-fw-vars" <<'EOL'
 #!/usr/bin/python3
 
 import re
