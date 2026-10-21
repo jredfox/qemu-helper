@@ -272,7 +272,6 @@ EOL
     #Make tmp dir
     mkdir -p "$install_dir/tmp"
 
-
     #Install arm32 efi firmware
     efi_arm32_code="/usr/share/AAVMF/AAVMF32_VARS.fd"
     if [ ! -f "$efi_arm32_code" ]; then
