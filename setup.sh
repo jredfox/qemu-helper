@@ -230,7 +230,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
         fi
 
         #Install virt-fw-vars
-        "$sudo_cmd" apk add --no-cache python3 py3-cryptography py3-setuptools
+        "$sudo_cmd" apk add --no-cache python3 py3-cryptography
         tmp_virt="${install_dir}/tmp/virt-fw-vars"
         virt_fw_version="v0.97"
         mkdir -p "${tmp_virt}"
