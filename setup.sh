@@ -191,11 +191,17 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
         if [ -f "${qemu_fwr}/edk2-arm-code.fd" ]; then
             "$sudo_cmd" ln -sfn "${qemu_fwr}/edk2-arm-code.fd" "/usr/share/AAVMF/AAVMF32_CODE.fd"
             "$sudo_cmd" ln -sfn "${qemu_fwr}/edk2-arm-vars.fd" "/usr/share/AAVMF/AAVMF32_VARS.fd"
+        else
+            echo "WARNING: arm32 firmware not found we will use the debian package instead"
         fi
-        "$sudo_cmd" mkdir -p "/usr/share/qemu-efi-riscv64" >/dev/null 2>&1
-        "$sudo_cmd" ln -sfn "${qemu_fwr}/edk2-riscv-code.fd" "/usr/share/qemu-efi-riscv64/RISCV_VIRT_CODE.fd"
-        "$sudo_cmd" ln -sfn "${qemu_fwr}/edk2-riscv-vars.fd" "/usr/share/qemu-efi-riscv64/RISCV_VIRT_VARS.fd"
-        
+        if [ -f "${qemu_fwr}/edk2-riscv-code.fd" ]; then
+            "$sudo_cmd" mkdir -p "/usr/share/qemu-efi-riscv64" >/dev/null 2>&1
+            "$sudo_cmd" ln -sfn "${qemu_fwr}/edk2-riscv-code.fd" "/usr/share/qemu-efi-riscv64/RISCV_VIRT_CODE.fd"
+            "$sudo_cmd" ln -sfn "${qemu_fwr}/edk2-riscv-vars.fd" "/usr/share/qemu-efi-riscv64/RISCV_VIRT_VARS.fd"
+        else
+            echo "ERROR: RISC-V Firmware is Missing. This means RISC-V ISO and QCOW2 Images won't be able to boot"
+        fi
+
         # md5sum is required for icons to work
         if ! md5sum "--help" >/dev/null 2>&1 && ! md5 "--help" >/dev/null 2>&1; then
             echo "Installing md5sum"
