@@ -278,6 +278,7 @@ EOL
         if [ -d "$tmp_virt" ]; then
             rm -rf "$tmp_virt"
         fi
+        python3 -m compileall -q "${install_dir}/resources" >/dev/null 2>&1
         echo "virt-fw-vars has been installed"
     else
         touch "$HOME/.qemu-helper"
