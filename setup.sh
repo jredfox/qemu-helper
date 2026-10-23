@@ -352,7 +352,7 @@ EOL
 
     #Prevent resource files from getting admin locked
     if [ "$sudo_cmd" != "env" ]; then
-        "$sudo_cmd" chown -R "$USER:" "${install_dir}/resources"
+        "$sudo_cmd" chown -R "$(id -u):$(id -g)" "${install_dir}/resources"
     fi
 
     #Create the installed dir file
