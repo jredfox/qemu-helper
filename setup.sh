@@ -263,7 +263,7 @@ if __name__ == '__main__':
     sys.exit(main())
 EOL
 
-        chmod +x "$install_dir/resources/virt-fw-vars"
+        chmod +x "${install_dir}/resources/virt-fw-vars"
         cat >"${install_dir}/resources/pkg_resources.py" <<'EOL'
 import os
 
