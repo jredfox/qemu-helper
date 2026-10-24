@@ -114,6 +114,25 @@ patchNVRAMTimeOut() {
 
 }
 
+get_pkg_manager() {
+
+    if [ ! -z "$pkg_mgr" ]; then
+        echo "$pkg_mgr"
+        return 0
+    fi
+
+    if command -v apt >/dev/null 2>&1; then
+        echo "apt"
+        return 0
+    elif command -v dnf >/dev/null 2>&1; then
+        echo "dnf"
+    elif command -v yum >/dev/null 2>&1; then
+        echo "yum"
+    elif command -v apk >/dev/null 2>&1; then
+        echo "apk"
+    fi
+}
+
 install_virt_fw_vars() {
 
     if command -v virt-fw-vars >/dev/null 2>&1; then
@@ -121,6 +140,7 @@ install_virt_fw_vars() {
         return 0
     fi
     echo "Installing virt-fw-vars manually"
+    pkg_mgr="$(get_pkg_manager "")"
 
     case "$pkg_mgr" in
         apt)
@@ -134,6 +154,9 @@ install_virt_fw_vars() {
         apk)
             "$sudo_cmd" apk update
             "$sudo_cmd" apk add --no-cache python3 py3-cryptography
+            ;;
+        *)
+            echo "Unsupported Pakcage Manager" 2>&1
             ;;
     esac
 
