@@ -140,6 +140,7 @@ install_virt_fw_vars() {
         return 0
     fi
     echo "Installing virt-fw-vars manually"
+    sudo_script "4"
     pkg_mgr="$(get_pkg_manager "")"
 
     case "$pkg_mgr" in
