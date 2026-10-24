@@ -404,14 +404,6 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
     touch "$HOME/.qemu-helper"
 fi
 
-#Create 7z symlink if required
-if [ "$alpine" != "true" ] && [ ! -f "/usr/bin/7z" ]; then
-    path7z="$(command -v 7zz 2>/dev/null)"
-    if [ ! -z "$path7z" ]; then
-        "$sudo_cmd" ln -sfn "$path7z" "/usr/bin/7z"
-    fi
-fi
-
 #Install virt_fw_vars
 install_virt_fw_vars ""
 
