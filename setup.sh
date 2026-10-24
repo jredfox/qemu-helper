@@ -339,7 +339,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
     #Install virt_fw_vars
     install_virt_fw_vars ""
 
-    #Make tmp dir
+    #Make tmp dir if it does not exist yet
     mkdir -p "$install_dir/tmp"
 
     #Install arm32 efi firmware
