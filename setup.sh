@@ -145,7 +145,7 @@ install_virt_fw_vars() {
     case "$pkg_mgr" in
         apt)
             "$sudo_cmd" apt update
-            "$sudo_cmd" apt install python3 python3-cryptography
+            "$sudo_cmd" apt install -y python3 python3-cryptography
             ;;
         dnf|yum)
             "$sudo_cmd" "$pkg_mgr" check-update
