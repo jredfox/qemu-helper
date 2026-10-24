@@ -118,18 +118,16 @@ get_pkg_manager() {
 
     if [ ! -z "$pkg_mgr" ]; then
         echo "$pkg_mgr"
-        return 0
-    fi
-
-    if command -v apt >/dev/null 2>&1; then
+    elif command -v apt >/dev/null 2>&1; then
         echo "apt"
-        return 0
     elif command -v dnf >/dev/null 2>&1; then
         echo "dnf"
     elif command -v yum >/dev/null 2>&1; then
         echo "yum"
     elif command -v apk >/dev/null 2>&1; then
         echo "apk"
+    else
+        return 1
     fi
 }
 
@@ -150,14 +148,14 @@ install_virt_fw_vars() {
             ;;
         dnf|yum)
             "$sudo_cmd" "$pkg_mgr" check-update
-            "$sudo_cmd" "$pkg_mgr" -y install python3-cryptography
+            "$sudo_cmd" "$pkg_mgr" -y install python3 python3-cryptography
             ;;
         apk)
             "$sudo_cmd" apk update
             "$sudo_cmd" apk add --no-cache python3 py3-cryptography
             ;;
         *)
-            echo "Unsupported Pakcage Manager" 2>&1
+            echo "Unsupported Pakcage Manager cannot install python3 python3-cryptography" 2>&1
             ;;
     esac
 
