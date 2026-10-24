@@ -138,27 +138,29 @@ install_virt_fw_vars() {
         return 0
     fi
     echo "Installing virt-fw-vars manually"
-    sudo_script "4"
-    pkg_mgr="$(get_pkg_manager "")"
+    if [ "${1}" = "true" ]; then
+        sudo_script "4"
+        pkg_mgr="$(get_pkg_manager "")"
 
-    case "$pkg_mgr" in
-        apt)
-            "$sudo_cmd" apt update
-            "$sudo_cmd" apt install -y python3 python3-cryptography
-            ;;
-        dnf|yum)
-            "$sudo_cmd" "$pkg_mgr" check-update
-            "$sudo_cmd" "$pkg_mgr" -y install python3 python3-cryptography
-            ;;
-        apk)
-            "$sudo_cmd" apk update
-            "$sudo_cmd" apk add --no-cache python3 py3-cryptography
-            ;;
-        *)
-            echo "Unsupported Pakcage Manager cannot install virt_fw_vars" >&2
-            return 1
-            ;;
-    esac
+        case "$pkg_mgr" in
+            apt)
+                "$sudo_cmd" apt update
+                "$sudo_cmd" apt install -y python3 python3-cryptography
+                ;;
+            dnf|yum)
+                "$sudo_cmd" "$pkg_mgr" check-update
+                "$sudo_cmd" "$pkg_mgr" -y install python3 python3-cryptography
+                ;;
+            apk)
+                "$sudo_cmd" apk update
+                "$sudo_cmd" apk add --no-cache python3 py3-cryptography
+                ;;
+            *)
+                echo "Unsupported Pakcage Manager cannot install virt_fw_vars" >&2
+                return 1
+                ;;
+        esac
+    fi
 
     #Install virt-fw-vars
     tmp_virt="${install_dir}/tmp/virt-fw-vars"
@@ -337,7 +339,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
     fi
 
     #Install virt_fw_vars
-    install_virt_fw_vars ""
+    install_virt_fw_vars "true"
 
     #Make tmp dir if it does not exist yet
     mkdir -p "$install_dir/tmp"
@@ -405,7 +407,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
 fi
 
 #Install virt_fw_vars
-install_virt_fw_vars ""
+install_virt_fw_vars "false"
 
 #repair or create qemu-system-ppc64le symlink if it does not exist
 if ! command -v qemu-system-ppc64le >/dev/null 2>&1; then
