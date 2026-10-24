@@ -134,7 +134,9 @@ get_pkg_manager() {
 install_virt_fw_vars() {
 
     if command -v virt-fw-vars >/dev/null 2>&1; then
-        echo "virt-fw-vars already installed"
+        if [ "${1}" = "true" ]; then
+            echo "virt-fw-vars already installed"
+        fi
         return 0
     fi
     echo "Installing virt-fw-vars manually"
