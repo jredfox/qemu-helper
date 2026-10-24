@@ -24,7 +24,7 @@ org_qram32="$qram32"
 org_qcore32="$qcore32"
 org_pwd="$PWD"
 #Change path to search for resources
-export PATH="$PATH:$install_dir/resources"
+export PATH="$PATH:${install_dir}/resources"
 
 #Find sudo command
 if [ "$(id -u)" -eq 0 ]; then
@@ -114,6 +114,74 @@ patchNVRAMTimeOut() {
 
 }
 
+install_virt_fw_vars() {
+
+    if command -v virt-fw-vars >/dev/null 2>&1; then
+        echo "virt_fw_vars already installed"
+        return 0
+    fi
+    echo "Installing virt-fw-vars manually"
+
+    case "$pkg_mgr" in
+        apt)
+            "$sudo_cmd" apt update
+            "$sudo_cmd" apt install python3 python3-cryptography
+            ;;
+        dnf|yum)
+            "$sudo_cmd" "$pkg_mgr" check-update
+            "$sudo_cmd" "$pkg_mgr" -y install python3-cryptography
+            ;;
+        apk)
+            "$sudo_cmd" apk update
+            "$sudo_cmd" apk add --no-cache python3 py3-cryptography
+            ;;
+    esac
+
+    #Install virt-fw-vars
+    tmp_virt="${install_dir}/tmp/virt-fw-vars"
+    virt_fw_version="v0.97"
+    mkdir -p "${tmp_virt}"
+    mkdir -p "${install_dir}/resources"
+    curl -A "Mozilla/5.0 (X11; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0" -fsSL "https://gitlab.com/kraxel/virt-firmware/-/archive/${virt_fw_version}/virt-firmware-${virt_fw_version}.zip" -o "${tmp_virt}/virt-firmware-${virt_fw_version}.zip" || exit 1
+    7z x "${tmp_virt}/virt-firmware-${virt_fw_version}.zip" -o"${tmp_virt}" -aoa >/dev/null
+    vars_src="${tmp_virt}/virt-firmware-${virt_fw_version}/virt"
+    rm -rf "${install_dir}/resources/virt"
+    cp -rfa "${vars_src}" "${install_dir}/resources/virt"
+
+    # Create the virt-fw-vars launcher
+    cat >"${install_dir}/resources/virt-fw-vars" <<'EOL'
+#!/usr/bin/python3
+
+import re
+import sys
+
+from virt.firmware.vars import main
+
+if __name__ == '__main__':
+    sys.argv[0] = re.sub(r'(-script\.pyw|\.exe)?$', '', sys.argv[0])
+    sys.exit(main())
+EOL
+
+    chmod +x "${install_dir}/resources/virt-fw-vars"
+    cat >"${install_dir}/resources/pkg_resources.py" <<'EOL'
+import os
+
+_virt_fw_root = os.path.dirname(os.path.abspath(__file__))
+
+def resource_filename(pkg_name, pkg_path):
+    if not pkg_name.startswith('virt.'):
+        error_msg = "pkg_name does not start with virt." + str(pkg_name)
+        raise Exception(error_msg)
+    return os.path.join(_virt_fw_root, pkg_name.replace('.', '/'), pkg_path)
+EOL
+    if [ -d "$tmp_virt" ]; then
+        rm -rf "$tmp_virt"
+    fi
+    python3 -m compileall -q "${install_dir}/resources" >/dev/null 2>&1
+    echo "Installed virt-fw-vars"
+
+}
+
 #install qemu
 alpine="false"
 if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ ! -f "$HOME/.qemu-helper" ]; then
@@ -121,6 +189,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
     sudo_script "4"
     #Debian & Ubuntu Based
     if command -v apt >/dev/null 2>&1; then
+        pkg_mgr="apt"
         "$sudo_cmd" apt update
         "$sudo_cmd" apt install -y qemu-kvm qemu-system virt-manager bridge-utils qemu-efi-aarch64 qemu-efi-arm zstd
         #RISC-V DEPS
@@ -132,7 +201,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
         #md5sum is required for icons to work
         if ! md5sum "--help" >/dev/null 2>&1 && ! md5 "--help" >/dev/null 2>&1; then
             echo "Installing md5sum"
-            "$sudo_cmd" apt install coreutils -y
+            "$sudo_cmd" apt install -y coreutils
         fi
         #Install 7z
         if ! command -v 7z >/dev/null 2>&1; then
@@ -149,6 +218,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
         if ! command -v dnf >/dev/null 2>&1; then
             pkg_dnf="yum"
         fi
+        pkg_mgr="$pkg_dnf"
         "$sudo_cmd" $pkg_dnf check-update
         for pkg in qemu-kvm 'qemu-system-*' virt-manager bridge-utils edk2-aarch64 edk2-riscv64 opensbi coreutils zstd curl lsof python3-virt-firmware; do
             echo "installing pkg: ${pkg}"
@@ -166,6 +236,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
         fi
     elif command -v apk >/dev/null 2>&1; then
         alpine="true"
+        pkg_mgr="apk"
         "$sudo_cmd" apk update
         qemu_systems="$("$sudo_cmd" apk search -q 'qemu-system-*')"
         qemu_systems="$(printf '%s' "$qemu_systems" | sed 's/-[0-9][0-9.]*-r[0-9]*$//' | tr '\n' ' ')"
@@ -228,58 +299,6 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
                 fi
             done
         fi
-
-        #Create 7z symlink if required
-        if [ ! -f "/usr/bin/7z" ]; then
-            path7z="$(command -v 7zz 2>/dev/null)"
-            if [ ! -z "$path7z" ]; then
-                "$sudo_cmd" ln -sfn "$path7z" "/usr/bin/7z"
-            fi
-        fi
-
-        #Install virt-fw-vars
-        "$sudo_cmd" apk add --no-cache python3 py3-cryptography
-        tmp_virt="${install_dir}/tmp/virt-fw-vars"
-        virt_fw_version="v0.97"
-        mkdir -p "${tmp_virt}"
-        mkdir -p "${install_dir}/resources"
-        curl -A "Mozilla/5.0 (X11; Linux x86_64; rv:152.0) Gecko/20100101 Firefox/152.0" -fsSL "https://gitlab.com/kraxel/virt-firmware/-/archive/${virt_fw_version}/virt-firmware-${virt_fw_version}.zip" -o "${tmp_virt}/virt-firmware-${virt_fw_version}.zip" || exit 1
-        7z x "${tmp_virt}/virt-firmware-${virt_fw_version}.zip" -o"${tmp_virt}" -aoa >/dev/null
-        vars_src="${tmp_virt}/virt-firmware-${virt_fw_version}/virt"
-        rm -rf "${install_dir}/resources/virt"
-        cp -rfa "${vars_src}" "${install_dir}/resources/virt"
-
-        # Create the virt-fw-vars launcher
-        cat >"${install_dir}/resources/virt-fw-vars" <<'EOL'
-#!/usr/bin/python3
-
-import re
-import sys
-
-from virt.firmware.vars import main
-
-if __name__ == '__main__':
-    sys.argv[0] = re.sub(r'(-script\.pyw|\.exe)?$', '', sys.argv[0])
-    sys.exit(main())
-EOL
-
-        chmod +x "${install_dir}/resources/virt-fw-vars"
-        cat >"${install_dir}/resources/pkg_resources.py" <<'EOL'
-import os
-
-_virt_fw_root = os.path.dirname(os.path.abspath(__file__))
-
-def resource_filename(pkg_name, pkg_path):
-    if not pkg_name.startswith('virt.'):
-        error_msg = "pkg_name does not start with virt." + str(pkg_name)
-        raise Exception(error_msg)
-    return os.path.join(_virt_fw_root, pkg_name.replace('.', '/'), pkg_path)
-EOL
-        if [ -d "$tmp_virt" ]; then
-            rm -rf "$tmp_virt"
-        fi
-        python3 -m compileall -q "${install_dir}/resources" >/dev/null 2>&1
-        echo "virt-fw-vars has been installed"
     else
         touch "$HOME/.qemu-helper"
         echo "Unsupported Linux Distro Please Manually install QEMU then run this script again!"
@@ -287,12 +306,15 @@ EOL
     fi
 
     #Create 7z symlink if required
-    if [ "$alpine" != "true" ] && [ ! -f "/usr/bin/7z" ]; then
+    if [ ! -f "/usr/bin/7z" ]; then
         path7z="$(command -v 7zz 2>/dev/null)"
         if [ ! -z "$path7z" ]; then
             "$sudo_cmd" ln -sfn "$path7z" "/usr/bin/7z"
         fi
     fi
+
+    #Install virt_fw_vars
+    install_virt_fw_vars ""
 
     #Make tmp dir
     mkdir -p "$install_dir/tmp"
@@ -358,6 +380,9 @@ EOL
     #Create the installed dir file
     touch "$HOME/.qemu-helper"
 fi
+
+#Install virt_fw_vars
+install_virt_fw_vars ""
 
 #repair or create qemu-system-ppc64le symlink if it does not exist
 if ! command -v qemu-system-ppc64le >/dev/null 2>&1; then
