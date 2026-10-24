@@ -156,7 +156,7 @@ install_virt_fw_vars() {
                 "$sudo_cmd" apk add --no-cache python3 py3-cryptography
                 ;;
             *)
-                echo "Unsupported Pakcage Manager cannot install virt-fw-vars" >&2
+                echo "Unsupported Package Manager cannot install virt-fw-vars" >&2
                 return 1
                 ;;
         esac
