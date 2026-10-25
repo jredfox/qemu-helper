@@ -401,7 +401,7 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
     rm -f "$install_dir/tmp/timeout.json"
 
     #Prevent resource files from getting admin locked
-    if [ "$sudo_cmd" != "env" ]; then
+    if [ "$sudo_cmd" != "env" ] && [ -f "${install_dir}/resources" ]; then
         "$sudo_cmd" chown -R "$(id -u):$(id -g)" "${install_dir}/resources"
     fi
 
