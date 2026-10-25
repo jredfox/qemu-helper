@@ -129,6 +129,7 @@ get_pkg_manager() {
     else
         return 1
     fi
+
 }
 
 install_virt_fw_vars() {
