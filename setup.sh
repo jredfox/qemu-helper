@@ -220,8 +220,8 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
         pkg_mgr="apt"
         "$sudo_cmd" apt update
         qemu_systems="$(apt-cache search --names-only '^qemu-system' | awk '{print $1}' | grep -vE -- '-(microvm|hwe|xen)$')"
-        qemu_systems="$(printf '%s' "$qemu_systems" | tr '\n' ' ')"
         qemu_efi="$(apt-cache search --names-only '^qemu-efi' | awk '{print $1}')"
+        qemu_systems="$(printf '%s' "$qemu_systems" | tr '\n' ' ')"
         qemu_efi="$(printf '%s' "$qemu_efi" | tr '\n' ' ')"
         "$sudo_cmd" apt install -y qemu-system $qemu_systems $qemu_efi qemu-utils virt-manager bridge-utils zstd
         #RISC-V DEPS
