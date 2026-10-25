@@ -219,7 +219,9 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
     if command -v apt >/dev/null 2>&1; then
         pkg_mgr="apt"
         "$sudo_cmd" apt update
-        "$sudo_cmd" apt install -y qemu-system 'qemu-system*' 'qemu-efi*' qemu-utils virt-manager bridge-utils zstd
+        qemu_systems="$(apt-cache pkgnames qemu-system | grep -vE -- '-(microvm|hwe)$')"
+        qemu_efi="$(apt-cache pkgnames qemu-efi | grep -vE -- '-(microvm|hwe)$')"
+        "$sudo_cmd" apt install -y qemu-system $qemu_systems $qemu_efi qemu-utils virt-manager bridge-utils zstd
         #RISC-V DEPS
         "$sudo_cmd" apt install -y opensbi
         #Additional Deps
