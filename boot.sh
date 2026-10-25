@@ -799,7 +799,7 @@ if [ "$no_graphics" != "true" ]; then
   fi
 
   #Set the Display Window
-  gpu_vendors="$(glxinfo -B 2>/dev/null | grep -iE 'OpenGL vendor|OpenGL renderer' | grep -iv 'NVIDIA')"
+  gpu_vendors="$(glxinfo -B 2>/dev/null | grep -iE 'OpenGL vendor|OpenGL renderer|virgl' | grep -iv 'NVIDIA')"
   if [ -z "$gpu_display" ]; then
     #NVIDIA breaks with GTK we need to use sdl
     if [ -z "$gpu_vendors" ] && [ "$gpu_2d" != "true" ]; then
