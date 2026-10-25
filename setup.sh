@@ -218,9 +218,9 @@ if ! qemu-img "--version" >/dev/null 2>&1 || [ "$INSTALL_FORCE" = "true" ] || [ 
     if command -v apt >/dev/null 2>&1; then
         pkg_mgr="apt"
         "$sudo_cmd" apt update
-        "$sudo_cmd" apt install -y qemu-kvm qemu-system virt-manager bridge-utils qemu-efi-aarch64 qemu-efi-arm zstd
+        "$sudo_cmd" apt install -y 'qemu-system*' 'qemu-efi*' virt-manager bridge-utils zstd
         #RISC-V DEPS
-        "$sudo_cmd" apt install -y opensbi qemu-system-riscv64 qemu-efi-riscv64
+        "$sudo_cmd" apt install -y opensbi
         #Additional Deps
         for pkg in curl lsof python3-virt-firmware; do
             "$sudo_cmd" apt install -y "$pkg"
