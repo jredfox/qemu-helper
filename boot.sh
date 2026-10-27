@@ -777,10 +777,17 @@ case "$arch" in
 esac
 
 #Enable KVM
-if [ "$windows_95" != "true" ]; then
+if [ "$windows_95" != "true" ] && [ "$no_kvm" != "true" ]; then
   if qemu-system-$arch -accel help 2>/dev/null | grep -qw kvm; then
     qdrive "-enable-kvm"
     q_cpu="host"
+    case "$q_machine" in
+      'virt,'*)
+        q_machine="virt"
+        ;;
+      'pseries-2.6,'*)
+        q_machine="pseries-2.6"
+    esac
   fi
 fi
 
